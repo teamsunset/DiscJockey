@@ -1,0 +1,12 @@
+{
+  "sound_event": {
+    "category": "record",
+    "subtitle": "subtitle.discjockey.block.speaker_sound",
+    "sounds": [
+      {
+        "name": "random/orb",
+        "stream": true
+      }
+    ]
+  }
+}

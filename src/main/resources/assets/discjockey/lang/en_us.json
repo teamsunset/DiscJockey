@@ -1,0 +1,9 @@
+{
+  "itemGroup.discjockey": "Disc Jockey",
+  "item.discjockey.usb_flash_disk": "USB Flash Disk",
+  "item.discjockey.usb_flash_disk.description": "USB Flash Disk",
+  "item.discjockey.audio_line": "Audio Line",
+  "block.discjockey.speaker": "Speaker",
+  "block.discjockey.ddj_400": "DDJ 400",
+  "subtitle.discjockey.block.speaker_sound": "Speaker Sound"
+}
