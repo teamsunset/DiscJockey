@@ -26,7 +26,7 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
     private BlockEntityRendererProvider.Context context;
 
     public static ModelDDJ400<?> MODEL;
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/block/ddj_400.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/model/ddj_400.png");
     public static BlockEntityRendererDDJ400 instance;
 
 
