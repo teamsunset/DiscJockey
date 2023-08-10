@@ -40,7 +40,7 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
     public void render(BlockEntityDDJ400 pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
         BlockPos pos = pBlockEntity.getBlockPos();
 
-        ModelPart M_bt = MODEL.M.getChild("M_bt");
+//        ModelPart M_bt = MODEL.M.getChild("M_bt");
 //        M_bt.x = (float) (-1 * pBlockEntity.getMiddleBladeFader().getVal());
         renderModel(pPoseStack, pBuffer, pPackedLight, pBlockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING));
     }
