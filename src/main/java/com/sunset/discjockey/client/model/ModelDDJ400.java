@@ -14,12 +14,12 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class DDJ_400_Converted<T extends Entity> extends EntityModel<T> {
+public class ModelDDJ400<T extends Entity> extends EntityModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "ddj_400"), "main");
 	public final ModelPart bone;
 
-	public DDJ_400_Converted(ModelPart root) {
+	public ModelDDJ400(ModelPart root) {
 		this.bone = root.getChild("bone");
 	}
 
