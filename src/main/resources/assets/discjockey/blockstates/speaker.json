@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "discjockey:block/speaker",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "discjockey:block/speaker",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "discjockey:block/speaker",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "discjockey:block/speaker",
+      "y": 0
+    }
+  }
+}

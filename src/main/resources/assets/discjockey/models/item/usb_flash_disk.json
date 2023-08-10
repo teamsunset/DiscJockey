@@ -1,0 +1,66 @@
+{
+	"credit": "Made with Blockbench",
+	"render_type": "minecraft:cutout",
+	"texture_size": [32, 16],
+	"textures": {
+		"0": "discjockey:item/usb_flash_disk",
+		"particle": "discjockey:item/usb_flash_disk"
+	},
+	"elements": [
+		{
+			"from": [7.5, 0.25, 5.5],
+			"to": [8.5, 0.75, 6.5],
+			"faces": {
+				"north": {"uv": [0, 0, 2.5, 5], "texture": "#0"},
+				"east": {"uv": [0, 5, 2.5, 10], "texture": "#0"},
+				"south": {"uv": [2.5, 0, 5, 5], "texture": "#0"},
+				"west": {"uv": [2.5, 5, 5, 10], "texture": "#0"},
+				"up": {"uv": [2.5, 15, 0, 10], "texture": "#0"},
+				"down": {"uv": [7.5, 0, 5, 5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [7, 0, 6.5],
+			"to": [9, 1, 10.5],
+			"faces": {
+				"north": {"uv": [9, 13, 11, 16], "texture": "#0"},
+				"east": {"uv": [6, 13, 9, 16], "texture": "#0"},
+				"south": {"uv": [14, 13, 16, 16], "texture": "#0"},
+				"west": {"uv": [11, 13, 14, 16], "texture": "#0"},
+				"up": {"uv": [11, 13, 9, 7], "texture": "#0"},
+				"down": {"uv": [13, 7, 11, 13], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [97, 0, 180],
+			"translation": [0.25, 2, -7.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [-84, 180, 0],
+			"translation": [0, 2, -7.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [107, 33, 0],
+			"translation": [0.5, 1.5, 10]
+		},
+		"firstperson_lefthand": {
+			"rotation": [79, 0, 0],
+			"translation": [-2, 5.25, 12]
+		},
+		"ground": {
+			"translation": [0, 4.75, 1.75]
+		},
+		"gui": {
+			"rotation": [93, 42, 0],
+			"translation": [0, -0.75, 2.75],
+			"scale": [2.46, 2.46, 2.46]
+		},
+		"fixed": {
+			"rotation": [0, 88, -91],
+			"translation": [10.75, 0, -21.5],
+			"scale": [2.88, 2.88, 2.88]
+		}
+	}
+}

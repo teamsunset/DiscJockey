@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=east": { "model": "discjockey:block/ddj_400" , "y": 90 },
+        "facing=south": { "model": "discjockey:block/ddj_400", "y": 180 },
+        "facing=west": { "model": "discjockey:block/ddj_400", "y": 270 },
+        "facing=north": { "model": "discjockey:block/ddj_400", "y": 0 }
+    }
+}
