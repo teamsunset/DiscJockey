@@ -1,0 +1,9 @@
+{
+  "itemGroup.discjockey": "Disc Jockey",
+  "item.discjockey.usb_flash_disk": "U盘",
+  "item.discjockey.usb_flash_disk.description": "U盘",
+  "item.discjockey.audio_line": "音频线",
+  "block.discjockey.speaker": "音箱",
+  "block.discjockey.ddj_400": "DDJ 400",
+  "subtitle.discjockey.block.speaker_sound": "Speaker Sound"
+}
