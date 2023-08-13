@@ -1,4 +1,4 @@
-package com.sunset.discjockey.util.Music;
+package com.sunset.discjockey.util.MusicMisc;
 
 import com.sunset.discjockey.util.Reference;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
