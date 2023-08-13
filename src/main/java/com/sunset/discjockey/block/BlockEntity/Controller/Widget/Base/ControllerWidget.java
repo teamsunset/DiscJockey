@@ -1,19 +1,19 @@
-package com.sunset.discjockey.block.BlockEntity.ControllerWidget.Base;
+package com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base;
 
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.nbt.CompoundTag;
 
 public abstract class ControllerWidget
 {
-    public ControllerWidgetSystem controllerWidgetSystem;
+    public ControllerWidgetManager controllerWidgetSystem;
 
     public String id;
 
-    public ControllerWidgetSystem.InteractType interactType;
+    public ControllerWidgetManager.InteractType interactType;
 
     public PlaneRange planeRange;
 
-    public ControllerWidget(String id, ControllerWidgetSystem.InteractType interactType, PlaneRange planeRange) {
+    public ControllerWidget(String id, ControllerWidgetManager.InteractType interactType, PlaneRange planeRange) {
         this.id = id;
         this.interactType = interactType;
         this.planeRange = planeRange;

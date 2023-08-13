@@ -1,14 +1,16 @@
-package com.sunset.discjockey.block.BlockEntity.ControllerWidget.AbstractWidget;
+package com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget;
 
-import com.sunset.discjockey.block.BlockEntity.ControllerWidget.Base.ControllerWidget;
-import com.sunset.discjockey.block.BlockEntity.ControllerWidget.Base.ControllerWidgetSystem;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidget;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.nbt.CompoundTag;
 
 public class ControllerKnob extends ControllerWidget
 {
+    public double value = 0.0; //between -1 to 1
+
     public ControllerKnob(String id, PlaneRange planeRange) {
-        super(id, ControllerWidgetSystem.InteractType.SCROLL, planeRange);
+        super(id, ControllerWidgetManager.InteractType.SCROLL, planeRange);
     }
 
     @Override
