@@ -1,6 +1,6 @@
 package com.sunset.discjockey.client.audio;
 
-import com.sunset.discjockey.util.Music.MusicFileManager;
+import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import net.minecraft.client.sounds.AudioStream;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
@@ -35,7 +35,8 @@ public class FileAudioStream implements AudioStream
         ByteBuffer byteBuffer = BufferUtils.createByteBuffer(size);
         if (array.length >= offset + size) {
             byteBuffer.put(array, offset, size);
-        } else {
+        }
+        else {
             byteBuffer.put(new byte[size]);
         }
         offset += size;

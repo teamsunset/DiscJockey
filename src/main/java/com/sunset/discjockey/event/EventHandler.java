@@ -3,7 +3,7 @@ package com.sunset.discjockey.event;
 import com.sunset.discjockey.block.BlockDDJ400;
 import com.sunset.discjockey.client.model.ModelDDJ400;
 import com.sunset.discjockey.client.renderer.BlockEntity.BlockEntityRendererDDJ400;
-import com.sunset.discjockey.util.Music.MusicFileManager;
+import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.Reference;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
 import net.minecraftforge.api.distmarker.Dist;

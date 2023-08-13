@@ -1,8 +1,8 @@
 package com.sunset.discjockey.client.audio;
 
 import com.sunset.discjockey.block.BlockEntity.BlockEntityDDJ400;
+import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.RegistryCollection.SoundEventCollection;
-import com.sunset.discjockey.util.Music.MusicFileManager;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
@@ -14,7 +14,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -54,10 +53,12 @@ public class SpeakerSound extends AbstractTickableSoundInstance
                 if (songTimeByTick != -1 && tick > songTimeByTick + 50) {
                     this.stop();
                 }
-            } else {
+            }
+            else {
                 this.stop();
             }
-        } else {
+        }
+        else {
             this.stop();
         }
     }

@@ -1,9 +1,9 @@
 package com.sunset.discjockey.block.BlockEntity;
 
-import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
 import com.sunset.discjockey.client.audio.SpeakerSound;
+import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
-import com.sunset.discjockey.util.Music.MusicFileManager;
+import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
