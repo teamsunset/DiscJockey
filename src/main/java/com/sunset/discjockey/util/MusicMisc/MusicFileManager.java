@@ -12,12 +12,13 @@ import javax.sound.sampled.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 @OnlyIn(Dist.CLIENT)
 public class MusicFileManager
 {
-    public static final String fileDir = FMLPaths.MODSDIR.get().toString() + "\\" + Reference.MOD_ID + "\\cache\\";
+    public static final String fileDir = Paths.get(FMLPaths.MODSDIR.get().toString(),Reference.MOD_ID , "cache") + File.separator;
 
     public static final HashMap<String, File> soundFiles = new HashMap<>();
 
