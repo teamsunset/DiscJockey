@@ -1,18 +1,21 @@
 package com.sunset.discjockey.util.Music;
 
 import com.sunset.discjockey.util.Reference;
-//import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.IOUtils;
 
-import javax.sound.sampled.*;
-import java.io.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.*;
+import java.util.HashMap;
 
 @OnlyIn(Dist.CLIENT)
 public class MusicFileManager
@@ -129,14 +132,19 @@ public class MusicFileManager
         return getMusicFile(url) != null;
     }
 
-    public static int getSongTimeBySecond(String url) {
+    //Millisecond
+    public static int getSongTime(String url) {
         AudioInputStream audioInputStream = getMusicAudioInputStream(url);
         if (audioInputStream == null) return 0;
         //获取音乐时长
         AudioFormat audioFormat = audioInputStream.getFormat();
         byte[] array = getMusicBytes(url);
         float bitrate = audioFormat.getSampleRate() * audioFormat.getSampleSizeInBits() * audioFormat.getChannels();
-        return (int) (array.length * 8 / bitrate);
+        return (int) (array.length * 8 / bitrate * 1000);
+    }
+
+    public static int getSongTimeBySecond(String url) {
+        return getSongTime(url) / 1000;
     }
 
     //get
@@ -146,7 +154,8 @@ public class MusicFileManager
         String hashCode = SHA256.calculateSHA256(url);
         if (soundFiles.containsKey(hashCode)) {
             file = soundFiles.get(hashCode);
-        } else {
+        }
+        else {
             file = downLoadFile(url);
             if (file != null)
                 soundFiles.put(hashCode, file);
@@ -161,7 +170,8 @@ public class MusicFileManager
         String hashCode = SHA256.calculateSHA256(url);
         if (soundStream.containsKey(hashCode)) {
             return soundStream.get(hashCode);
-        } else {
+        }
+        else {
             audioInputStream = getPcmAudioInputStreamFromMp3(getMusicFile(url));
             if (audioInputStream != null)
                 soundStream.put(hashCode, audioInputStream);
@@ -177,7 +187,8 @@ public class MusicFileManager
             String hashCode = SHA256.calculateSHA256(url);
             if (soundBytes.containsKey(hashCode)) {
                 return soundBytes.get(hashCode);
-            } else {
+            }
+            else {
                 AudioInputStream audioInputStream = getMusicAudioInputStream(url);
                 if (audioInputStream != null) {
                     bytes = IOUtils.toByteArray(audioInputStream);
@@ -295,7 +306,8 @@ public class MusicFileManager
         File path = new File(fileDir);
         if (!path.exists()) {
             new File(fileDir).mkdirs();
-        } else {
+        }
+        else {
             for (File file : path.listFiles()) {
                 String hashcode = file.getName().replace(".mp3", "");
 //                String hashcode = SHA256.calculateSHA256(file);

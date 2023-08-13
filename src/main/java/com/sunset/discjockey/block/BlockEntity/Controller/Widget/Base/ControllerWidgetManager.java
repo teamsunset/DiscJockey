@@ -1,21 +1,30 @@
-package com.sunset.discjockey.block.BlockEntity.ControllerWidget.Base;
+package com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base;
 
-import com.sunset.discjockey.block.BlockEntity.ControllerWidget.Base.ControllerWidget;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.ArrayList;
 
-public class ControllerWidgetSystem
+//for load at launching, this.controllerWidgets will be statically defined by BlockEntity.if you want to create dynamic widgets in the future, you should write the load function.
+public class ControllerWidgetManager
 {
     public enum InteractType
     {
         PRESS,
         DRAG,
-        SCROLL
+        SCROLL,
+        NONE
     }
 
     public ArrayList<ControllerWidget> controllerWidgets = new ArrayList<>();
+
+
+    //it will be load function.
+//    public ControllerWidgetManager(CompoundTag compoundTag) {
+//        for (String key : compoundTag.getAllKeys()) {
+//            controllerWidgets.add(ControllerWidget.create(key, compoundTag.getCompound(key)));
+//        }
+//    }
 
     public void add(ControllerWidget controllerWidget) {
         controllerWidget.controllerWidgetSystem = this;
