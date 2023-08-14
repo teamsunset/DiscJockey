@@ -14,17 +14,14 @@ public abstract class ControllerFader extends ControllerWidget
     }
 
     @Override
-    public abstract void execute(double value);
-
-    @Override
     public CompoundTag getCompoundTag() {
         CompoundTag compoundTag = new CompoundTag();
-        compoundTag.putDouble("value", value);
+        compoundTag.putDouble("value", this.value);
         return compoundTag;
     }
 
     @Override
     public void writeCompoundTag(CompoundTag compoundTag) {
-        value = compoundTag.getDouble("value");
+        this.value = compoundTag.getDouble("value");
     }
 }

@@ -132,7 +132,7 @@ public class MusicFileManager
         return getMusicFile(url) != null;
     }
 
-    //Millisecond
+    //tick amount
     public static int getSongTime(String url) {
         AudioInputStream audioInputStream = getMusicAudioInputStream(url);
         if (audioInputStream == null) return 0;
@@ -140,11 +140,11 @@ public class MusicFileManager
         AudioFormat audioFormat = audioInputStream.getFormat();
         byte[] array = getMusicBytes(url);
         float bitrate = audioFormat.getSampleRate() * audioFormat.getSampleSizeInBits() * audioFormat.getChannels();
-        return (int) (array.length * 8 / bitrate * 1000);
+        return (int) (array.length * 8 / bitrate * 20);
     }
 
     public static int getSongTimeBySecond(String url) {
-        return getSongTime(url) / 1000;
+        return getSongTime(url) / 20;
     }
 
     //get
