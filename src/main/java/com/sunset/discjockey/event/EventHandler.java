@@ -1,5 +1,6 @@
 package com.sunset.discjockey.event;
 
+import com.google.common.eventbus.Subscribe;
 import com.sunset.discjockey.block.BlockDDJ400;
 import com.sunset.discjockey.client.model.ModelDDJ400;
 import com.sunset.discjockey.client.renderer.BlockEntity.BlockEntityRendererDDJ400;
@@ -8,6 +9,7 @@ import com.sunset.discjockey.util.Reference;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -16,6 +18,15 @@ import java.io.IOException;
 
 public class EventHandler
 {
+    @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public class ForgeEventBoth
+    {
+        @Subscribe
+        public static void onLevelTick(TickEvent.LevelTickEvent event) {
+
+        }
+    }
+
     @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public class ModEventBothSide
     {
@@ -45,7 +56,7 @@ public class EventHandler
     }
 
     @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.DEDICATED_SERVER)
-    public class ModEventServerSide
+    public class ModEventDedicatedServerSide
     {
 
     }

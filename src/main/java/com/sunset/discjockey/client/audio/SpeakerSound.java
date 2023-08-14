@@ -34,7 +34,7 @@ public class SpeakerSound extends AbstractTickableSoundInstance
         super(SoundEventCollection.SOUND_EVENT.get(), SoundSource.RECORDS, SoundInstance.createUnseededRandom());
         this.songUrl = songUrl;
         this.fileAudioStream = new FileAudioStream(this.songUrl);
-        this.songTimeByTick = MusicFileManager.getSongTimeBySecond(songUrl) * 20;
+        this.songTimeByTick = MusicFileManager.getSongTime(songUrl);
         this.x = pos.getX() + 0.5f;
         this.y = pos.getY() + 0.5f;
         this.z = pos.getZ() + 0.5f;

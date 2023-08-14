@@ -1,11 +1,11 @@
 package com.sunset.discjockey.block.BlockEntity;
 
-import com.sunset.discjockey.client.audio.SpeakerSound;
-import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
+import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudioManager;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMiddleBladeFader;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
+import com.sunset.discjockey.util.TouchMap.TouchMapDDJ400;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -21,48 +21,19 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.world.level.block.Block.UPDATE_CLIENTS;
 
 public class BlockEntityDDJ400 extends BlockEntity
 {
 
-    private String leftAudioURL = "https://music.163.com/song/media/outer/url?id=32405293.mp3";
-    private String rightAudioURL = "https://music.163.com/song/media/outer/url?id=1361445916.mp3";
-    private SpeakerSound leftAudioSound = null;
-    private SpeakerSound rightAudioSound = null;
-    private boolean playing = false;
+    public ControllerAudioManager controllerAudioManager = new ControllerAudioManager();
+    public ControllerWidgetManager controllerWidgetManager = new ControllerWidgetManager();
 
 
     public BlockEntityDDJ400(BlockPos pPos, BlockState pBlockState) {
         super(BlockEntityTypeCollection.BLOCK_ENTITY_DDJ400.get(), pPos, pBlockState);
-    }
-
-    public boolean getPlaying() {
-        return playing;
-    }
-
-    public String getLeftAudioURL() {
-        return leftAudioURL;
-    }
-
-
-    public void setPlaying(boolean playing) {
-        if (this.playing != playing) {
-            this.playing = playing;
-            this.markDirty();
-        }
-    }
-
-    public void setLeftAudioURL(String leftAudioURL) {
-        if (!this.leftAudioURL.equals(leftAudioURL)) {
-            this.leftAudioURL = leftAudioURL;
-            this.markDirty();
-        }
+        controllerWidgetManager.add(new ControllerMiddleBladeFader("middle_blade_fader", TouchMapDDJ400.MIDDLE_BLADE_FADER, controllerAudioManager));
     }
 
 
@@ -101,26 +72,6 @@ public class BlockEntityDDJ400 extends BlockEntity
         return InteractionResult.SUCCESS;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void play() {
-        CompletableFuture.runAsync(() ->
-//                        Minecraft.getInstance().submitAsync(() ->
-                {
-                    try {
-                        if (!MusicFileManager.checkURL(this.getLeftAudioURL())) {
-                            throw new Exception("Can't Play it!");
-                        }
-                        this.leftAudioSound = new SpeakerSound(this.getBlockPos(), this.getLeftAudioURL());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return;
-                    }
-                    Minecraft.getInstance().getSoundManager().play(this.leftAudioSound);
-                }
-//                        )
-                , Util.backgroundExecutor());
-    }
-
     //data change actions
     public void markDirty() {
         if (level != null) {
@@ -149,20 +100,16 @@ public class BlockEntityDDJ400 extends BlockEntity
     @Override
     public void load(CompoundTag compoundTag) throws RuntimeException {
         super.load(compoundTag);
-        boolean previousPlaying = this.getPlaying();
-        this.setPlaying(compoundTag.getBoolean("playing"));
-        this.setLeftAudioURL(compoundTag.getString("songURL"));
-        if (level != null && level.isClientSide() && !previousPlaying && this.getPlaying()) {
-            this.play();
-        }
+        controllerAudioManager.writeCompoundTag(compoundTag.getCompound("controller_audio_manager"));
+        controllerWidgetManager.writeCompoundTag(compoundTag.getCompound("controller_widget_manager"));
     }
 
     //network
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag compoundTag = super.getUpdateTag();
-        compoundTag.putBoolean("playing", this.getPlaying());
-        compoundTag.putString("songURL", this.getLeftAudioURL());
+        compoundTag.put("controller_audio_manager", controllerAudioManager.getCompoundTag());
+        compoundTag.put("controller_widget_manager", controllerWidgetManager.getCompoundTag());
         return compoundTag;
     }
 

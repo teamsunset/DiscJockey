@@ -15,6 +15,10 @@ public class ControllerAudioManager
     //channel,ControllerAudio
     public Map<Integer, ControllerAudio> loadedAudios = new HashMap<>();
 
+    public ControllerAudioManager() {
+
+    }
+
     public ControllerAudioManager(CompoundTag compoundTag) {
     }
 
@@ -52,7 +56,11 @@ public class ControllerAudioManager
 //        }
     }
 
-    public void load(int index, int channelIndex) {
+    public void loadAudio(int index, int channelIndex) {
         loadedAudios.put(channelIndex, new ControllerAudio(audios.get(index)));
+    }
+
+    public void unloadAudio(int channelIndex) {
+        loadedAudios.remove(channelIndex);
     }
 }

@@ -3,7 +3,7 @@ package com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
 import net.minecraft.nbt.CompoundTag;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 //for load at launching, this.controllerWidgets will be statically defined by BlockEntity.if you want to create dynamic widgets in the future, you should write the load function.
 public class ControllerWidgetManager
@@ -16,7 +16,7 @@ public class ControllerWidgetManager
         NONE
     }
 
-    public ArrayList<ControllerWidget> controllerWidgets = new ArrayList<>();
+    public Vector<ControllerWidget> controllerWidgets = new Vector<>();
 
 
     //it will be load function.
@@ -26,24 +26,26 @@ public class ControllerWidgetManager
 //        }
 //    }
 
-    public void add(ControllerWidget controllerWidget) {
+    public ControllerWidgetManager add(ControllerWidget controllerWidget) {
         controllerWidget.controllerWidgetSystem = this;
         controllerWidgets.add(controllerWidget);
+        return this;
     }
 
+    //this function is only on serverside
     public void interact(InteractType interactType, int interactValue, Vec2Plane relativeActionPos) {
         for (ControllerWidget controllerWidget : controllerWidgets) {
             if (controllerWidget.interactType == interactType && controllerWidget.planeRange.isInRange(relativeActionPos)) {
                 switch (interactType) {
                     case PRESS -> {
-                        controllerWidget.execute(1);
+                        controllerWidget.executeOnServer(1);
                     }
                     case DRAG -> {
                         double value = controllerWidget.planeRange.getValueInRange(relativeActionPos) * 2 - 1;
-                        controllerWidget.execute(value);
+                        controllerWidget.executeOnServer(value);
                     }
                     case SCROLL -> {
-                        controllerWidget.execute(interactValue);
+                        controllerWidget.executeOnServer(interactValue);
                     }
                 }
             }

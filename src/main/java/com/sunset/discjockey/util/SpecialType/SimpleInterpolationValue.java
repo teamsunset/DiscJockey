@@ -24,11 +24,12 @@ public class SimpleInterpolationValue
         VALUES.add(this);
     }
 
-    @Override
-    public void finalize() throws Throwable {
-        VALUES.remove(this);
-        super.finalize();
-    }
+    //invalid
+//    @Override
+//    public void finalize() throws Throwable {
+//        VALUES.remove(this);
+//        super.finalize();
+//    }
 
     public void interpolate() {
         if (_oVal != _dVal) {

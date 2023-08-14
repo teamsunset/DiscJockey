@@ -5,7 +5,7 @@ import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.Controller
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.nbt.CompoundTag;
 
-public class ControllerKnob extends ControllerWidget
+public abstract class ControllerKnob extends ControllerWidget
 {
     public double value = 0.0; //between -1 to 1
 
@@ -14,17 +14,8 @@ public class ControllerKnob extends ControllerWidget
     }
 
     @Override
-    public void execute(double value) {
-
-    }
+    public abstract CompoundTag getCompoundTag();
 
     @Override
-    public CompoundTag getCompoundTag() {
-        return null;
-    }
-
-    @Override
-    public void writeCompoundTag(CompoundTag compoundTag) {
-
-    }
+    public abstract void writeCompoundTag(CompoundTag compoundTag);
 }

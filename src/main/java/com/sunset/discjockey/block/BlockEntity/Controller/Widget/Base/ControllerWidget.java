@@ -13,22 +13,27 @@ public abstract class ControllerWidget
 
     public PlaneRange planeRange;
 
+    public boolean syncMark = false;
+
     public ControllerWidget(String id, ControllerWidgetManager.InteractType interactType, PlaneRange planeRange) {
         this.id = id;
         this.interactType = interactType;
         this.planeRange = planeRange;
     }
 
-    public abstract void execute(double value);
+    //dirty
+    //only on serverside
+    public void markDirty() {this.syncMark = true;}
+
+    public void markClean() {this.syncMark = false;}
+
+    //should clean mark on serverside after send packet
+    public void executeOnServer(double value) {}
+
+    public void executeOnClient() {}
 
     public abstract CompoundTag getCompoundTag();
 
     public abstract void writeCompoundTag(CompoundTag compoundTag);
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        if (controllerWidgetSystem != null)
-            controllerWidgetSystem.controllerWidgets.remove(this);
-    }
+    
 }
