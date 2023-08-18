@@ -5,12 +5,12 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SimpleInterpolationValue
 {
-    public static ArrayList<SimpleInterpolationValue> VALUES = new ArrayList<>();
+    public static Vector<SimpleInterpolationValue> VALUES = new Vector<>();
 
     public double _oVal;
 
@@ -47,8 +47,8 @@ public class SimpleInterpolationValue
 
     //interpolate at the end of each tick
     @SubscribeEvent
-    public static void onLevelTick(TickEvent.LevelTickEvent event) {
-        if (!event.level.isClientSide() && event.phase == TickEvent.Phase.END) {
+    public static void onLevelTick(TickEvent.ServerTickEvent event) {
+        if (event.side.isServer() && event.phase == TickEvent.Phase.END) {
             for (SimpleInterpolationValue value : VALUES) {
                 value.interpolate();
             }

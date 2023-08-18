@@ -14,7 +14,11 @@ public class ControllerAudio
 {
     public String url;
 
-    public int elapsedTime = 0;
+    //only on level clientside
+    public SpeakerSound speakerSound = null;
+    
+    public int elapsedTimeOnServer = 0;
+
 
     public ControllerAudio(String url) {
         this.url = url;
@@ -27,18 +31,12 @@ public class ControllerAudio
     public CompoundTag getCompoundTag() {
         CompoundTag compoundTag = new CompoundTag();
         compoundTag.putString("url", this.url);
-        compoundTag.putInt("elapsed_time", this.elapsedTime);
         return compoundTag;
     }
 
     public void writeCompoundTag(CompoundTag compoundTag) {
         this.url = compoundTag.getString("url");
-        this.elapsedTime = compoundTag.getInt("elapsed_time");
     }
-
-    //level clientside
-
-    public SpeakerSound speakerSound = null;
 
     @OnlyIn(Dist.CLIENT)
     public void play() {
@@ -50,11 +48,10 @@ public class ControllerAudio
                             throw new Exception("Can't Play it!");
                         }
 //                        this.speakerSound = new SpeakerSound(this.getBlockPos(), this.url);
+                        Minecraft.getInstance().getSoundManager().play(this.speakerSound);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return;
                     }
-                    Minecraft.getInstance().getSoundManager().play(this.speakerSound);
                 }
 //                        )
                 , Util.backgroundExecutor());
