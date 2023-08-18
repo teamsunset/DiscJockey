@@ -10,6 +10,7 @@ import javax.sound.sampled.AudioInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+//should be async
 public class FileAudioStream implements AudioStream
 {
     public final AudioInputStream stream;

@@ -1,6 +1,7 @@
 package com.sunset.discjockey.util.SpecialType;
 
-import java.util.function.*;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * C# style property
