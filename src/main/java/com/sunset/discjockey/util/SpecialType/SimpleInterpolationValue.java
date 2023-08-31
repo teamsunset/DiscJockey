@@ -18,7 +18,7 @@ public class SimpleInterpolationValue
 
     public Runnable functionOnValueChanged = null;
 
-    public static double r = 0.5;
+    public static double r = 0.6;
 
     public static double threshold = 0.01;
 
@@ -59,23 +59,18 @@ public class SimpleInterpolationValue
     }
 
     //interpolate at the end of each tick
-//    @SubscribeEvent
-//    public static void onLevelTick(TickEvent.ServerTickEvent event) {
-//        if (event.side.isServer() && event.phase == TickEvent.Phase.END) {
-//            for (SimpleInterpolationValue value : VALUES) {
-//                value.interpolate();
-//            }
-//        }
-//    }
     @SubscribeEvent
-    public void onLevelTick(TickEvent.ServerTickEvent event) {
+    public static void onLevelTick(TickEvent.ServerTickEvent event) {
         if (event.side.isServer() && event.phase == TickEvent.Phase.END) {
-            if (_dVal - _oVal > SimpleInterpolationValue.threshold) {
-                this.interpolate();
-                if (functionOnValueChanged != null) {
-                    functionOnValueChanged.run();
+            for (SimpleInterpolationValue value : VALUES) {
+                if (Math.abs(value._dVal - value._oVal) > SimpleInterpolationValue.threshold) {
+                    value.interpolate();
+                    if (value.functionOnValueChanged != null) {
+                        value.functionOnValueChanged.run();
+                    }
                 }
             }
         }
     }
+
 }

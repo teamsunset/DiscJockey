@@ -5,6 +5,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import com.sunset.discjockey.block.BlockEntity.BlockEntityDDJ400;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidget;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMiddleBladeFader;
 import com.sunset.discjockey.client.model.ModelDDJ400;
 import com.sunset.discjockey.util.Reference;
 import net.minecraft.client.model.geom.ModelPart;
@@ -40,8 +42,12 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
     public void render(BlockEntityDDJ400 pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
         BlockPos pos = pBlockEntity.getBlockPos();
 
-//        ModelPart M_bt = MODEL.M.getChild("M_bt");
-//        M_bt.x = (float) (-1 * pBlockEntity.getMiddleBladeFader().getVal());
+        ModelPart M_bt = MODEL.bone.getChild("M").getChild("M_bt");
+        for (ControllerWidget controllerWidget : pBlockEntity.controllerWidgetManager.controllerWidgets) {
+            if (controllerWidget instanceof ControllerMiddleBladeFader controllerMiddleBladeFader) {
+                M_bt.x = (float) (-1 * controllerMiddleBladeFader.value.get());
+            }
+        }
         renderModel(pPoseStack, pBuffer, pPackedLight, pBlockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING));
     }
 
