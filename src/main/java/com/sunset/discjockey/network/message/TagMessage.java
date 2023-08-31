@@ -13,6 +13,7 @@ public class TagMessage
 {
 
     public static Map<String, BiConsumer<TagMessage, NetworkEvent.Context>> HANDLERS = new HashMap<>();
+
     public final CompoundTag compoundTag;
 
     public TagMessage(CompoundTag compoundTag) {
@@ -36,8 +37,7 @@ public class TagMessage
                     context.enqueueWork(() -> handler.accept(message, context));
                 else
                     throw new Exception("Not Found Handler in HANDLERS!");
-            }
-            else {
+            } else {
                 throw new Exception("Not Found Handler in tag!");
             }
         } catch (Exception e) {

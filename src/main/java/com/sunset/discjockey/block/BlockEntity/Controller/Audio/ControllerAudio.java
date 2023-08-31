@@ -5,6 +5,7 @@ import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -12,20 +13,19 @@ import java.util.concurrent.CompletableFuture;
 
 public class ControllerAudio
 {
+    public ControllerAudioManager manager;
     public String url;
 
-    //only on level clientside
-    public SpeakerSound speakerSound = null;
-    
+    public SpeakerSound speakerSound = null;//only on level clientside
+
+    public boolean isPlayingOnServer = false;
+
     public int elapsedTimeOnServer = 0;
 
 
-    public ControllerAudio(String url) {
+    public ControllerAudio(ControllerAudioManager controllerAudioManager, String url) {
+        this.manager = controllerAudioManager;
         this.url = url;
-    }
-
-    public ControllerAudio(CompoundTag compoundTag) {
-        this.writeCompoundTag(compoundTag);
     }
 
     public CompoundTag getCompoundTag() {
@@ -39,7 +39,7 @@ public class ControllerAudio
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void play() {
+    public void setupOnClient() {
         CompletableFuture.runAsync(() ->
 //                        Minecraft.getInstance().submitAsync(() ->
                 {
@@ -47,7 +47,8 @@ public class ControllerAudio
                         if (!MusicFileManager.checkURL(this.url)) {
                             throw new Exception("Can't Play it!");
                         }
-//                        this.speakerSound = new SpeakerSound(this.getBlockPos(), this.url);
+                        this.speakerSound = new SpeakerSound(this.manager.controller.getBlockPos(), this.url);
+                        this.speakerSound.elapsedTime.setValue(this.elapsedTimeOnServer);
                         Minecraft.getInstance().getSoundManager().play(this.speakerSound);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -57,8 +58,4 @@ public class ControllerAudio
                 , Util.backgroundExecutor());
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void pause() {
-
-    }
 }

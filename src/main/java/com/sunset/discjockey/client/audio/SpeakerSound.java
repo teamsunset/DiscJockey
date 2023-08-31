@@ -1,6 +1,7 @@
 package com.sunset.discjockey.client.audio;
 
 import com.sunset.discjockey.block.BlockEntity.BlockEntityDDJ400;
+import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.RegistryCollection.SoundEventCollection;
 import com.sunset.discjockey.util.SpecialType.Property;
@@ -26,6 +27,8 @@ public class SpeakerSound extends AbstractTickableSoundInstance
 {
     public Integer soundTime;
 
+    public boolean isPlaying = false;
+
     public Property<Integer> elapsedTime = new Property<>(
             ov -> {
                 return soundTime * this.fileAudioStream.offset / this.fileAudioStream.array.length;
@@ -43,6 +46,7 @@ public class SpeakerSound extends AbstractTickableSoundInstance
         super(SoundEventCollection.SOUND_EVENT.get(), SoundSource.RECORDS, SoundInstance.createUnseededRandom());
         this.fileAudioStream = new FileAudioStream(url);
         this.soundTime = MusicFileManager.getSongTime(url);
+        //xyz determines where the sound will play
         this.x = pos.getX() + 0.5f;
         this.y = pos.getY() + 0.5f;
         this.z = pos.getZ() + 0.5f;
@@ -54,12 +58,19 @@ public class SpeakerSound extends AbstractTickableSoundInstance
     public void tick() {
         Level world = Minecraft.getInstance().level;
         BlockEntity blockEntity = world.getBlockEntity(this.pos);
-        if (blockEntity instanceof BlockEntityDDJ400 blockEntityDDJ400) {
-
-        }
-        else {
+        if (blockEntity instanceof AbstractController controller) {
+            this.fileAudioStream.isPlaying = this.isPlaying;
+        } else {
             this.stop();
         }
+    }
+
+    public void play() {
+        this.isPlaying = true;
+    }
+
+    public void pause() {
+        this.isPlaying = false;
     }
 
     @Override

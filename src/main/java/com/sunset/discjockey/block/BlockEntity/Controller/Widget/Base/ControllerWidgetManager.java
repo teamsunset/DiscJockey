@@ -1,5 +1,6 @@
 package com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base;
 
+import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
 import net.minecraft.nbt.CompoundTag;
 
@@ -8,6 +9,8 @@ import java.util.Vector;
 //for load at launching, this.controllerWidgets will be statically defined by BlockEntity.if you want to create dynamic widgets in the future, you should write the load function.
 public class ControllerWidgetManager
 {
+    public AbstractController controller;
+
     public enum InteractType
     {
         PRESS,
@@ -26,8 +29,12 @@ public class ControllerWidgetManager
 //        }
 //    }
 
+    public ControllerWidgetManager(AbstractController controller) {
+        this.controller = controller;
+    }
+
     public ControllerWidgetManager add(ControllerWidget controllerWidget) {
-        controllerWidget.controllerWidgetSystem = this;
+        controllerWidget.controllerWidgetManager = this;
         controllerWidgets.add(controllerWidget);
         return this;
     }
@@ -59,14 +66,23 @@ public class ControllerWidgetManager
     public CompoundTag getCompoundTag() {
         CompoundTag compoundTag = new CompoundTag();
         for (ControllerWidget controllerWidget : controllerWidgets) {
-            compoundTag.put(controllerWidget.id, controllerWidget.getCompoundTag());
+            if (controllerWidget.syncMark) {
+                compoundTag.put(
+                        controllerWidget.id,
+                        controllerWidget.getCompoundTag() == null ? new CompoundTag() : controllerWidget.getCompoundTag()
+                );
+                controllerWidget.markClean();
+            }
         }
         return compoundTag;
     }
 
     public void writeCompoundTag(CompoundTag compoundTag) {
         for (ControllerWidget controllerWidget : controllerWidgets) {
-            controllerWidget.writeCompoundTag(compoundTag.getCompound(controllerWidget.id));
+            if (compoundTag.contains(controllerWidget.id)) {
+                controllerWidget.writeCompoundTag(compoundTag.getCompound(controllerWidget.id));
+                controllerWidget.executeOnClient();
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 
 public abstract class ControllerWidget
 {
-    public ControllerWidgetManager controllerWidgetSystem;
+    public ControllerWidgetManager controllerWidgetManager;
 
     public String id;
 
@@ -23,17 +23,22 @@ public abstract class ControllerWidget
 
     //dirty
     //only on serverside
-    public void markDirty() {this.syncMark = true;}
+    public void markDirty() {
+        this.syncMark = true;
+        controllerWidgetManager.controller.markDirty();
+    }
 
     public void markClean() {this.syncMark = false;}
 
     //should clean mark on serverside after send packet
-    public void executeOnServer(double value) {}
+    public abstract void executeOnServer(double value);
 
-    public void executeOnClient() {}
+    public abstract void executeOnClient();
 
+    //serverside
     public abstract CompoundTag getCompoundTag();
 
+    //clientside
     public abstract void writeCompoundTag(CompoundTag compoundTag);
-    
+
 }

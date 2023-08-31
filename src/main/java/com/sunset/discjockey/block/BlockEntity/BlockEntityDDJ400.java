@@ -1,7 +1,9 @@
 package com.sunset.discjockey.block.BlockEntity;
 
 import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMiddleBladeFader;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerPlayButton;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
 import com.sunset.discjockey.util.TouchMap.TouchMapDDJ400;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
@@ -22,8 +24,9 @@ public class BlockEntityDDJ400 extends AbstractController
     public BlockEntityDDJ400(BlockPos pPos, BlockState pBlockState) {
         super(BlockEntityTypeCollection.BLOCK_ENTITY_DDJ400.get(), pPos, pBlockState);
         controllerWidgetManager.add(new ControllerMiddleBladeFader("middle_blade_fader", TouchMapDDJ400.MIDDLE_BLADE_FADER, controllerAudioManager));
+        controllerWidgetManager.add(new ControllerPlayButton("left_play_button", TouchMapDDJ400.LEFT_PLAY_BUTTON, controllerAudioManager, 0));
     }
-    
+
     //action
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 //        if (player.getItemInHand(hand).getItem().equals(ItemCollection.ITEM_USB_FLASH_DISK.get())) {
@@ -49,6 +52,9 @@ public class BlockEntityDDJ400 extends AbstractController
             Vec3 relativeHitLocation = hitLocation.subtract(this.getBlockPos().getCenter());
             Direction blockFacing = state.getValue(HorizontalDirectionalBlock.FACING);
             Vec2Plane relativeHitPoint = new Vec2Plane(new Vec2Plane(relativeHitLocation.x, relativeHitLocation.z)).rotate(-1 * Vec2Plane.DIRECTION_DEGREE_MAP.get(blockFacing), Vec2Plane.ORIGIN);
+            controllerWidgetManager.interact(ControllerWidgetManager.InteractType.DRAG, 1, relativeHitPoint);
+            controllerWidgetManager.interact(ControllerWidgetManager.InteractType.PRESS, 1, relativeHitPoint);
+
 //        player.getEyePosition();
 //        player.pick(player.distance)
 //            if (TouchMapDDJ400.MIDDLE_BLADE_FADER.isInRange(relativeHitPoint)) {

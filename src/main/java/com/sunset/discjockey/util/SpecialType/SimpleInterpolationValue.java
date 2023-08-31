@@ -16,7 +16,15 @@ public class SimpleInterpolationValue
 
     public double _dVal;
 
+    public Runnable functionOnValueChanged = null;
+
     public static double r = 0.5;
+
+    public static double threshold = 0.01;
+
+    public SimpleInterpolationValue() {
+        this(0.0, 0.0);
+    }
 
     public SimpleInterpolationValue(double _oVal, double _dVal) {
         this._oVal = _oVal;
@@ -37,20 +45,36 @@ public class SimpleInterpolationValue
         }
     }
 
-    public double getVal() {
+    public double get() {
         return _oVal;
     }
 
-    public void setVal(double _dVal) {
+    public void set(double val) {
+        this._oVal = val;
+        this._dVal = val;
+    }
+
+    public void setTarget(double _dVal) {
         this._dVal = _dVal;
     }
 
     //interpolate at the end of each tick
+//    @SubscribeEvent
+//    public static void onLevelTick(TickEvent.ServerTickEvent event) {
+//        if (event.side.isServer() && event.phase == TickEvent.Phase.END) {
+//            for (SimpleInterpolationValue value : VALUES) {
+//                value.interpolate();
+//            }
+//        }
+//    }
     @SubscribeEvent
-    public static void onLevelTick(TickEvent.ServerTickEvent event) {
+    public void onLevelTick(TickEvent.ServerTickEvent event) {
         if (event.side.isServer() && event.phase == TickEvent.Phase.END) {
-            for (SimpleInterpolationValue value : VALUES) {
-                value.interpolate();
+            if (_dVal - _oVal > SimpleInterpolationValue.threshold) {
+                this.interpolate();
+                if (functionOnValueChanged != null) {
+                    functionOnValueChanged.run();
+                }
             }
         }
     }
