@@ -21,11 +21,12 @@ public class ControllerMiddleBladeFader extends ControllerFader
     public void executeOnServer(double value) {
         ControllerAudio leftAudio = this.controllerAudioManager.loadedAudios.get(0);
         ControllerAudio rightAudio = this.controllerAudioManager.loadedAudios.get(1);
+        this.value.setTarget(value);
         this.markDirty();
     }
 
     @Override
     public void executeOnClient() {
-        Minecraft.getInstance().player.sendSystemMessage(Component.literal("middle blade fader"));
+
     }
 }
