@@ -21,7 +21,7 @@ public class AbstractController extends BlockEntity
     public AbstractController(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
         controllerAudioManager = new ControllerAudioManager(this);
-        controllerWidgetManager = new ControllerWidgetManager();
+        controllerWidgetManager = new ControllerWidgetManager(this);
     }
 
 

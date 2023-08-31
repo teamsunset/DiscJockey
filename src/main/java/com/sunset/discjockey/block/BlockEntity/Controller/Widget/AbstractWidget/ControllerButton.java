@@ -11,9 +11,20 @@ public abstract class ControllerButton extends ControllerWidget
         super(id, ControllerWidgetManager.InteractType.PRESS, planeRange);
     }
 
-    @Override
-    public abstract CompoundTag getCompoundTag();
+//    @Override
+//    public abstract CompoundTag getCompoundTag();
+//
+//    @Override
+//    public abstract void writeCompoundTag(CompoundTag compoundTag);
 
     @Override
-    public abstract void writeCompoundTag(CompoundTag compoundTag);
+    public CompoundTag getCompoundTag() {
+        return null;
+    }
+
+    @Override
+    public void writeCompoundTag(CompoundTag compoundTag) {
+
+    }
+
 }

@@ -1,7 +1,10 @@
 package com.sunset.discjockey.client.audio;
 
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
+import com.sunset.discjockey.util.SpecialType.Property;
 import net.minecraft.client.sounds.AudioStream;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.BufferUtils;
 
@@ -11,11 +14,15 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 //should be async
+
+@OnlyIn(Dist.CLIENT)
 public class FileAudioStream implements AudioStream
 {
     public final AudioInputStream stream;
     public final byte[] array;
     public int offset;
+
+    public boolean isPlaying = false;
 
     public FileAudioStream(String url) {
         this.stream = MusicFileManager.getMusicAudioInputStream(url);
@@ -34,13 +41,12 @@ public class FileAudioStream implements AudioStream
     public ByteBuffer read(int size) {
         size = 4000;
         ByteBuffer byteBuffer = BufferUtils.createByteBuffer(size);
-        if (array.length >= offset + size) {
+        if (this.isPlaying && array.length >= offset + size) {
             byteBuffer.put(array, offset, size);
-        }
-        else {
+            offset += size;
+        } else {
             byteBuffer.put(new byte[size]);
         }
-        offset += size;
         byteBuffer.flip();
         return byteBuffer;
     }

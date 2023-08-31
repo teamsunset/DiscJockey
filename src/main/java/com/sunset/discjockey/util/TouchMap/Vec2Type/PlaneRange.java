@@ -4,6 +4,8 @@ import net.minecraft.core.Direction;
 
 public class PlaneRange
 {
+
+    //The reference axis for determining the value
     public enum RangeReferenceAxis
     {
         X,

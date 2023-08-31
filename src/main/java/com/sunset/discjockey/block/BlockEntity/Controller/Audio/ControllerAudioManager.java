@@ -72,56 +72,47 @@ public class ControllerAudioManager
     }
 
     public void loadAudio(int index, int channelIndex) {
-        loadedAudios.put(channelIndex, new ControllerAudio(audios.get(index)));
+        loadedAudios.put(channelIndex, new ControllerAudio(this, audios.get(index)));
     }
 
     public void unloadAudio(int channelIndex) {
         loadedAudios.remove(channelIndex);
     }
 
+//    @SubscribeEvent
+//    public static void onLevelTick(TickEvent.LevelTickEvent event) {
+//        //sync data from client to server
+//        if (event.level.isClientSide() && event.phase == TickEvent.Phase.END) {
+//            CompoundTag compoundTag = new CompoundTag();
+//            for (ControllerAudioManager manager : MANAGERS) {
+//
+//                CompoundTag managerCompoundTag = new CompoundTag();
+//                CompoundTag dataCompoundTag = new CompoundTag();
+//
+//                for (Integer channel : manager.loadedAudios.keySet()) {
+//                    ControllerAudio audio = manager.loadedAudios.get(channel);
+//                    CompoundTag audioCompoundTag = new CompoundTag();
+//                    if (audio != null) {
+//                        audioCompoundTag.putInt("elapsed_time", audio.speakerSound.elapsedTime.getValue());
+//                    }
+//                    dataCompoundTag.put(String.valueOf(channel), audioCompoundTag);
+//                }
+//                BlockPos pos = manager.controller.getBlockPos();
+//                managerCompoundTag.put("Pos", new IntArrayTag(new int[]{pos.getX(), pos.getY(), pos.getZ()}));
+//                managerCompoundTag.put("data", dataCompoundTag);
+//                compoundTag.put(String.valueOf(MANAGERS.indexOf(manager)), managerCompoundTag);
+//            }
+//            NetworkHandler.NETWORK_CHANNEL.sendToServer(new TagMessage(compoundTag));
+//        }
+//    }
+
     @SubscribeEvent
-    public static void onLevelTick(TickEvent.LevelTickEvent event) {
+    public void onLevelTick(TickEvent.LevelTickEvent event) {
         //sync data from client to server
-        if (event.level.isClientSide() && event.phase == TickEvent.Phase.END) {
-            CompoundTag compoundTag = new CompoundTag();
-            for (ControllerAudioManager manager : MANAGERS) {
-
-                CompoundTag managerCompoundTag = new CompoundTag();
-                CompoundTag dataCompoundTag = new CompoundTag();
-
-                for (Integer channel : manager.loadedAudios.keySet()) {
-                    ControllerAudio audio = manager.loadedAudios.get(channel);
-                    CompoundTag audioCompoundTag = new CompoundTag();
-                    if (audio != null) {
-                        audioCompoundTag.putInt("elapsed_time", audio.speakerSound.elapsedTime.getValue());
-                    }
-                    dataCompoundTag.put(String.valueOf(channel), audioCompoundTag);
-                }
-                BlockPos pos = manager.controller.getBlockPos();
-                managerCompoundTag.put("Pos", new IntArrayTag(new int[]{pos.getX(), pos.getY(), pos.getZ()}));
-                managerCompoundTag.put("data", dataCompoundTag);
-                compoundTag.put(String.valueOf(MANAGERS.indexOf(manager)), managerCompoundTag);
-            }
-            NetworkHandler.NETWORK_CHANNEL.sendToServer(new TagMessage(compoundTag));
-        }
     }
 
-    public static void handleTagMessage(TagMessage message, NetworkEvent.Context context) {
-        if (context.getDirection().getReceptionSide().isServer()) {
-            for (String key : message.compoundTag.getAllKeys()) {
-                CompoundTag managerCompoundTag = message.compoundTag.getCompound(key);
-                int[] pos = managerCompoundTag.getIntArray("Pos");
-                BlockPos blockPos = new BlockPos(pos[0], pos[1], pos[2]);
-                ServerLevel level = context.getSender().serverLevel();
 
-                if (level.getBlockEntity(blockPos) instanceof AbstractController controller) {
-                    CompoundTag dataCompoundTag = managerCompoundTag.getCompound("data");
-                    for (String channel : dataCompoundTag.getAllKeys()) {
-                        CompoundTag audioCompoundTag = dataCompoundTag.getCompound(channel);
-                        controller.controllerAudioManager.loadedAudios.get(Integer.parseInt(channel)).elapsedTimeOnServer = audioCompoundTag.getInt("elapsed_time");
-                    }
-                }
-            }
-        }
+    public static void handleTagMessage(TagMessage message, NetworkEvent.Context context) {
+
     }
 }
