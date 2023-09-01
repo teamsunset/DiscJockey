@@ -42,7 +42,7 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
     public void render(BlockEntityDDJ400 pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
         BlockPos pos = pBlockEntity.getBlockPos();
 
-        ModelPart M_bt = MODEL.bone.getChild("M").getChild("M_bt");
+        ModelPart M_bt = MODEL.all.getChild("middle").getChild("middle_fader");
         for (ControllerWidget controllerWidget : pBlockEntity.controllerWidgetManager.controllerWidgets) {
             if (controllerWidget instanceof ControllerMiddleBladeFader controllerMiddleBladeFader) {
                 M_bt.x = (float) (-1 * controllerMiddleBladeFader.value.get());
