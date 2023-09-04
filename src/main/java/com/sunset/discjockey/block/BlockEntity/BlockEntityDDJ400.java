@@ -2,7 +2,7 @@ package com.sunset.discjockey.block.BlockEntity;
 
 import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
-import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMiddleBladeFader;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMixFader;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerPlayButton;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
 import com.sunset.discjockey.util.TouchMap.TouchMapDDJ400;
@@ -23,7 +23,7 @@ public class BlockEntityDDJ400 extends AbstractController
 
     public BlockEntityDDJ400(BlockPos pPos, BlockState pBlockState) {
         super(BlockEntityTypeCollection.BLOCK_ENTITY_DDJ400.get(), pPos, pBlockState);
-        controllerWidgetManager.add(new ControllerMiddleBladeFader("middle_blade_fader", TouchMapDDJ400.MIDDLE_BLADE_FADER, controllerAudioManager));
+        controllerWidgetManager.add(new ControllerMixFader("mix_fader", TouchMapDDJ400.MIX_FADER, controllerAudioManager));
         controllerWidgetManager.add(new ControllerPlayButton("left_play_button", TouchMapDDJ400.LEFT_PLAY_BUTTON, controllerAudioManager, 0));
     }
 

@@ -39,6 +39,15 @@ public class ControllerWidgetManager
         return this;
     }
 
+    public ControllerWidget get(String id) {
+        for (ControllerWidget controllerWidget : controllerWidgets) {
+            if (controllerWidget.id.equals(id)) {
+                return controllerWidget;
+            }
+        }
+        return null;
+    }
+
     //this function is only on serverside
     public void interact(InteractType interactType, int interactValue, Vec2Plane relativeActionPos) {
         for (ControllerWidget controllerWidget : controllerWidgets) {
