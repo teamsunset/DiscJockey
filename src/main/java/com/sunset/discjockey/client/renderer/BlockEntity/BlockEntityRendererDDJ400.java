@@ -1,23 +1,18 @@
 package com.sunset.discjockey.client.renderer.BlockEntity;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import com.sunset.discjockey.block.BlockEntity.BlockEntityDDJ400;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidget;
-import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMiddleBladeFader;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMixFader;
 import com.sunset.discjockey.client.model.ModelDDJ400;
 import com.sunset.discjockey.util.Reference;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -42,10 +37,10 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
     public void render(BlockEntityDDJ400 pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
         BlockPos pos = pBlockEntity.getBlockPos();
 
-        ModelPart M_bt = MODEL.all.getChild("middle").getChild("middle_fader");
+        ModelPart mix_fader = MODEL.whole.getChild("middle").getChild("middle_fader").getChild("mix_fader");
         for (ControllerWidget controllerWidget : pBlockEntity.controllerWidgetManager.controllerWidgets) {
-            if (controllerWidget instanceof ControllerMiddleBladeFader controllerMiddleBladeFader) {
-                M_bt.x = (float) (-1 * controllerMiddleBladeFader.value.get());
+            if (controllerWidget instanceof ControllerMixFader controllerMiddleBladeFader) {
+                mix_fader.x = (float) (-1 * controllerMiddleBladeFader.value.get());
             }
         }
         renderModel(pPoseStack, pBuffer, pPackedLight, pBlockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING));
