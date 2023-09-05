@@ -4,6 +4,7 @@ import com.sunset.discjockey.client.gui.layout.AbstractLayout;
 import com.sunset.discjockey.client.gui.layout.HorizontalLayout;
 import com.sunset.discjockey.client.gui.layout.VerticalLayout;
 import net.minecraft.client.GameNarrator;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -18,47 +19,50 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @OnlyIn(Dist.CLIENT)
 public class GUIUSBFlashDisk extends Screen {
     private static final Component TITLE = null;
-    private Player owner;
     private ItemStack itemStack;
 
     //widget
 
-    private List<AbstractLayout> inputLines;
+    private AbstractLayout inputLines;
 
-    private Button confirmButton;
+    private AbstractLayout buttons;
 
-    private AbstractLayout layout;
+    private AbstractLayout layout; //whole layout
 
 
-    public GUIUSBFlashDisk(Player pOwner, ItemStack pItemStack) {
+    public GUIUSBFlashDisk(ItemStack pItemStack) {
         super(GameNarrator.NO_TITLE);
-        this.owner = pOwner;
         this.itemStack = pItemStack;
     }
 
-//    @Override
-//    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-//        return super.mouseClicked(pMouseX, pMouseY, pButton);
-//    }
+    //what the hell???
+    public void show() {
+        Minecraft.getInstance().setScreen(this);
+    }
 
     @Override
     protected void init() {
-        layout = new VerticalLayout(this, null, this.width / 4, this.height / 4, this.width / 2, this.height / 2, 10);
+        this.readFromNBT(); //init inputLines
 
-        this.readFromNBT();
-        confirmButton = Button.builder(Component.literal("Confirm"), (button) -> {
-            this.saveToNBT();
-            this.getMinecraft().popGuiLayer();
-        }).build();
+        buttons = new HorizontalLayout(10, 0)
+                .add(
+                        Button.builder(Component.literal("Add"), (button) -> {
+                            inputLines.add(this.createEmptyInputLine());
+                        }).build()
+                )
+                .add(
+                        Button.builder(Component.literal("Confirm"), (button) -> {
+                            this.saveToNBT();
+                            this.getMinecraft().popGuiLayer();
+                        }).build()
+                );
 
-        layout.addAll(inputLines)
-                .add(confirmButton);
+        layout = new VerticalLayout(this, null, this.width / 4, this.height / 8, this.width / 2, (int) (this.height / 1.3), 10, 0)
+                .add(inputLines)
+                .add(buttons, 0, 15);
 
         super.init();
     }
@@ -73,36 +77,40 @@ public class GUIUSBFlashDisk extends Screen {
 
 
     //other
-    public AbstractLayout createEmptyLine() {
-        HorizontalLayout inputLine = new HorizontalLayout(this, 10);
+    public AbstractLayout createEmptyInputLine() {
+        HorizontalLayout inputLine = new HorizontalLayout(10, 0);
         EditBox editBox = new EditBox(font, 0, 0, 0, 0, Component.literal("url input"));
+        editBox.setMaxLength(255);
         Button removeButton = Button.builder(Component.literal("Remove"), (button) -> {
             inputLine.destroy();
-        }).build();
+        }).bounds(0, 0, 0, 0).build();
         return inputLine
-                .add(editBox)
-                .add(removeButton);
+                .add(editBox, -70, 20)
+                .add(removeButton, 0, 20);
     }
 
     public void readFromNBT() {
-        inputLines = new ArrayList<>();
-        CompoundTag compoundTag = this.itemStack.getTag();
-        if (compoundTag != null) {
-            ListTag listTag = compoundTag.getList("url", Tag.TAG_STRING);
-            listTag.forEach(i -> {
-                AbstractLayout inputLine = this.createEmptyLine();
-                ((EditBox) inputLine.getWidgets().get(0)).setValue(i.getAsString());
-                inputLines.add(inputLine);
-            });
+        if (inputLines == null) {
+            inputLines = new VerticalLayout(10, 8);
+            CompoundTag compoundTag = this.itemStack.getTag();
+            if (compoundTag != null) {
+                ListTag listTag = compoundTag.getList("url", Tag.TAG_STRING);
+                listTag.forEach(i -> {
+                    AbstractLayout inputLine = this.createEmptyInputLine();
+                    ((EditBox) inputLine.widgets.get(0)).setValue(i.getAsString());
+                    inputLines.add(inputLine);
+                });
+            }
+        } else {
+            inputLines.screen = this;
         }
-        inputLines.add(this.createEmptyLine());
     }
 
     public void saveToNBT() {
         ListTag listTag = new ListTag();
 
-        inputLines.forEach(i -> {
-            listTag.add(StringTag.valueOf(((EditBox) i.getWidgets().get(0)).getValue()));
+        inputLines.widgets.forEach(i -> {
+            listTag.add(StringTag.valueOf(((EditBox) ((HorizontalLayout) i).widgets.get(0)).getValue()));
         });
 
         this.itemStack.addTagElement("url", listTag);
