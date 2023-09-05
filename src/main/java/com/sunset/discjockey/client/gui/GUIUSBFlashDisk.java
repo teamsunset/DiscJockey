@@ -79,7 +79,7 @@ public class GUIUSBFlashDisk extends Screen {
     public void readFromNBT() {
         CompoundTag compoundTag = this.itemStack.getTag();
         if (compoundTag != null) {
-            ListTag listTag = .getList("url", Tag.TAG_STRING);
+            ListTag listTag = compoundTag.getList("url", Tag.TAG_STRING);
             listTag.forEach(i -> {
                 EditBox editBox = this.createEmptyEditBox();
                 editBox.setValue(i.getAsString());
