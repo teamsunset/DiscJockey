@@ -2,9 +2,11 @@ package com.sunset.discjockey.client.gui.layout;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,56 +16,109 @@ import java.util.List;
 public abstract class AbstractLayout extends AbstractWidget {
     public List<AbstractWidget> widgets = new ArrayList<>();
 
+    public List<Pair<AbstractWidget, Pair<Integer, Integer>>> fixedSizes = new ArrayList<>(); //0 is invalid,-100 to 0 is percent number
+
     public AbstractLayout parent;
 
     public Screen screen;
 
     //    public int x;
 //    public int y;
-//    public int width;
-//    public int height;
     public int gap;
 
-    public AbstractLayout(Screen pScreen, AbstractLayout pParent, int pX, int pY, int pWidth, int pHeight, int pGap) {
+    public int limit; //0 means that there is no limit
+
+    public AbstractLayout(Screen pScreen, AbstractLayout pParent, int pX, int pY, int pWidth, int pHeight, int pGap, int limit) {
         super(pX, pY, pWidth, pHeight, Component.nullToEmpty(null));
         this.active = false;
+
+        this.width = pWidth;
+        this.height = pHeight;
+
         this.screen = pScreen;
         this.parent = pParent;
-//        this.x = pX;
-//        this.y = pY;
-//        this.width = pWidth;
-//        this.height = pHeight;
         this.gap = pGap;
+        this.limit = limit;
     }
 
-    public AbstractLayout(Screen pScreen, int pGap) {
-        this(pScreen, null, 0, 0, 0, 0, pGap);
+    public Pair<Integer, Integer> getFixedSize(AbstractWidget widget) {
+        for (Pair<AbstractWidget, Pair<Integer, Integer>> pair : this.fixedSizes) {
+            if (pair.getA() == widget) {
+                return pair.getB();
+            }
+        }
+        return new Pair<>(0, 0);
     }
 
-    public int getGap() {
-        return gap;
+    public AbstractLayout addFixedSize(AbstractWidget widget, int pFixedWidth, int pFixedHeight) {
+        this.fixedSizes.add(new Pair<>(widget, new Pair<>(pFixedWidth, pFixedHeight)));
+        return this;
     }
 
-    public List<AbstractWidget> getWidgets() {
-        return this.widgets;
+    public Double getPercentage(int pNumber) {
+        return Math.abs(pNumber) / 100.0;
     }
 
-    //child should override this method to realize layout
-    public abstract void sort();
+    public AbstractLayout setScreen(Screen pScreen) {
+        this.screen = pScreen;
+        for (AbstractWidget widget : this.widgets) {
+            if (widget instanceof AbstractLayout layout) {
+                layout.setScreen(pScreen);
+            } else if (this.screen != null) {
+                this.screen.renderables.add(widget);
+                this.screen.narratables.add(widget);
+                this.screen.children.add(widget);
+            }
+        }
+        return this;
+    }
+
+    //child should override this method to implement layout
+    //do super at the end
+    public void sort() {
+        for (AbstractWidget widget : this.widgets) {
+//            if (widget.getWidth() < 2 || widget.getHeight() < 2) {
+//                new RuntimeException("size should be positive(>1)").printStackTrace();
+//                System.err.println("size should be positive(>1)");
+//                if (widget.getWidth() < 2)
+//                    widget.setWidth(999);
+//                if (widget.getHeight() < 2)
+//                    widget.setHeight(999);
+//            }
+            widget.setWidth(Math.max(widget.getWidth(), 2));
+            widget.setHeight(Math.max(widget.getHeight(), 2));
+
+            if (widget instanceof EditBox editBox) {
+                editBox.setValue(editBox.getValue());
+            }
+
+            if (widget instanceof AbstractLayout layout) {
+                layout.sort();
+            }
+        }
+    }
 
     public AbstractLayout add(AbstractWidget widget) {
-        this.widgets.add(widget);
+        if (this.limit < 1 || this.widgets.size() < this.limit) {
+            this.widgets.add(widget);
 
-        if (widget instanceof AbstractLayout layout) {
-            layout.screen = this.screen;
-            layout.parent = this;
-        } else {
-            screen.renderables.add(widget);
-            screen.narratables.add(widget);
-            screen.children.add(widget);
+            if (widget instanceof AbstractLayout layout) {
+                layout.setScreen(this.screen);
+                layout.parent = this;
+            } else if (screen != null) {
+                this.screen.renderables.add(widget);
+                this.screen.narratables.add(widget);
+                this.screen.children.add(widget);
+            }
+
+            this.sort();
         }
+        return this;
+    }
 
-        this.sort();
+    public AbstractLayout add(AbstractWidget widget, int pFixedWidth, int pFixedHeight) {
+        this.addFixedSize(widget, pFixedWidth, pFixedHeight);
+        this.add(widget);//sequential because of sort()
         return this;
     }
 
@@ -75,20 +130,25 @@ public abstract class AbstractLayout extends AbstractWidget {
 
     public AbstractLayout remove(AbstractWidget widget) {
         this.widgets.remove(widget);
+        this.fixedSizes.removeIf((pair) -> pair.getA() == widget);
 
-        if (!(widget instanceof AbstractLayout)) {
-            screen.renderables.remove(widget);
-            screen.narratables.remove(widget);
-            screen.children.remove(widget);
+        if (!(widget instanceof AbstractLayout) && this.screen != null) {
+            this.screen.renderables.remove(widget);
+            this.screen.narratables.remove(widget);
+            this.screen.children.remove(widget);
         }
+
         if (!this.widgets.isEmpty())
             this.sort();
         return this;
     }
 
     public void removeAll() {
-        this.widgets.forEach(this::remove);
+        while (!this.widgets.isEmpty()) {
+            this.remove(this.widgets.get(0));
+        }
     }
+
 
     public void destroy() {
         if (parent != null)
@@ -96,6 +156,8 @@ public abstract class AbstractLayout extends AbstractWidget {
         this.removeAll();
     }
 
+
+    //deprecated
     @Override
     protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 //        widgets.forEach((widget) -> {
