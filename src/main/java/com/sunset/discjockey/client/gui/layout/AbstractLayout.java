@@ -80,10 +80,6 @@ public abstract class AbstractLayout extends AbstractWidget {
 //            if (widget.getWidth() < 2 || widget.getHeight() < 2) {
 //                new RuntimeException("size should be positive(>1)").printStackTrace();
 //                System.err.println("size should be positive(>1)");
-//                if (widget.getWidth() < 2)
-//                    widget.setWidth(999);
-//                if (widget.getHeight() < 2)
-//                    widget.setHeight(999);
 //            }
             widget.setWidth(Math.max(widget.getWidth(), 2));
             widget.setHeight(Math.max(widget.getHeight(), 2));
@@ -172,73 +168,4 @@ public abstract class AbstractLayout extends AbstractWidget {
 //                widget.updateNarration(narrationElementOutput);
 //        });
     }
-//
-//    @Override
-//    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-//        widgets.forEach((widget) -> {
-//            if (widget.mouseClicked(pMouseX, pMouseY, pButton)) {
-//                widget.setFocused(true);
-//            } else {
-//                widget.setFocused(false);
-//            }
-//        });
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
-//        widgets.forEach((widget) -> {
-//            widget.mouseReleased(pMouseX, pMouseY, pButton);
-//        });
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-//        widgets.forEach((widget) -> {
-//            widget.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
-//        });
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-//        widgets.forEach((widget) -> {
-//            widget.keyPressed(pKeyCode, pScanCode, pModifiers);
-//        });
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers) {
-//        widgets.forEach((widget) -> {
-//            widget.keyReleased(pKeyCode, pScanCode, pModifiers);
-//        });
-//        return true;
-//    }
-//
-//    @Override
-//    public void mouseMoved(double pMouseX, double pMouseY) {
-//        widgets.forEach((widget) -> {
-//            widget.mouseMoved(pMouseX, pMouseY);
-//        });
-//    }
-//
-//    @Override
-//    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
-//        widgets.forEach((widget) -> {
-//            widget.mouseScrolled(pMouseX, pMouseY, pDelta);
-//        });
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean charTyped(char pCodePoint, int pModifiers) {
-//        widgets.forEach((widget) -> {
-//            widget.charTyped(pCodePoint, pModifiers);
-//        });
-//        return true;
-//    }
-
-
 }
