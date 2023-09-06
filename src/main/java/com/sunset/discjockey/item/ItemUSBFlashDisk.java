@@ -2,6 +2,8 @@ package com.sunset.discjockey.item;
 
 import com.sunset.discjockey.client.gui.GUIUSBFlashDisk;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.DeathScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -10,8 +12,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+
+import static com.sunset.discjockey.DiscJockey.DEBUG_LOGGER;
 
 public class ItemUSBFlashDisk extends Item {
     public ItemUSBFlashDisk() {
@@ -28,11 +33,16 @@ public class ItemUSBFlashDisk extends Item {
 
         if (FMLEnvironment.dist == Dist.CLIENT && pLevel.isClientSide() && pPlayer.isShiftKeyDown()) {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-                new GUIUSBFlashDisk(pPlayer.getItemInHand(pUsedHand)).show();
+                this.openGui(pPlayer.getItemInHand(pUsedHand));
             });
         }
         return super.use(pLevel, pPlayer, pUsedHand);
     }
 
+
+    @OnlyIn(Dist.CLIENT)
+    public void openGui(ItemStack itemStack) {
+        Minecraft.getInstance().setScreen(new GUIUSBFlashDisk(itemStack));
+    }
 
 }
