@@ -41,6 +41,10 @@ public abstract class AbstractLayout extends AbstractWidget {
         this.limit = limit;
     }
 
+    public boolean hasReachedLimit() {
+        return this.limit > 0 && this.widgets.size() >= this.limit;
+    }
+
     public Pair<Integer, Integer> getFixedSize(AbstractWidget widget) {
         for (Pair<AbstractWidget, Pair<Integer, Integer>> pair : this.fixedSizes) {
             if (pair.getA() == widget) {
@@ -59,15 +63,39 @@ public abstract class AbstractLayout extends AbstractWidget {
         return Math.abs(pNumber) / 100.0;
     }
 
+    public void addToScreen(AbstractWidget widget) {
+        if (this.screen != null && !this.screen.renderables.contains(widget) && !this.screen.narratables.contains(widget) && !this.screen.children.contains(widget)) {
+            this.screen.renderables.add(widget);
+            this.screen.narratables.add(widget);
+            this.screen.children.add(widget);
+        }
+    }
+
+    public void removeFromScreen(AbstractWidget widget) {
+        if (this.screen != null) {
+            if (widget instanceof AbstractLayout layout) {
+                layout.removeFromScreenAll();
+            } else {
+                this.screen.renderables.remove(widget);
+                this.screen.narratables.remove(widget);
+                this.screen.children.remove(widget);
+            }
+        }
+    }
+
+    public void removeFromScreenAll() {
+        for (AbstractWidget widget : this.widgets) {
+            this.removeFromScreen(widget);
+        }
+    }
+
     public AbstractLayout setScreen(Screen pScreen) {
         this.screen = pScreen;
         for (AbstractWidget widget : this.widgets) {
             if (widget instanceof AbstractLayout layout) {
                 layout.setScreen(pScreen);
-            } else if (this.screen != null) {
-                this.screen.renderables.add(widget);
-                this.screen.narratables.add(widget);
-                this.screen.children.add(widget);
+            } else {
+                this.addToScreen(widget);
             }
         }
         return this;
@@ -95,16 +123,14 @@ public abstract class AbstractLayout extends AbstractWidget {
     }
 
     public AbstractLayout add(AbstractWidget widget) {
-        if (this.limit < 1 || this.widgets.size() < this.limit) {
+        if (!this.hasReachedLimit()) {
             this.widgets.add(widget);
 
             if (widget instanceof AbstractLayout layout) {
                 layout.setScreen(this.screen);
                 layout.parent = this;
-            } else if (screen != null) {
-                this.screen.renderables.add(widget);
-                this.screen.narratables.add(widget);
-                this.screen.children.add(widget);
+            } else {
+                this.addToScreen(widget);
             }
 
             this.sort();
@@ -128,10 +154,10 @@ public abstract class AbstractLayout extends AbstractWidget {
         this.widgets.remove(widget);
         this.fixedSizes.removeIf((pair) -> pair.getA() == widget);
 
-        if (!(widget instanceof AbstractLayout) && this.screen != null) {
-            this.screen.renderables.remove(widget);
-            this.screen.narratables.remove(widget);
-            this.screen.children.remove(widget);
+        if (widget instanceof AbstractLayout layout) {
+            layout.removeFromScreenAll();
+        } else {
+            this.removeFromScreen(widget);
         }
 
         if (!this.widgets.isEmpty())
@@ -149,6 +175,11 @@ public abstract class AbstractLayout extends AbstractWidget {
     public void destroy() {
         if (parent != null)
             this.parent.remove(this);
+        for (AbstractWidget widget : this.widgets) {
+            if (widget instanceof AbstractLayout layout) {
+                layout.destroy();
+            }
+        }
         this.removeAll();
     }
 
