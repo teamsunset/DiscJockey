@@ -6,8 +6,7 @@ import com.sunset.discjockey.util.SpecialType.SimpleInterpolationValue;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.nbt.CompoundTag;
 
-public abstract class ControllerFader extends ControllerWidget
-{
+public abstract class ControllerFader extends ControllerWidget {
 //    public double value = 0.0; //between -1 to 1
 
     public SimpleInterpolationValue value;

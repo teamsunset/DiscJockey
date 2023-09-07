@@ -5,8 +5,9 @@ import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudioM
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerFader;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 
-public class ControllerMixFader extends ControllerFader
-{
+import static com.sunset.discjockey.DiscJockey.DEBUG_LOGGER;
+
+public class ControllerMixFader extends ControllerFader {
 
     public ControllerAudioManager controllerAudioManager;
 
@@ -20,11 +21,12 @@ public class ControllerMixFader extends ControllerFader
         ControllerAudio leftAudio = this.controllerAudioManager.loadedAudios.get(0);
         ControllerAudio rightAudio = this.controllerAudioManager.loadedAudios.get(1);
         this.value.setTarget(value);
+        this.markExecute();
         this.markDirty();
     }
 
     @Override
     public void executeOnClient() {
-
+        DEBUG_LOGGER.debug("帅");
     }
 }
