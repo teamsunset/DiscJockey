@@ -4,11 +4,9 @@ import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudioM
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerButton;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 
-public class ControllerPlayButton extends ControllerButton
-{
+public class ControllerPlayButton extends ControllerButton {
     public int channelIndex;
     public ControllerAudioManager controllerAudioManager;
 
@@ -20,6 +18,7 @@ public class ControllerPlayButton extends ControllerButton
 
     @Override
     public void executeOnServer(double value) {
+        this.markExecute();
         this.markDirty();
     }
 

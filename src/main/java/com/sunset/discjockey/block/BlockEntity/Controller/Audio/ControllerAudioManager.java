@@ -1,25 +1,18 @@
 package com.sunset.discjockey.block.BlockEntity.Controller.Audio;
 
 import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
-import com.sunset.discjockey.network.NetworkHandler;
 import com.sunset.discjockey.network.message.TagMessage;
-import com.sunset.discjockey.util.Reference;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntArrayTag;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-@Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class ControllerAudioManager
-{
+public class ControllerAudioManager {
     public static Vector<ControllerAudioManager> MANAGERS = new Vector<>();
 
     public AbstractController controller;
@@ -32,6 +25,8 @@ public class ControllerAudioManager
 
     public ControllerAudioManager(AbstractController controller) {
         this.controller = controller;
+        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(ControllerAudioManager.class);
     }
 
     public ControllerAudioManager(CompoundTag compoundTag) {
