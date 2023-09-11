@@ -10,8 +10,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 
 import java.util.concurrent.CompletableFuture;
+
+import static com.sunset.discjockey.DiscJockey.DEBUG_LOGGER;
 
 public class ControllerAudio {
     public ControllerAudioManager manager;
@@ -27,7 +30,9 @@ public class ControllerAudio {
     public ControllerAudio(ControllerAudioManager controllerAudioManager, String url) {
         this.manager = controllerAudioManager;
         this.url = url;
-        MinecraftForge.EVENT_BUS.register(this);
+        if (Minecraft.getInstance().level != null && Minecraft.getInstance().level.isClientSide()) {
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::setupOnClient);
+        }
     }
 
     public CompoundTag getCompoundTag() {
@@ -42,12 +47,16 @@ public class ControllerAudio {
         this.url = compoundTag.getString("url");
         this.isPlayingOnServer = compoundTag.getBoolean("isPlayingOnServer");
         this.elapsedTimeOnServer = compoundTag.getInt("elapsedTimeOnServer");
+        if (this.speakerSound != null) {
+            this.speakerSound.isPlaying = this.isPlayingOnServer;
+            this.speakerSound.elapsedTime.setValue(this.elapsedTimeOnServer);
+        }
+        DEBUG_LOGGER.debug(String.valueOf(this.elapsedTimeOnServer));
     }
 
     @OnlyIn(Dist.CLIENT)
     public void setupOnClient() {
         CompletableFuture.runAsync(() ->
-//                        Minecraft.getInstance().submitAsync(() ->
                 {
                     try {
                         if (!MusicFileManager.checkURL(this.url)) {
@@ -60,18 +69,15 @@ public class ControllerAudio {
                         e.printStackTrace();
                     }
                 }
-//                        )
                 , Util.backgroundExecutor());
     }
 
-    @SubscribeEvent
     public void onLevelTick(TickEvent.LevelTickEvent event) {
-        if (!event.level.isClientSide()) {
+        if (!event.level.isClientSide() && event.phase.equals(TickEvent.Phase.END)) {
             if (this.isPlayingOnServer) {
                 this.elapsedTimeOnServer++;
-            } else {
-                this.elapsedTimeOnServer = 0;
             }
+            this.manager.controller.markDirty();
         }
     }
 }

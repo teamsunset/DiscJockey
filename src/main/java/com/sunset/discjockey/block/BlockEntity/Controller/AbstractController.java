@@ -2,19 +2,26 @@ package com.sunset.discjockey.block.BlockEntity.Controller;
 
 import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudioManager;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
+import com.sunset.discjockey.network.NetworkHandler;
+import com.sunset.discjockey.network.message.ControllerSyncMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 
 import static net.minecraft.world.level.block.Block.UPDATE_CLIENTS;
 
-public class AbstractController extends BlockEntity
-{
+public class AbstractController extends BlockEntity {
     public ControllerAudioManager controllerAudioManager;
     public ControllerWidgetManager controllerWidgetManager;
 
@@ -22,6 +29,7 @@ public class AbstractController extends BlockEntity
         super(pType, pPos, pBlockState);
         controllerAudioManager = new ControllerAudioManager(this);
         controllerWidgetManager = new ControllerWidgetManager(this);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
 
@@ -29,13 +37,15 @@ public class AbstractController extends BlockEntity
     public void markDirty() {
         if (level != null) {
             this.setChanged();
-            this.sync();
+//            this.sync();
         }
     }
 
     public void sync() {
-        if (level != null && !level.isClientSide)
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), UPDATE_CLIENTS);
+        if (level != null && !level.isClientSide) {
+//            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), UPDATE_CLIENTS);
+            NetworkHandler.NETWORK_CHANNEL.send(PacketDistributor.ALL.noArg(), new ControllerSyncMessage(getBlockPos(), getUpdateTag()));
+        }
     }
 
 
@@ -55,18 +65,23 @@ public class AbstractController extends BlockEntity
     //getUpdateTag <->handleUpdateTag loading
 
     @Override
-    public void load(CompoundTag compoundTag) throws RuntimeException {
+    public void load(@NotNull CompoundTag compoundTag) throws RuntimeException {
         super.load(compoundTag);
-        controllerAudioManager.writeCompoundTag(compoundTag.getCompound("controller_audio_manager"));
-        controllerWidgetManager.writeCompoundTag(compoundTag.getCompound("controller_widget_manager"));
+        this.controllerAudioManager.writeCompoundTag(compoundTag.getCompound("controller_audio_manager"));
+        this.controllerWidgetManager.writeCompoundTag(compoundTag.getCompound("controller_widget_manager"));
     }
 
-    //network
     @Override
-    public CompoundTag getUpdateTag() {
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        // Will get tag from #getUpdateTag
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public @NotNull CompoundTag getUpdateTag() {
         CompoundTag compoundTag = super.getUpdateTag();
-        compoundTag.put("controller_audio_manager", controllerAudioManager.getCompoundTag());
-        compoundTag.put("controller_widget_manager", controllerWidgetManager.getCompoundTag());
+        compoundTag.put("controller_audio_manager", this.controllerAudioManager.getCompoundTag());
+        compoundTag.put("controller_widget_manager", this.controllerWidgetManager.getCompoundTag());
         return compoundTag;
     }
 
@@ -74,12 +89,24 @@ public class AbstractController extends BlockEntity
     @Override
     public void handleUpdateTag(CompoundTag compoundTag) {
         super.handleUpdateTag(compoundTag);
-//        super.load(compoundTag);
     }
 
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        // Will get tag from #getUpdateTag
-        return ClientboundBlockEntityDataPacket.create(this);
+    public boolean loadDone = false;
+
+    @SubscribeEvent
+    public void onLevelTick(TickEvent.LevelTickEvent event) {
+        if (event.level != null && (event.level.isClientSide() == this.level.isClientSide()) && event.phase.equals(TickEvent.Phase.END)) {
+            if (!loadDone) {
+                if (this.level.getBlockEntity(this.getBlockPos()) != null)
+                    loadDone = true;
+            } else {
+                if (this.level.getBlockEntity(this.getBlockPos()) == null) {
+                    MinecraftForge.EVENT_BUS.unregister(this);
+                } else if (!event.level.isClientSide()) {
+                    this.controllerAudioManager.onLevelTick(event);
+                    this.sync();
+                }
+            }
+        }
     }
 }

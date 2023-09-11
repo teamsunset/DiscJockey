@@ -171,7 +171,7 @@ public class GUIUSBFlashDisk extends Screen {
             inputLinesList = new ArrayList<>();
 
             CompoundTag compoundTag = this.itemStack.getOrCreateTag();
-            ListTag listTag = compoundTag.getList("url", Tag.TAG_STRING);
+            ListTag listTag = compoundTag.getList("urls", Tag.TAG_STRING);
 
             //fill inputLines and make sure that the inputLinesList is not empty
             VerticalLayout inputLines = createEmptyInputLines();
@@ -197,6 +197,6 @@ public class GUIUSBFlashDisk extends Screen {
             listTag.add(StringTag.valueOf(((EditBox) ((HorizontalLayout) inputLine).widgets.get(0)).getValue()));
         }));
 
-        this.itemStack.addTagElement("url", listTag);
+        this.itemStack.addTagElement("urls", listTag);
     }
 }

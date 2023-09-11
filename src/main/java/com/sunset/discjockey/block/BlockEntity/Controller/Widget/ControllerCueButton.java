@@ -7,11 +7,11 @@ import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
-public class ControllerPlayButton extends ControllerButton {
+public class ControllerCueButton extends ControllerButton {
     public int channelIndex;
     public ControllerAudioManager controllerAudioManager;
 
-    public ControllerPlayButton(String id, PlaneRange planeRange, ControllerAudioManager controllerAudioManager, int channelIndex) {
+    public ControllerCueButton(String id, PlaneRange planeRange, ControllerAudioManager controllerAudioManager, int channelIndex) {
         super(id, planeRange);
         this.controllerAudioManager = controllerAudioManager;
         this.channelIndex = channelIndex;
@@ -19,16 +19,13 @@ public class ControllerPlayButton extends ControllerButton {
 
     @Override
     public void executeOnServer(double value) {
-        ControllerAudio audio = controllerAudioManager.loadedAudios.get(channelIndex);
-        if (audio != null) {
-            audio.isPlayingOnServer = !audio.isPlayingOnServer;
-        }
+        controllerAudioManager.loadAudio(0, 0);
         this.markExecute();
         this.markDirty();
     }
 
     @Override
     public void executeOnClient() {
-        Minecraft.getInstance().player.sendSystemMessage(Component.literal("play button"));
+        Minecraft.getInstance().player.sendSystemMessage(Component.literal("cue button"));
     }
 }

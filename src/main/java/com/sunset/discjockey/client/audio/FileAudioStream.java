@@ -16,17 +16,19 @@ import java.nio.ByteBuffer;
 //should be async
 
 @OnlyIn(Dist.CLIENT)
-public class FileAudioStream implements AudioStream
-{
+public class FileAudioStream implements AudioStream {
     public final AudioInputStream stream;
     public final byte[] array;
     public int offset;
+
+    public final int tickSize;
 
     public boolean isPlaying = false;
 
     public FileAudioStream(String url) {
         this.stream = MusicFileManager.getMusicAudioInputStream(url);
         this.array = MusicFileManager.getMusicBytes(url);
+        this.tickSize = this.array.length / MusicFileManager.getSongTime(url);
         this.offset = 0;
     }
 
@@ -39,7 +41,7 @@ public class FileAudioStream implements AudioStream
     @NotNull
     @Override
     public ByteBuffer read(int size) {
-        size = 4000;
+        size = 5000;
         ByteBuffer byteBuffer = BufferUtils.createByteBuffer(size);
         if (this.isPlaying && array.length >= offset + size) {
             byteBuffer.put(array, offset, size);
