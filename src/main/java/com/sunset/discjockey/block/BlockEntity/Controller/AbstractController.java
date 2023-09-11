@@ -44,7 +44,7 @@ public class AbstractController extends BlockEntity {
     public void sync() {
         if (level != null && !level.isClientSide) {
 //            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), UPDATE_CLIENTS);
-            NetworkHandler.NETWORK_CHANNEL.send(PacketDistributor.ALL.noArg(), new ControllerSyncMessage(getBlockPos(), getUpdateTag()));
+            NetworkHandler.NETWORK_CHANNEL.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(getBlockPos())), new ControllerSyncMessage(this.getBlockPos(), this.getUpdateTag()));
         }
     }
 

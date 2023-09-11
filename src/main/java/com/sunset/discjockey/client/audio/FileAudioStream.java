@@ -55,6 +55,7 @@ public class FileAudioStream implements AudioStream {
 
     @Override
     public void close() throws IOException {
+        //nothing to do
         stream.close();
     }
 }
