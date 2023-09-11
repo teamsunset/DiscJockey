@@ -59,7 +59,7 @@ public class BlockEntityDDJ400 extends AbstractController {
 //            player.displayClientMessage(Component.literal("Set playing to " + this.getPlaying()), true);
 //        }
 
-        if (!level.isClientSide()) {
+        if (!level.isClientSide() && !player.getItemInHand(hand).getItem().equals(ItemCollection.ITEM_USB_FLASH_DISK.get())) {
             Vec3 hitLocation = hit.getLocation();
             Vec3 relativeHitLocation = hitLocation.subtract(this.getBlockPos().getCenter());
             Direction blockFacing = state.getValue(HorizontalDirectionalBlock.FACING);
@@ -73,7 +73,7 @@ public class BlockEntityDDJ400 extends AbstractController {
 //                this.setMiddleBladeFader(((relativeHitPoint.x - TouchMapDDJ400.MIDDLE_BLADE_FADER.p1.x) / (TouchMapDDJ400.MIDDLE_BLADE_FADER.p2.x - TouchMapDDJ400.MIDDLE_BLADE_FADER.p1.x) * 2 - 1));
 //                SG_LOGGER.debug(String.valueOf(hitLocation));
 //            }
-        } else if (player.getItemInHand(hand).getItem().equals(ItemCollection.ITEM_USB_FLASH_DISK.get())) {
+        } else if (level.isClientSide() && player.getItemInHand(hand).getItem().equals(ItemCollection.ITEM_USB_FLASH_DISK.get())) {
             CompletableFuture.runAsync(() -> {
                 ListTag listTag = player.getItemInHand(hand).getTag().getList("urls", Tag.TAG_STRING);
                 boolean isValid = true;
