@@ -95,7 +95,7 @@ public class AbstractController extends BlockEntity {
 
     @SubscribeEvent
     public void onLevelTick(TickEvent.LevelTickEvent event) {
-        if (event.level != null && (event.level.isClientSide() == this.level.isClientSide()) && event.phase.equals(TickEvent.Phase.END)) {
+        if (event.level != null && this.level != null && (event.level.isClientSide() == this.level.isClientSide()) && event.phase.equals(TickEvent.Phase.END)) {
             if (!loadDone) {
                 if (this.level.getBlockEntity(this.getBlockPos()) != null)
                     loadDone = true;
