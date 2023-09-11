@@ -4,11 +4,18 @@ import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMixFader;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerPlayButton;
+import com.sunset.discjockey.network.message.MusicURLSyncMessage;
+import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
+import com.sunset.discjockey.util.RegistryCollection.ItemCollection;
 import com.sunset.discjockey.util.TouchMap.TouchMapDDJ400;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -18,8 +25,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class BlockEntityDDJ400 extends AbstractController
-{
+import java.util.Vector;
+import java.util.concurrent.CompletableFuture;
+
+import static com.sunset.discjockey.network.NetworkHandler.NETWORK_CHANNEL;
+
+public class BlockEntityDDJ400 extends AbstractController {
 
     public BlockEntityDDJ400(BlockPos pPos, BlockState pBlockState) {
         super(BlockEntityTypeCollection.BLOCK_ENTITY_DDJ400.get(), pPos, pBlockState);
@@ -29,7 +40,6 @@ public class BlockEntityDDJ400 extends AbstractController
 
     //action
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-//        if (player.getItemInHand(hand).getItem().equals(ItemCollection.ITEM_USB_FLASH_DISK.get())) {
 //            String futureSongURL = player.getItemInHand(hand).getDisplayName().getString().replace("[", "").replace("]", "");
 //            if (!level.isClientSide()) {
 //                this.setSongURL(futureSongURL);
@@ -61,6 +71,25 @@ public class BlockEntityDDJ400 extends AbstractController
 //                this.setMiddleBladeFader(((relativeHitPoint.x - TouchMapDDJ400.MIDDLE_BLADE_FADER.p1.x) / (TouchMapDDJ400.MIDDLE_BLADE_FADER.p2.x - TouchMapDDJ400.MIDDLE_BLADE_FADER.p1.x) * 2 - 1));
 //                SG_LOGGER.debug(String.valueOf(hitLocation));
 //            }
+        } else if (player.getItemInHand(hand).getItem().equals(ItemCollection.ITEM_USB_FLASH_DISK.get())) {
+            CompletableFuture.runAsync(() -> {
+                ListTag listTag = player.getItemInHand(hand).getTag().getList("urls", Tag.TAG_STRING);
+                boolean isValid = true;
+                for (Tag tag : listTag) {
+                    if (!MusicFileManager.checkURL(tag.getAsString())) {
+                        isValid = false;
+                        player.sendSystemMessage(Component.literal("§4URLs not found!, url:" + tag.getAsString()));
+                        break;
+                    }
+                }
+                if (isValid) {
+                    Vector<String> urls = new Vector<>();
+                    for (Tag tag : listTag) {
+                        urls.add(tag.getAsString());
+                    }
+                    NETWORK_CHANNEL.sendToServer(new MusicURLSyncMessage(this.getBlockPos(), urls));
+                }
+            }, Util.backgroundExecutor());
         }
         return InteractionResult.SUCCESS;
     }
