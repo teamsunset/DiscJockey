@@ -18,8 +18,7 @@ import java.net.URLConnection;
 import java.util.HashMap;
 
 @OnlyIn(Dist.CLIENT)
-public class MusicFileManager
-{
+public class MusicFileManager {
     public static final String fileDir = FMLPaths.MODSDIR.get().toString() + "\\" + Reference.MOD_ID + "\\cache\\";
 
     //para1 Return type, para2 Parameter type
@@ -159,8 +158,7 @@ public class MusicFileManager
         String hashCode = SHA256.calculateSHA256(url);
         if (soundFiles.containsKey(hashCode)) {
             file = soundFiles.get(hashCode);
-        }
-        else {
+        } else {
             file = downLoadFile(url);
             if (file != null)
                 soundFiles.put(hashCode, file);
@@ -175,8 +173,7 @@ public class MusicFileManager
         String hashCode = SHA256.calculateSHA256(url);
         if (soundStream.containsKey(hashCode)) {
             return soundStream.get(hashCode);
-        }
-        else {
+        } else {
             audioInputStream = getPcmAudioInputStreamFromMp3(getMusicFile(url));
             if (audioInputStream != null)
                 soundStream.put(hashCode, audioInputStream);
@@ -192,8 +189,7 @@ public class MusicFileManager
             String hashCode = SHA256.calculateSHA256(url);
             if (soundBytes.containsKey(hashCode)) {
                 return soundBytes.get(hashCode);
-            }
-            else {
+            } else {
                 AudioInputStream audioInputStream = getMusicAudioInputStream(url);
                 if (audioInputStream != null) {
                     bytes = IOUtils.toByteArray(audioInputStream);
@@ -284,7 +280,7 @@ public class MusicFileManager
 
             InputStream inputStream = connection.getInputStream();
             if (inputStream.available() == 0) {
-                throw new Exception("File not found");
+                throw new Exception("Music not found");
             }
 
             //name the file with hashcode
@@ -311,8 +307,7 @@ public class MusicFileManager
         File path = new File(fileDir);
         if (!path.exists()) {
             new File(fileDir).mkdirs();
-        }
-        else {
+        } else {
             for (File file : path.listFiles()) {
                 String hashcode = file.getName().replace(".mp3", "");
 //                String hashcode = SHA256.calculateSHA256(file);
