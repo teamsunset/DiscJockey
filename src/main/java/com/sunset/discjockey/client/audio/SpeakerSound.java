@@ -23,18 +23,17 @@ import java.util.concurrent.CompletableFuture;
 
 //should be async
 @OnlyIn(Dist.CLIENT)
-public class SpeakerSound extends AbstractTickableSoundInstance
-{
+public class SpeakerSound extends AbstractTickableSoundInstance {
     public Integer soundTime;
 
     public boolean isPlaying = false;
 
     public Property<Integer> elapsedTime = new Property<>(
             ov -> {
-                return soundTime * this.fileAudioStream.offset / this.fileAudioStream.array.length;
+                return Math.toIntExact(1L * this.soundTime * this.fileAudioStream.offset / this.fileAudioStream.array.length);
             },
             (ov, nv) -> {
-                this.fileAudioStream.offset = this.fileAudioStream.array.length * nv / soundTime;
+                this.fileAudioStream.offset = Math.toIntExact(1L * this.fileAudioStream.array.length * nv / this.soundTime);
             }
     );
 
@@ -71,6 +70,10 @@ public class SpeakerSound extends AbstractTickableSoundInstance
 
     public void pause() {
         this.isPlaying = false;
+    }
+
+    public void destroy() {
+        this.stop();
     }
 
     @Override

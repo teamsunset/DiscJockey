@@ -10,8 +10,7 @@ import java.util.function.Function;
  *            getter: oldValue -> {}
  *            setter: (oldValue, newValue) -> {}
  */
-public class Property<T>
-{
+public class Property<T> {
     T value;
 
     public Function<T, T> getter;

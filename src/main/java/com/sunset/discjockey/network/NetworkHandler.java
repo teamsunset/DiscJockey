@@ -1,5 +1,6 @@
 package com.sunset.discjockey.network;
 
+import com.sunset.discjockey.network.message.ControllerSyncMessage;
 import com.sunset.discjockey.network.message.MusicURLSyncMessage;
 import com.sunset.discjockey.network.message.TagMessage;
 import com.sunset.discjockey.util.Reference;
@@ -29,12 +30,20 @@ public class NetworkHandler {
                 TagMessage::handle
         );
         NETWORK_CHANNEL.registerMessage(
-                0,
+                1,
                 MusicURLSyncMessage.class,
                 MusicURLSyncMessage::encode,
                 MusicURLSyncMessage::decode,
                 MusicURLSyncMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
+        NETWORK_CHANNEL.registerMessage(
+                2,
+                ControllerSyncMessage.class,
+                ControllerSyncMessage::encode,
+                ControllerSyncMessage::decode,
+                ControllerSyncMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
     }
 

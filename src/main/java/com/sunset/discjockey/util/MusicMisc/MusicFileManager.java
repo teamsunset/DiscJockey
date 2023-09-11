@@ -254,7 +254,7 @@ public class MusicFileManager {
         try {
             // netease music redirect handle
             //若非url格式，匹配netease:数字id，例如netease:123456
-            if (url.matches("^neteast:[0-9]*$")) {
+            if (url.matches("^netease:[0-9]*$")) {
                 url = "https://music.163.com/song/media/outer/url?id=" + url.split(":")[1] + ".mp3";
             }
 
