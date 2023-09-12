@@ -22,11 +22,17 @@ public class Property<T> {
         this.setter = setter;
     }
 
-    public T getValue() {
+    public Property(T value, Function<T, T> getter, BiConsumer<T, T> setter) {
+        this.value = value;
+        this.getter = getter;
+        this.setter = setter;
+    }
+
+    public T get() {
         return getter.apply(this.value);
     }
 
-    public void setValue(T value) {
+    public void set(T value) {
         setter.accept(this.value, value);
     }
 }

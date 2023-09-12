@@ -12,8 +12,6 @@ import net.minecraftforge.fml.DistExecutor;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.sunset.discjockey.DiscJockey.DEBUG_LOGGER;
-
 public class ControllerAudio {
     public ControllerAudioManager manager;
     public String url;
@@ -47,7 +45,7 @@ public class ControllerAudio {
         this.elapsedTimeOnServer = compoundTag.getInt("elapsedTimeOnServer");
         if (this.speakerSound != null) {
             this.speakerSound.isPlaying = this.isPlayingOnServer;
-            this.speakerSound.elapsedTime.setValue(this.elapsedTimeOnServer);
+            this.speakerSound.elapsedTime.set(this.elapsedTimeOnServer);
         }
     }
 
@@ -60,7 +58,7 @@ public class ControllerAudio {
                             throw new Exception("Can't Play it!");
                         }
                         this.speakerSound = new SpeakerSound(this.manager.controller.getBlockPos(), this.url);
-                        this.speakerSound.elapsedTime.setValue(this.elapsedTimeOnServer);
+                        this.speakerSound.elapsedTime.set(this.elapsedTimeOnServer);
                         Minecraft.getInstance().getSoundManager().play(this.speakerSound);
                     } catch (Exception e) {
                         e.printStackTrace();

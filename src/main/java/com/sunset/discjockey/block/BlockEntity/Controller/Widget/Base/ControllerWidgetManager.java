@@ -67,22 +67,18 @@ public class ControllerWidgetManager {
         }
     }
 
-    public void render() {
-
-    }
-
     public CompoundTag getCompoundTag() {
         CompoundTag compoundTag = new CompoundTag();
         for (ControllerWidget controllerWidget : controllerWidgets) {
-            if (controllerWidget.syncMark) {
+            if (controllerWidget.syncMark.get()) {
                 CompoundTag widgetTag = new CompoundTag();
                 widgetTag.put(
                         "data",
                         controllerWidget.getCompoundTag() == null ? new CompoundTag() : controllerWidget.getCompoundTag()
                 );
-                widgetTag.put("execute", IntTag.valueOf(controllerWidget.executeMark ? 1 : 0));
+                widgetTag.put("execute", IntTag.valueOf(controllerWidget.executeMark.get() ? 1 : 0));
                 compoundTag.put(controllerWidget.id, widgetTag);
-                controllerWidget.markClean();
+//                controllerWidget.markClean();
             }
 
         }

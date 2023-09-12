@@ -1,6 +1,5 @@
 package com.sunset.discjockey.block.BlockEntity.Controller.Widget;
 
-import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudio;
 import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudioManager;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerButton;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
@@ -19,9 +18,8 @@ public class ControllerCueButton extends ControllerButton {
 
     @Override
     public void executeOnServer(double value) {
+        super.executeOnServer(value);
         controllerAudioManager.loadAudio(0, 0);
-        this.markExecute();
-        this.markDirty();
     }
 
     @Override
