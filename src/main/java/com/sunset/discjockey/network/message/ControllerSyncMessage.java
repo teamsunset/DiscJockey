@@ -1,6 +1,5 @@
 package com.sunset.discjockey.network.message;
 
-import com.google.common.hash.HashCode;
 import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -9,7 +8,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 import static com.sunset.discjockey.DiscJockey.DEBUG_LOGGER;
@@ -39,6 +37,7 @@ public class ControllerSyncMessage {
 
     public static void handle(ControllerSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
+        DEBUG_LOGGER.debug("handler:" + String.valueOf(message.compoundTag.getCompound("controller_audio_manager").getCompound("loadedAudios").getCompound("0").getInt("elapsedTimeOnServer")));
         context.enqueueWork(() -> {
 //            context.getSender().level().getBlockEntity(message.pos).getCapability(MusicURLSyncMessageProvider.MUSIC_URL_SYNC_MESSAGE_CAPABILITY).ifPresent(cap -> {
 //                cap.setURLs(message.urls);

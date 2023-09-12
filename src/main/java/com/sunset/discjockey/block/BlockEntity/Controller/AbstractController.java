@@ -6,7 +6,6 @@ import com.sunset.discjockey.network.NetworkHandler;
 import com.sunset.discjockey.network.message.ControllerSyncMessage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -19,7 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
-import static net.minecraft.world.level.block.Block.UPDATE_CLIENTS;
+import static com.sunset.discjockey.DiscJockey.DEBUG_LOGGER;
 
 public class AbstractController extends BlockEntity {
     public ControllerAudioManager controllerAudioManager;
@@ -44,7 +43,8 @@ public class AbstractController extends BlockEntity {
     public void sync() {
         if (level != null && !level.isClientSide) {
 //            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), UPDATE_CLIENTS);
-            NetworkHandler.NETWORK_CHANNEL.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(getBlockPos())), new ControllerSyncMessage(this.getBlockPos(), this.getUpdateTag()));
+            DEBUG_LOGGER.debug("send:" + String.valueOf(getUpdateTag().getCompound("controller_audio_manager").getCompound("loadedAudios").getCompound("0").getInt("elapsedTimeOnServer")));
+            NetworkHandler.NETWORK_CHANNEL.send(PacketDistributor.DIMENSION.with(() -> level.dimension()), new ControllerSyncMessage(this.getBlockPos(), this.getUpdateTag()));
         }
     }
 
