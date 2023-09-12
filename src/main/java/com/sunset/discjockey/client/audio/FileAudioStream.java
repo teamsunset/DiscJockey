@@ -1,5 +1,6 @@
 package com.sunset.discjockey.client.audio;
 
+import com.sunset.discjockey.DiscJockey;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.SpecialType.Property;
 import net.minecraft.client.sounds.AudioStream;
@@ -41,7 +42,7 @@ public class FileAudioStream implements AudioStream {
     @NotNull
     @Override
     public ByteBuffer read(int size) {
-        size = 5000;
+        size = 1000;
         ByteBuffer byteBuffer = BufferUtils.createByteBuffer(size);
         if (this.isPlaying && array.length >= offset + size) {
             byteBuffer.put(array, offset, size);
@@ -55,7 +56,6 @@ public class FileAudioStream implements AudioStream {
 
     @Override
     public void close() throws IOException {
-        //nothing to do
         stream.close();
     }
 }

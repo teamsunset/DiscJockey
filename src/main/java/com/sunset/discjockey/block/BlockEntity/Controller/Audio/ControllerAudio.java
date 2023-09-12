@@ -49,7 +49,6 @@ public class ControllerAudio {
             this.speakerSound.isPlaying = this.isPlayingOnServer;
             this.speakerSound.elapsedTime.setValue(this.elapsedTimeOnServer);
         }
-        DEBUG_LOGGER.debug("receive:" + String.valueOf(this.elapsedTimeOnServer));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -71,7 +70,7 @@ public class ControllerAudio {
     }
 
     public void onLevelTick(TickEvent.LevelTickEvent event) {
-        if (!event.level.isClientSide() && event.phase.equals(TickEvent.Phase.END)) {
+        if (!event.level.isClientSide()) {
             if (this.isPlayingOnServer) {
                 this.elapsedTimeOnServer++;
             }
