@@ -56,7 +56,7 @@ public class MusicURLSyncMessage {
             } else {
                 DEBUG_LOGGER.debug("what the hell?" + MusicURLSyncMessage.class.getName());
             }
-            context.setPacketHandled(true);
         });
+        context.setPacketHandled(true);
     }
 }

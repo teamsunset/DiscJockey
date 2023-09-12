@@ -43,7 +43,6 @@ public class AbstractController extends BlockEntity {
     public void sync() {
         if (level != null && !level.isClientSide) {
 //            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), UPDATE_CLIENTS);
-            DEBUG_LOGGER.debug("send:" + String.valueOf(getUpdateTag().getCompound("controller_audio_manager").getCompound("loadedAudios").getCompound("0").getInt("elapsedTimeOnServer")));
             NetworkHandler.NETWORK_CHANNEL.send(PacketDistributor.DIMENSION.with(() -> level.dimension()), new ControllerSyncMessage(this.getBlockPos(), this.getUpdateTag()));
         }
     }
