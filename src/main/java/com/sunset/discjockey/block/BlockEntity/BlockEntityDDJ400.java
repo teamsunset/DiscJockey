@@ -1,6 +1,7 @@
 package com.sunset.discjockey.block.BlockEntity;
 
 import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerFader;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerCueButton;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMixFader;
@@ -38,6 +39,8 @@ public class BlockEntityDDJ400 extends AbstractController {
         controllerWidgetManager.add(new ControllerMixFader("mix_fader", TouchMapDDJ400.MIX_FADER, controllerAudioManager));
         controllerWidgetManager.add(new ControllerPlayButton("left_play_button", TouchMapDDJ400.LEFT_PLAY_BUTTON, controllerAudioManager, 0));
         controllerWidgetManager.add(new ControllerCueButton("left_cue_button", TouchMapDDJ400.LEFT_CUE_BUTTON, controllerAudioManager, 0));
+        controllerWidgetManager.add(new ControllerFader("left_bpm_fader", TouchMapDDJ400.LEFT_BPM_FADER));
+        controllerWidgetManager.add(new ControllerFader("right_bpm_fader", TouchMapDDJ400.RIGHT_BPM_FADER));
     }
 
     //action
@@ -95,6 +98,4 @@ public class BlockEntityDDJ400 extends AbstractController {
         }
         return InteractionResult.SUCCESS;
     }
-
-
 }

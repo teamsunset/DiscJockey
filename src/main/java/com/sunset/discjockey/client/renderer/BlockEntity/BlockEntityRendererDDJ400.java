@@ -1,8 +1,11 @@
 package com.sunset.discjockey.client.renderer.BlockEntity;
 
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.sunset.discjockey.block.BlockEntity.BlockEntityDDJ400;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerButton;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerFader;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidget;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMixFader;
 import com.sunset.discjockey.client.model.ModelDDJ400;
@@ -18,14 +21,15 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 
-public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntityDDJ400>
-{
+import java.util.HashMap;
+import java.util.Map;
+
+public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntityDDJ400> {
     private BlockEntityRendererProvider.Context context;
 
     public static ModelDDJ400<?> MODEL;
     public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/model/ddj_400.png");
     public static BlockEntityRendererDDJ400 instance;
-
 
     public BlockEntityRendererDDJ400(BlockEntityRendererProvider.Context context) {
         this.context = context;
@@ -33,16 +37,41 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
         instance = this;
     }
 
+    public static Map<String, ModelPart> flatParts(ModelPart root) {
+        Map<String, ModelPart> parts = new HashMap<>();
+        return flatParts(root, parts);
+    }
+
+    public static Map<String, ModelPart> flatParts(ModelPart root, Map<String, ModelPart> parts) {
+        for (String name : root.children.keySet()) {
+            ModelPart part = root.getChild(name);
+            parts.put(name, part);
+            flatParts(part, parts);
+        }
+        return parts;
+    }
+
+    public void renderWidgets(BlockEntityDDJ400 blockEntity) {
+        Map<String, ModelPart> allParts = flatParts(MODEL.whole);
+
+        for (ControllerWidget controllerWidget : blockEntity.controllerWidgetManager.controllerWidgets) {
+            if (controllerWidget.id.equals("mix_fader")) {
+                ModelPart mix_fader = allParts.get(controllerWidget.id);
+                mix_fader.x = (float) (-1 * ((ControllerMixFader) controllerWidget).value.get());
+            } else if (controllerWidget instanceof ControllerButton controllerButton) {
+                ModelPart button = allParts.get(controllerButton.id);
+                button.y = controllerButton.pressed.get() ? -0.1f : 0;
+            } else if (controllerWidget.id.contains("bpm_fader")) {
+                ModelPart bpm_fader = allParts.get(controllerWidget.id);
+                bpm_fader.z = (float) (((ControllerFader) controllerWidget).value.get() * 1.5);
+            }
+        }
+    }
+
     @Override
     public void render(BlockEntityDDJ400 pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
         BlockPos pos = pBlockEntity.getBlockPos();
-
-        ModelPart mix_fader = MODEL.whole.getChild("middle").getChild("middle_fader").getChild("mix_fader");
-        for (ControllerWidget controllerWidget : pBlockEntity.controllerWidgetManager.controllerWidgets) {
-            if (controllerWidget instanceof ControllerMixFader controllerMiddleBladeFader) {
-                mix_fader.x = (float) (-1 * controllerMiddleBladeFader.value.get());
-            }
-        }
+        this.renderWidgets(pBlockEntity);
         renderModel(pPoseStack, pBuffer, pPackedLight, pBlockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING));
     }
 
