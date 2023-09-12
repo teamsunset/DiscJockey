@@ -17,20 +17,21 @@ public class NetworkHandler {
     public static final SimpleChannel NETWORK_CHANNEL = NetworkRegistry.newSimpleChannel(
             new ResourceLocation(Reference.MOD_ID, "network"),
             () -> VERSION,
-            it -> it.equals(VERSION),
-            it -> it.equals(VERSION)
+            VERSION::equals,
+            VERSION::equals
     );
 
     public static void init() {
+        int id = 0;
         NETWORK_CHANNEL.registerMessage(
-                0,
+                id++,
                 TagMessage.class,
                 TagMessage::encode,
                 TagMessage::decode,
                 TagMessage::handle
         );
         NETWORK_CHANNEL.registerMessage(
-                1,
+                id++,
                 MusicURLSyncMessage.class,
                 MusicURLSyncMessage::encode,
                 MusicURLSyncMessage::decode,
@@ -38,7 +39,7 @@ public class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER)
         );
         NETWORK_CHANNEL.registerMessage(
-                2,
+                id++,
                 ControllerSyncMessage.class,
                 ControllerSyncMessage::encode,
                 ControllerSyncMessage::decode,

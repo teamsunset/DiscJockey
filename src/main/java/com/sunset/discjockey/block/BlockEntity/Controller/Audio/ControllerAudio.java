@@ -7,9 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 
 import java.util.concurrent.CompletableFuture;
@@ -30,7 +28,7 @@ public class ControllerAudio {
     public ControllerAudio(ControllerAudioManager controllerAudioManager, String url) {
         this.manager = controllerAudioManager;
         this.url = url;
-        if (Minecraft.getInstance().level != null && Minecraft.getInstance().level.isClientSide()) {
+        if (this.manager.controller.getLevel().isClientSide()) {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::setupOnClient);
         }
     }
@@ -51,7 +49,7 @@ public class ControllerAudio {
             this.speakerSound.isPlaying = this.isPlayingOnServer;
             this.speakerSound.elapsedTime.setValue(this.elapsedTimeOnServer);
         }
-        DEBUG_LOGGER.debug(String.valueOf(this.elapsedTimeOnServer));
+        DEBUG_LOGGER.debug("receive:" + String.valueOf(this.elapsedTimeOnServer));
     }
 
     @OnlyIn(Dist.CLIENT)
