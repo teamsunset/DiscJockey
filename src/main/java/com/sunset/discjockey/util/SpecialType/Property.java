@@ -7,32 +7,40 @@ import java.util.function.Function;
  * C# style property
  *
  * @param <T> type of the value
- *            getter: oldValue -> {}
- *            setter: (oldValue, newValue) -> {}
+ *            getter: wov -> {}
+ *            setter: (wov, newValue) -> {}
  */
 public class Property<T> {
-    T value;
+    Wrapper<T> value;
 
-    public Function<T, T> getter;
+    private Function<Wrapper<T>, T> getter;
 
-    public BiConsumer<T, T> setter;
+    private BiConsumer<Wrapper<T>, T> setter;
 
-    public Property(Function<T, T> getter, BiConsumer<T, T> setter) {
+
+    public Property(T value, Function<Wrapper<T>, T> getter, BiConsumer<Wrapper<T>, T> setter) {
+        this.value = new Wrapper<>(value);
         this.getter = getter;
         this.setter = setter;
     }
 
-    public Property(T value, Function<T, T> getter, BiConsumer<T, T> setter) {
-        this.value = value;
-        this.getter = getter;
-        this.setter = setter;
+    public Property(Function<Wrapper<T>, T> getter, BiConsumer<Wrapper<T>, T> setter) {
+        this(null, getter, setter);
     }
 
     public T get() {
-        return getter.apply(this.value);
+        if (this.value == null) {
+            return null;
+        } else {
+            return getter.apply(this.value);
+        }
     }
 
     public void set(T value) {
-        setter.accept(this.value, value);
+        if (this.value == null) {
+            this.value = new Wrapper<>(value);
+        } else {
+            setter.accept(this.value, value);
+        }
     }
 }

@@ -29,10 +29,10 @@ public class SpeakerSound extends AbstractTickableSoundInstance {
     public boolean isPlaying = false;
 
     public Property<Integer> elapsedTime = new Property<>(
-            ov -> {
+            wov -> {
                 return this.fileAudioStream.offset / this.fileAudioStream.tickSize;
             },
-            (ov, nv) -> {
+            (wov, nv) -> {
                 this.fileAudioStream.offset = nv * this.fileAudioStream.tickSize;
             }
     );

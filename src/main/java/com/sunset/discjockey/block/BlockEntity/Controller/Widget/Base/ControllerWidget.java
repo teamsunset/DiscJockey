@@ -1,5 +1,6 @@
 package com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base;
 
+import com.sunset.discjockey.util.SpecialType.OneShotBoolean;
 import com.sunset.discjockey.util.SpecialType.Property;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.nbt.CompoundTag;
@@ -14,29 +15,11 @@ public abstract class ControllerWidget {
     public PlaneRange planeRange;
 
     //    public boolean syncMark = false;
-    public Property<Boolean> syncMark = new Property<>(false,
-            ov -> {
-                boolean v = ov;
-                ov = false;
-                return v;
-            },
-            (ov, dv) -> {
-                ov = dv;
-            }
-    );
+    public Property<Boolean> syncMark = new OneShotBoolean();
 
 //    public boolean executeMark = false;
 
-    public Property<Boolean> executeMark = new Property<>(false,
-            ov -> {
-                boolean v = ov;
-                ov = false;
-                return v;
-            },
-            (ov, dv) -> {
-                ov = dv;
-            }
-    );
+    public Property<Boolean> executeMark = new OneShotBoolean();
 
     public ControllerWidget(String id, ControllerWidgetManager.InteractType interactType, PlaneRange planeRange) {
         this.id = id;
