@@ -3,6 +3,8 @@ package com.sunset.discjockey.client.gui;
 import com.sunset.discjockey.client.gui.layout.AbstractLayout;
 import com.sunset.discjockey.client.gui.layout.HorizontalLayout;
 import com.sunset.discjockey.client.gui.layout.VerticalLayout;
+import com.sunset.discjockey.network.NetworkHandler;
+import com.sunset.discjockey.network.message.ItemTagMessage;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -14,6 +16,8 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,7 +28,10 @@ import java.util.List;
 @OnlyIn(Dist.CLIENT)
 public class GUIUSBFlashDisk extends Screen {
 
+    private Player player;
     private ItemStack itemStack;
+
+    public int slotIndex;
 
     private int pageIndex = 0;
 
@@ -37,9 +44,11 @@ public class GUIUSBFlashDisk extends Screen {
     private AbstractLayout layout; //whole layout
 
 
-    public GUIUSBFlashDisk(ItemStack pItemStack) {
+    public GUIUSBFlashDisk(Player pPlayer, ItemStack pItemStack, int slotIndex) {
         super(GameNarrator.NO_TITLE);
+        this.player = pPlayer;
         this.itemStack = pItemStack;
+        this.slotIndex = slotIndex;
     }
 
     @Override
@@ -198,5 +207,7 @@ public class GUIUSBFlashDisk extends Screen {
         }));
 
         this.itemStack.addTagElement("urls", listTag);
+
+        NetworkHandler.NETWORK_CHANNEL.sendToServer(new ItemTagMessage(this.slotIndex, this.itemStack.getTag()));
     }
 }

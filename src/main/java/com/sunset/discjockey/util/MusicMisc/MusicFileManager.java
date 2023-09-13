@@ -278,10 +278,15 @@ public class MusicFileManager {
         try {
             URLConnection connection = getURLConnection(url);
 
-            InputStream inputStream = connection.getInputStream();
-            if (inputStream.available() == 0) {
+            //check valid
+            if (connection.getHeaderField("Content-Length") == null) {
                 throw new Exception("Music not found");
             }
+
+            InputStream inputStream = connection.getInputStream();
+//            if (inputStream.available() == 0) {
+//                throw new Exception("Music not found");
+//            }
 
             //name the file with hashcode
             file = new File(fileDir + SHA256.calculateSHA256(url) + ".mp3");
