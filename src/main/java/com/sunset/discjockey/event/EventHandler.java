@@ -2,14 +2,12 @@ package com.sunset.discjockey.event;
 
 import com.google.common.eventbus.Subscribe;
 import com.sunset.discjockey.block.BlockDDJ400;
-import com.sunset.discjockey.client.gui.GUIUSBFlashDisk;
 import com.sunset.discjockey.client.model.ModelDDJ400;
 import com.sunset.discjockey.client.renderer.BlockEntity.BlockEntityRendererDDJ400;
 import com.sunset.discjockey.network.NetworkHandler;
+import com.sunset.discjockey.util.ModReference;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
-import com.sunset.discjockey.util.Reference;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.TickEvent;
@@ -21,7 +19,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import java.io.IOException;
 
 public class EventHandler {
-    @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    @Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public class ForgeEventBoth {
         @Subscribe
         public static void onLevelTick(TickEvent.LevelTickEvent event) {
@@ -29,7 +27,7 @@ public class EventHandler {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    @Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public class ModEventBothSide {
         @SubscribeEvent
         public static void onSetupEvent(FMLCommonSetupEvent event) {
@@ -37,7 +35,7 @@ public class EventHandler {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public class ModEventClientSide {
         @SubscribeEvent
         public static void clientSetup(FMLClientSetupEvent event) throws IOException {
@@ -58,7 +56,7 @@ public class EventHandler {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.DEDICATED_SERVER)
+    @Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.DEDICATED_SERVER)
     public class ModEventDedicatedServerSide {
 
     }

@@ -3,7 +3,7 @@ package com.sunset.discjockey.network;
 import com.sunset.discjockey.network.message.ControllerSyncMessage;
 import com.sunset.discjockey.network.message.MusicURLSyncMessage;
 import com.sunset.discjockey.network.message.TagMessage;
-import com.sunset.discjockey.util.Reference;
+import com.sunset.discjockey.util.ModReference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -15,7 +15,7 @@ public class NetworkHandler {
     private static final String VERSION = "1.0.0";
 
     public static final SimpleChannel NETWORK_CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(Reference.MOD_ID, "network"),
+            new ResourceLocation(ModReference.MOD_ID, "network"),
             () -> VERSION,
             VERSION::equals,
             VERSION::equals

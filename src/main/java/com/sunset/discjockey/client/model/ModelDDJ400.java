@@ -5,7 +5,7 @@ package com.sunset.discjockey.client.model;// Made with Blockbench 4.8.1
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.sunset.discjockey.util.Reference;
+import com.sunset.discjockey.util.ModReference;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -16,7 +16,7 @@ import net.minecraft.world.entity.Entity;
 
 public class ModelDDJ400<T extends Entity> extends EntityModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "ddj_400"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(ModReference.MOD_ID, "ddj_400"), "main");
     public final ModelPart whole;
 
     public ModelDDJ400(ModelPart root) {

@@ -10,8 +10,7 @@ import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.Controller
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMixFader;
 import com.sunset.discjockey.client.model.ModelDDJ400;
 import com.sunset.discjockey.client.model.ModelManager;
-import com.sunset.discjockey.util.Reference;
-import net.minecraft.client.model.geom.ModelPart;
+import com.sunset.discjockey.util.ModReference;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -22,16 +21,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntityDDJ400> {
     private BlockEntityRendererProvider.Context context;
 
     public static ModelDDJ400<?> MODEL;
 
     public static ModelManager MODEL_MANAGER;
-    public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/model/ddj_400.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(ModReference.MOD_ID, "textures/model/ddj_400.png");
     public static BlockEntityRendererDDJ400 instance;
 
     public BlockEntityRendererDDJ400(BlockEntityRendererProvider.Context context) {
