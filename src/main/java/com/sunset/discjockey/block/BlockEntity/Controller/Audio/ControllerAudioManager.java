@@ -80,9 +80,9 @@ public class ControllerAudioManager {
         loadedAudios.remove(channelIndex);
     }
 
-    public void onLevelTick(TickEvent.LevelTickEvent event) {
+    public void onServerTick(TickEvent.ServerTickEvent event) {
         for (ControllerAudio controllerAudio : loadedAudios.values()) {
-            controllerAudio.onLevelTick(event);
+            controllerAudio.onServerTick(event);
         }
     }
 }

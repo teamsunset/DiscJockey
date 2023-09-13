@@ -42,7 +42,7 @@ public class FileAudioStream implements AudioStream {
     @NotNull
     @Override
     public ByteBuffer read(int size) {
-        size = 1000;
+        size = this.tickSize;
         ByteBuffer byteBuffer = BufferUtils.createByteBuffer(size);
         if (this.isPlaying && array.length >= offset + size) {
             byteBuffer.put(array, offset, size);

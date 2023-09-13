@@ -13,7 +13,7 @@ public class ControllerFader extends ControllerWidget {
     public ControllerFader(String id, PlaneRange planeRange) {
         super(id, ControllerWidgetManager.InteractType.DRAG, planeRange);
         this.value = new SimpleInterpolationValue();
-        this.value.functionOnValueChanged = this::markDirty;
+        this.value.onServerInterpolate = this::markDirty;
     }
 
     @Override

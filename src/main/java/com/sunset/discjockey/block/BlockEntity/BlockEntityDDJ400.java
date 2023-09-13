@@ -6,6 +6,7 @@ import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.Controller
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerCueButton;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMixFader;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerPlayButton;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerVolumeFader;
 import com.sunset.discjockey.network.message.MusicURLSyncMessage;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
@@ -41,8 +42,8 @@ public class BlockEntityDDJ400 extends AbstractController {
         controllerWidgetManager.add(new ControllerCueButton("left_cue_button", TouchMapDDJ400.LEFT_CUE_BUTTON, controllerAudioManager, 0));
         controllerWidgetManager.add(new ControllerFader("left_bpm_fader", TouchMapDDJ400.LEFT_BPM_FADER));
         controllerWidgetManager.add(new ControllerFader("right_bpm_fader", TouchMapDDJ400.RIGHT_BPM_FADER));
-        controllerWidgetManager.add(new ControllerFader("left_volume_fader", TouchMapDDJ400.LEFT_VOLUME_FADER));
-        controllerWidgetManager.add(new ControllerFader("right_volume_fader", TouchMapDDJ400.RIGHT_VOLUME_FADER));
+        controllerWidgetManager.add(new ControllerVolumeFader("left_volume_fader", TouchMapDDJ400.LEFT_VOLUME_FADER, controllerAudioManager, 0));
+        controllerWidgetManager.add(new ControllerVolumeFader("right_volume_fader", TouchMapDDJ400.RIGHT_VOLUME_FADER, controllerAudioManager, 1));
     }
 
     //action

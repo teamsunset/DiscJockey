@@ -2,12 +2,14 @@ package com.sunset.discjockey.event;
 
 import com.google.common.eventbus.Subscribe;
 import com.sunset.discjockey.block.BlockDDJ400;
+import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
 import com.sunset.discjockey.client.model.ModelDDJ400;
 import com.sunset.discjockey.client.renderer.BlockEntity.BlockEntityRendererDDJ400;
 import com.sunset.discjockey.network.NetworkHandler;
 import com.sunset.discjockey.util.ModReference;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
+import com.sunset.discjockey.util.SpecialType.SimpleInterpolationValue;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.TickEvent;
@@ -21,9 +23,21 @@ import java.io.IOException;
 public class EventHandler {
     @Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public class ForgeEventBoth {
-        @Subscribe
+        @SubscribeEvent
         public static void onLevelTick(TickEvent.LevelTickEvent event) {
 
+        }
+
+        @SubscribeEvent
+        public static void onServerTick(TickEvent.ServerTickEvent event) {
+            SimpleInterpolationValue.onServerTick(event);
+            AbstractController.onServerTick(event);
+        }
+
+        @SubscribeEvent
+        public static void onClientTick(TickEvent.ClientTickEvent event) {
+            SimpleInterpolationValue.onClientTick(event);
+            AbstractController.onClientTick(event);
         }
     }
 

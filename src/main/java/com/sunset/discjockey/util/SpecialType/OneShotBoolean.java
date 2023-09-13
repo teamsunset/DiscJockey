@@ -15,4 +15,16 @@ public class OneShotBoolean extends Property<Boolean> {
                     wov.set(true);
                 });
     }
+
+    public OneShotBoolean(boolean origin) {
+        super(origin,
+                wov -> {
+                    boolean v = wov.get();
+                    wov.set(false);
+                    return v;
+                },
+                (wov, dv) -> {
+                    wov.set(true);
+                });
+    }
 }
