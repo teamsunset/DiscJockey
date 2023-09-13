@@ -48,15 +48,15 @@ public class ModelDDJ400<T extends Entity> extends EntityModel<T> {
 
         PartDefinition left = whole.addOrReplaceChild("left", CubeListBuilder.create(), PartPose.offset(0.0F, -8.0F, 0.0F));
 
-        PartDefinition left_disc = left.addOrReplaceChild("left_disc", CubeListBuilder.create().texOffs(92, 34).addBox(-7.625F, -5.95F, 3.875F, 9.0F, 8.25F, 9.0F, new CubeDeformation(-3.375F))
-                .texOffs(96, 52).addBox(-7.875F, -5.95F, 3.875F, 7.0F, 8.25F, 9.0F, new CubeDeformation(-3.375F))
-                .texOffs(98, 17).addBox(-8.125F, -5.95F, 4.375F, 7.0F, 8.25F, 8.0F, new CubeDeformation(-3.375F))
-                .texOffs(96, 52).addBox(-5.375F, -5.95F, 3.875F, 7.0F, 8.25F, 9.0F, new CubeDeformation(-3.375F))
-                .texOffs(68, 17).mirror().addBox(-5.125F, -5.95F, 4.375F, 7.0F, 8.25F, 8.0F, new CubeDeformation(-3.375F)).mirror(false)
-                .texOffs(60, 36).addBox(-7.625F, -5.95F, 6.125F, 9.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F))
-                .texOffs(66, 54).addBox(-7.125F, -5.95F, 6.375F, 8.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F))
-                .texOffs(96, 87).mirror().addBox(-7.625F, -5.95F, 3.625F, 9.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F)).mirror(false)
-                .texOffs(98, 71).mirror().addBox(-7.125F, -5.95F, 3.375F, 8.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F)).mirror(false), PartPose.offset(-1.75F, 7.975F, -7.875F));
+        PartDefinition left_disc = left.addOrReplaceChild("left_disc", CubeListBuilder.create().texOffs(92, 34).addBox(-4.5F, -4.125F, -4.5F, 9.0F, 8.25F, 9.0F, new CubeDeformation(-3.375F))
+                .texOffs(96, 52).addBox(-4.75F, -4.125F, -4.5F, 7.0F, 8.25F, 9.0F, new CubeDeformation(-3.375F))
+                .texOffs(98, 17).addBox(-5.0F, -4.125F, -4.0F, 7.0F, 8.25F, 8.0F, new CubeDeformation(-3.375F))
+                .texOffs(96, 52).addBox(-2.25F, -4.125F, -4.5F, 7.0F, 8.25F, 9.0F, new CubeDeformation(-3.375F))
+                .texOffs(68, 17).mirror().addBox(-2.0F, -4.125F, -4.0F, 7.0F, 8.25F, 8.0F, new CubeDeformation(-3.375F)).mirror(false)
+                .texOffs(60, 36).addBox(-4.5F, -4.125F, -2.25F, 9.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F))
+                .texOffs(66, 54).addBox(-4.0F, -4.125F, -2.0F, 8.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F))
+                .texOffs(96, 87).mirror().addBox(-4.5F, -4.125F, -4.75F, 9.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F)).mirror(false)
+                .texOffs(98, 71).mirror().addBox(-4.0F, -4.125F, -5.0F, 8.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F)).mirror(false), PartPose.offset(-4.875F, 6.15F, 0.5F));
 
         PartDefinition left_button = left.addOrReplaceChild("left_button", CubeListBuilder.create().texOffs(9, 49).addBox(-16.0F, -3.85F, 2.75F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F))
                 .texOffs(9, 49).addBox(-15.25F, -3.85F, 2.75F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F))
@@ -73,25 +73,25 @@ public class ModelDDJ400<T extends Entity> extends EntityModel<T> {
                 .texOffs(89, 105).addBox(-7.6F, -2.05F, -5.975F, 3.85F, 4.1F, 4.125F, new CubeDeformation(-1.75F))
                 .texOffs(89, 105).addBox(-7.6F, -2.05F, -5.225F, 3.85F, 4.1F, 4.125F, new CubeDeformation(-1.75F)), PartPose.offsetAndRotation(-17.2F, -1.9F, 11.375F, 0.0F, -1.5708F, 0.0F));
 
-        PartDefinition left_cue_button = left_button.addOrReplaceChild("left_cue_button", CubeListBuilder.create().texOffs(0, 87).addBox(-17.15F, -3.85F, 3.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition left_cue_button = left_button.addOrReplaceChild("left_cue_button", CubeListBuilder.create().texOffs(0, 87).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F)), PartPose.offset(-15.15F, -1.85F, 5.0F));
 
-        PartDefinition left_play_button = left_button.addOrReplaceChild("left_play_button", CubeListBuilder.create().texOffs(0, 66).addBox(-17.15F, -3.85F, 2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition left_play_button = left_button.addOrReplaceChild("left_play_button", CubeListBuilder.create().texOffs(0, 66).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F)), PartPose.offset(-15.15F, -1.85F, 4.0F));
 
-        PartDefinition left_bpm_fader = left.addOrReplaceChild("left_bpm_fader", CubeListBuilder.create().texOffs(54, 59).addBox(-1.375F, -3.5F, -1.625F, 3.0F, 2.75F, 2.5F, new CubeDeformation(-1.125F))
-                .texOffs(44, 60).addBox(-1.375F, -3.275F, -1.875F, 3.0F, 2.5F, 2.5F, new CubeDeformation(-1.125F))
-                .texOffs(44, 56).addBox(-1.375F, -3.275F, -1.375F, 3.0F, 2.5F, 2.5F, new CubeDeformation(-1.125F)), PartPose.offset(-3.0F, 8.0F, -2.625F));
+        PartDefinition left_bpm_fader = left.addOrReplaceChild("left_bpm_fader", CubeListBuilder.create().texOffs(54, 59).addBox(-1.5F, -1.4417F, -1.25F, 3.0F, 2.75F, 2.5F, new CubeDeformation(-1.125F))
+                .texOffs(44, 60).addBox(-1.5F, -1.2167F, -1.5F, 3.0F, 2.5F, 2.5F, new CubeDeformation(-1.125F))
+                .texOffs(44, 56).addBox(-1.5F, -1.2167F, -1.0F, 3.0F, 2.5F, 2.5F, new CubeDeformation(-1.125F)), PartPose.offset(-2.875F, 5.9417F, -3.0F));
 
         PartDefinition right = whole.addOrReplaceChild("right", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition right_disc = right.addOrReplaceChild("right_disc", CubeListBuilder.create().texOffs(92, 34).addBox(-7.625F, -5.95F, 3.875F, 9.0F, 8.25F, 9.0F, new CubeDeformation(-3.375F))
-                .texOffs(96, 52).addBox(-7.875F, -5.95F, 3.875F, 7.0F, 8.25F, 9.0F, new CubeDeformation(-3.375F))
-                .texOffs(98, 17).addBox(-8.125F, -5.95F, 4.375F, 7.0F, 8.25F, 8.0F, new CubeDeformation(-3.375F))
-                .texOffs(96, 52).addBox(-5.375F, -5.95F, 3.875F, 7.0F, 8.25F, 9.0F, new CubeDeformation(-3.375F))
-                .texOffs(68, 17).mirror().addBox(-5.125F, -5.95F, 4.375F, 7.0F, 8.25F, 8.0F, new CubeDeformation(-3.375F)).mirror(false)
-                .texOffs(60, 36).addBox(-7.625F, -5.95F, 6.125F, 9.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F))
-                .texOffs(66, 54).addBox(-7.125F, -5.95F, 6.375F, 8.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F))
-                .texOffs(96, 87).mirror().addBox(-7.625F, -5.95F, 3.625F, 9.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F)).mirror(false)
-                .texOffs(98, 71).mirror().addBox(-7.125F, -5.95F, 3.375F, 8.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F)).mirror(false), PartPose.offset(8.25F, -0.025F, -7.875F));
+        PartDefinition right_disc = right.addOrReplaceChild("right_disc", CubeListBuilder.create().texOffs(92, 34).addBox(-4.5F, -4.125F, -4.5F, 9.0F, 8.25F, 9.0F, new CubeDeformation(-3.375F))
+                .texOffs(96, 52).addBox(-4.75F, -4.125F, -4.5F, 7.0F, 8.25F, 9.0F, new CubeDeformation(-3.375F))
+                .texOffs(98, 17).addBox(-5.0F, -4.125F, -4.0F, 7.0F, 8.25F, 8.0F, new CubeDeformation(-3.375F))
+                .texOffs(96, 52).addBox(-2.25F, -4.125F, -4.5F, 7.0F, 8.25F, 9.0F, new CubeDeformation(-3.375F))
+                .texOffs(68, 17).mirror().addBox(-2.0F, -4.125F, -4.0F, 7.0F, 8.25F, 8.0F, new CubeDeformation(-3.375F)).mirror(false)
+                .texOffs(60, 36).addBox(-4.5F, -4.125F, -2.25F, 9.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F))
+                .texOffs(66, 54).addBox(-4.0F, -4.125F, -2.0F, 8.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F))
+                .texOffs(96, 87).mirror().addBox(-4.5F, -4.125F, -4.75F, 9.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F)).mirror(false)
+                .texOffs(98, 71).mirror().addBox(-4.0F, -4.125F, -5.0F, 8.0F, 8.25F, 7.0F, new CubeDeformation(-3.375F)).mirror(false), PartPose.offset(5.125F, -1.85F, 0.5F));
 
         PartDefinition right_button = right.addOrReplaceChild("right_button", CubeListBuilder.create().texOffs(9, 49).addBox(-6.25F, -3.85F, 2.75F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F))
                 .texOffs(9, 49).addBox(-5.5F, -3.85F, 2.75F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F))
@@ -108,13 +108,13 @@ public class ModelDDJ400<T extends Entity> extends EntityModel<T> {
                 .texOffs(89, 105).addBox(-7.6F, -2.05F, -5.975F, 3.85F, 4.1F, 4.125F, new CubeDeformation(-1.75F))
                 .texOffs(89, 105).addBox(-7.6F, -2.05F, -5.225F, 3.85F, 4.1F, 4.125F, new CubeDeformation(-1.75F)), PartPose.offsetAndRotation(-7.425F, -1.9F, 11.375F, 0.0F, -1.5708F, 0.0F));
 
-        PartDefinition right_cue_button = right_button.addOrReplaceChild("right_cue_button", CubeListBuilder.create().texOffs(0, 87).addBox(-7.25F, -3.85F, 3.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition right_cue_button = right_button.addOrReplaceChild("right_cue_button", CubeListBuilder.create().texOffs(0, 87).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F)), PartPose.offset(-5.25F, -1.85F, 5.0F));
 
-        PartDefinition right_play_button = right_button.addOrReplaceChild("right_play_button", CubeListBuilder.create().texOffs(0, 66).addBox(-7.25F, -3.85F, 2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition right_play_button = right_button.addOrReplaceChild("right_play_button", CubeListBuilder.create().texOffs(0, 66).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F)), PartPose.offset(-5.25F, -1.85F, 4.0F));
 
-        PartDefinition right_bpm_fader = right.addOrReplaceChild("right_bpm_fader", CubeListBuilder.create().texOffs(54, 59).addBox(-2.125F, -3.5F, 4.375F, 3.0F, 2.75F, 2.5F, new CubeDeformation(-1.125F))
-                .texOffs(44, 60).addBox(-2.125F, -3.275F, 4.125F, 3.0F, 2.5F, 2.5F, new CubeDeformation(-1.125F))
-                .texOffs(44, 56).addBox(-2.125F, -3.275F, 4.625F, 3.0F, 2.5F, 2.5F, new CubeDeformation(-1.125F)), PartPose.offset(7.75F, 0.0F, -8.625F));
+        PartDefinition right_bpm_fader = right.addOrReplaceChild("right_bpm_fader", CubeListBuilder.create().texOffs(54, 59).addBox(-1.5F, -1.4417F, -1.25F, 3.0F, 2.75F, 2.5F, new CubeDeformation(-1.125F))
+                .texOffs(44, 60).addBox(-1.5F, -1.2167F, -1.5F, 3.0F, 2.5F, 2.5F, new CubeDeformation(-1.125F))
+                .texOffs(44, 56).addBox(-1.5F, -1.2167F, -1.0F, 3.0F, 2.5F, 2.5F, new CubeDeformation(-1.125F)), PartPose.offset(7.125F, -2.0583F, -3.0F));
 
         PartDefinition top = whole.addOrReplaceChild("top", CubeListBuilder.create().texOffs(0, 105).addBox(1.0F, -4.0F, 1.375F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F))
                 .texOffs(0, 105).addBox(2.0F, -4.0F, 1.375F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F))
@@ -133,15 +133,15 @@ public class ModelDDJ400<T extends Entity> extends EntityModel<T> {
         PartDefinition right_load_r1 = top.addOrReplaceChild("right_load_r1", CubeListBuilder.create().texOffs(33, 100).addBox(-2.025F, -2.05F, -2.55F, 3.85F, 4.1F, 4.125F, new CubeDeformation(-1.75F))
                 .texOffs(33, 100).addBox(-2.025F, -2.05F, -0.425F, 3.85F, 4.1F, 4.125F, new CubeDeformation(-1.75F)), PartPose.offsetAndRotation(0.575F, -1.9F, 3.375F, 0.0F, -1.5708F, 0.0F));
 
-        PartDefinition middle = whole.addOrReplaceChild("middle", CubeListBuilder.create(), PartPose.offset(0.25F, -2.0F, 0.0F));
+        PartDefinition middle = whole.addOrReplaceChild("middle", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition middle_fader = middle.addOrReplaceChild("middle_fader", CubeListBuilder.create(), PartPose.offset(0.0F, -6.0F, 0.0F));
+        PartDefinition middle_fader = middle.addOrReplaceChild("middle_fader", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition right_volume_fader = middle_fader.addOrReplaceChild("right_volume_fader", CubeListBuilder.create().texOffs(54, 59).addBox(-8.75F, -3.6F, 5.025F, 3.0F, 2.75F, 2.5F, new CubeDeformation(-1.125F)), PartPose.offset(7.5F, 8.0F, -8.0F));
+        PartDefinition right_volume_fader = middle_fader.addOrReplaceChild("right_volume_fader", CubeListBuilder.create().texOffs(54, 59).addBox(-1.5F, -1.375F, -1.25F, 3.0F, 2.75F, 2.5F, new CubeDeformation(-1.125F)), PartPose.offset(0.5F, -2.225F, -1.725F));
 
-        PartDefinition left_volume_fader = middle_fader.addOrReplaceChild("left_volume_fader", CubeListBuilder.create().texOffs(54, 59).addBox(-9.75F, -3.6F, 5.025F, 3.0F, 2.75F, 2.5F, new CubeDeformation(-1.125F)), PartPose.offset(7.5F, 8.0F, -8.0F));
+        PartDefinition left_volume_fader = middle_fader.addOrReplaceChild("left_volume_fader", CubeListBuilder.create().texOffs(54, 59).addBox(-1.5F, -1.375F, -1.25F, 3.0F, 2.75F, 2.5F, new CubeDeformation(-1.125F)), PartPose.offset(-0.5F, -2.225F, -1.725F));
 
-        PartDefinition mix_fader = middle_fader.addOrReplaceChild("mix_fader", CubeListBuilder.create().texOffs(34, 59).addBox(-1.525F, 4.4F, -5.625F, 2.5F, 2.75F, 3.0F, new CubeDeformation(-1.125F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition mix_fader = middle_fader.addOrReplaceChild("mix_fader", CubeListBuilder.create().texOffs(34, 59).addBox(-1.25F, -1.375F, -1.5F, 2.5F, 2.75F, 3.0F, new CubeDeformation(-1.125F)), PartPose.offset(-0.025F, -2.225F, -4.125F));
 
         PartDefinition middle_knob = middle.addOrReplaceChild("middle_knob", CubeListBuilder.create().texOffs(111, 0).addBox(-8.475F, -4.55F, 8.3F, 4.0F, 4.3F, 4.0F, new CubeDeformation(-1.75F))
                 .texOffs(111, 9).addBox(-10.875F, -4.55F, 8.3F, 4.0F, 4.3F, 4.0F, new CubeDeformation(-1.75F))
@@ -154,9 +154,9 @@ public class ModelDDJ400<T extends Entity> extends EntityModel<T> {
                 .texOffs(111, 0).addBox(-9.625F, -4.55F, 5.575F, 4.0F, 4.3F, 4.0F, new CubeDeformation(-1.75F))
                 .texOffs(111, 0).addBox(-11.875F, -4.55F, 6.1F, 4.0F, 4.3F, 4.0F, new CubeDeformation(-1.75F))
                 .texOffs(111, 0).addBox(-11.875F, -4.55F, 4.725F, 4.0F, 4.3F, 4.0F, new CubeDeformation(-1.75F))
-                .texOffs(111, 0).addBox(-8.5F, -4.55F, 4.725F, 4.0F, 4.3F, 4.0F, new CubeDeformation(-1.75F)), PartPose.offset(8.0F, 2.0F, -8.0F));
+                .texOffs(111, 0).addBox(-8.5F, -4.55F, 4.725F, 4.0F, 4.3F, 4.0F, new CubeDeformation(-1.75F)), PartPose.offset(8.25F, 0.0F, -8.0F));
 
-        PartDefinition middle_button = middle.addOrReplaceChild("middle_button", CubeListBuilder.create().texOffs(16, 71).addBox(-0.5F, -1.975F, -5.225F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition middle_button = middle.addOrReplaceChild("middle_button", CubeListBuilder.create().texOffs(16, 71).addBox(-0.5F, -1.975F, -5.225F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-1.75F)), PartPose.offset(0.25F, -2.0F, 0.0F));
 
         PartDefinition dx_select_button_r1 = middle_button.addOrReplaceChild("dx_select_button_r1", CubeListBuilder.create().texOffs(40, 80).addBox(-4.975F, -2.05F, -2.975F, 3.85F, 4.1F, 4.125F, new CubeDeformation(-1.75F))
                 .texOffs(45, 80).addBox(-4.375F, -2.05F, -2.675F, 3.85F, 4.1F, 4.125F, new CubeDeformation(-1.75F))

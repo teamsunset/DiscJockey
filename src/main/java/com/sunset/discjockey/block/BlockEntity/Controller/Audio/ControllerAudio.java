@@ -45,7 +45,7 @@ public class ControllerAudio {
         this.elapsedTimeOnServer = compoundTag.getInt("elapsedTimeOnServer");
         if (this.speakerSound != null) {
             this.speakerSound.isPlaying = this.isPlayingOnServer;
-            this.speakerSound.elapsedTime.set(this.elapsedTimeOnServer);
+//            this.speakerSound.elapsedTime.set(this.elapsedTimeOnServer);
         }
     }
 

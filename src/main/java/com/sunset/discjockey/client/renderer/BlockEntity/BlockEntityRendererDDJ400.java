@@ -9,6 +9,7 @@ import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidget;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMixFader;
 import com.sunset.discjockey.client.model.ModelDDJ400;
+import com.sunset.discjockey.client.model.ModelManager;
 import com.sunset.discjockey.util.Reference;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -28,42 +29,47 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
     private BlockEntityRendererProvider.Context context;
 
     public static ModelDDJ400<?> MODEL;
+
+    public static ModelManager MODEL_MANAGER;
     public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/model/ddj_400.png");
     public static BlockEntityRendererDDJ400 instance;
 
     public BlockEntityRendererDDJ400(BlockEntityRendererProvider.Context context) {
         this.context = context;
-        MODEL = new ModelDDJ400<>(context.bakeLayer(ModelDDJ400.LAYER_LOCATION));
+        MODEL_MANAGER = new ModelManager(() -> context.bakeLayer(ModelDDJ400.LAYER_LOCATION));
+//                MODEL = new ModelDDJ400<>(context.bakeLayer(ModelDDJ400.LAYER_LOCATION));
+//        MODEL = new ModelDDJ400<>(ModelDDJ400.createBodyLayer().bakeRoot());
+        MODEL = new ModelDDJ400<>(MODEL_MANAGER.getRoot());
         instance = this;
     }
 
-    public static Map<String, ModelPart> flatParts(ModelPart root) {
-        Map<String, ModelPart> parts = new HashMap<>();
-        return flatParts(root, parts);
-    }
-
-    public static Map<String, ModelPart> flatParts(ModelPart root, Map<String, ModelPart> parts) {
-        for (String name : root.children.keySet()) {
-            ModelPart part = root.getChild(name);
-            parts.put(name, part);
-            flatParts(part, parts);
-        }
-        return parts;
-    }
-
     public void renderWidgets(BlockEntityDDJ400 blockEntity) {
-        Map<String, ModelPart> allParts = flatParts(MODEL.whole);
 
         for (ControllerWidget controllerWidget : blockEntity.controllerWidgetManager.controllerWidgets) {
             if (controllerWidget.id.equals("mix_fader")) {
-                ModelPart mix_fader = allParts.get(controllerWidget.id);
-                mix_fader.x = (float) (-1 * ((ControllerMixFader) controllerWidget).value.get());
+                MODEL_MANAGER.setRelative(
+                        "mix_fader",
+                        "x",
+                        (float) (-1 * ((ControllerMixFader) controllerWidget).value.get())
+                );
             } else if (controllerWidget instanceof ControllerButton controllerButton) {
-                ModelPart button = allParts.get(controllerButton.id);
-                button.y = controllerButton.pressed.get() ? -0.1f : 0;
+                MODEL_MANAGER.setRelative(
+                        controllerButton.id,
+                        "y",
+                        controllerButton.pressed.get() ? 0.1f : 0
+                );
             } else if (controllerWidget.id.contains("bpm_fader")) {
-                ModelPart bpm_fader = allParts.get(controllerWidget.id);
-                bpm_fader.z = (float) (((ControllerFader) controllerWidget).value.get() * 1.5);
+                MODEL_MANAGER.setRelative(
+                        controllerWidget.id,
+                        "z",
+                        (float) (((ControllerFader) controllerWidget).value.get() * 1.5)
+                );
+            } else if (controllerWidget.id.contains("volume_fader")) {
+                MODEL_MANAGER.setRelative(
+                        controllerWidget.id,
+                        "z",
+                        (float) (((ControllerFader) controllerWidget).value.get() - 0.5)
+                );
             }
         }
     }

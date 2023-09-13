@@ -41,6 +41,8 @@ public class BlockEntityDDJ400 extends AbstractController {
         controllerWidgetManager.add(new ControllerCueButton("left_cue_button", TouchMapDDJ400.LEFT_CUE_BUTTON, controllerAudioManager, 0));
         controllerWidgetManager.add(new ControllerFader("left_bpm_fader", TouchMapDDJ400.LEFT_BPM_FADER));
         controllerWidgetManager.add(new ControllerFader("right_bpm_fader", TouchMapDDJ400.RIGHT_BPM_FADER));
+        controllerWidgetManager.add(new ControllerFader("left_volume_fader", TouchMapDDJ400.LEFT_VOLUME_FADER));
+        controllerWidgetManager.add(new ControllerFader("right_volume_fader", TouchMapDDJ400.RIGHT_VOLUME_FADER));
     }
 
     //action

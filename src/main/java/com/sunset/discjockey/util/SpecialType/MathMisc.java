@@ -1,7 +1,6 @@
 package com.sunset.discjockey.util.SpecialType;
 
-public class MathMisc
-{
+public class MathMisc {
     public static double linearInterpolate(double _oVal, double _dVal, double r) {
         return _oVal + (_dVal - _oVal) * r;
     }

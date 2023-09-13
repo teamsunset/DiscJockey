@@ -5,12 +5,13 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.lang.ref.WeakReference;
+import java.util.Iterator;
 import java.util.Vector;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class SimpleInterpolationValue
-{
-    public static Vector<SimpleInterpolationValue> VALUES = new Vector<>();
+public class SimpleInterpolationValue {
+    public static Vector<WeakReference<SimpleInterpolationValue>> VALUES = new Vector<>();
 
     public double _oVal;
 
@@ -29,7 +30,7 @@ public class SimpleInterpolationValue
     public SimpleInterpolationValue(double _oVal, double _dVal) {
         this._oVal = _oVal;
         this._dVal = _dVal;
-        VALUES.add(this);
+        VALUES.add(new WeakReference<>(this));
     }
 
     //invalid
@@ -62,11 +63,17 @@ public class SimpleInterpolationValue
     @SubscribeEvent
     public static void onLevelTick(TickEvent.ServerTickEvent event) {
         if (event.side.isServer() && event.phase == TickEvent.Phase.END) {
-            for (SimpleInterpolationValue value : VALUES) {
-                if (Math.abs(value._dVal - value._oVal) > SimpleInterpolationValue.threshold) {
-                    value.interpolate();
-                    if (value.functionOnValueChanged != null) {
-                        value.functionOnValueChanged.run();
+            Iterator<WeakReference<SimpleInterpolationValue>> it = VALUES.iterator();
+            while (it.hasNext()) {
+                SimpleInterpolationValue value = it.next().get();
+                if (value == null) {
+                    it.remove();
+                } else {
+                    if (Math.abs(value._dVal - value._oVal) > SimpleInterpolationValue.threshold) {
+                        value.interpolate();
+                        if (value.functionOnValueChanged != null) {
+                            value.functionOnValueChanged.run();
+                        }
                     }
                 }
             }

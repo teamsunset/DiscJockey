@@ -2,21 +2,13 @@ package com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget
 
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidget;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
+import com.sunset.discjockey.util.SpecialType.OneShotBoolean;
 import com.sunset.discjockey.util.SpecialType.Property;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.nbt.CompoundTag;
 
 public abstract class ControllerButton extends ControllerWidget {
-    public Property<Boolean> pressed = new Property<>(false,
-            ov -> {
-                boolean v = ov;
-                ov = false;
-                return v;
-            },
-            (ov, dv) -> {
-                ov = dv;
-            }
-    );
+    public Property<Boolean> pressed = new OneShotBoolean();
 
     public ControllerButton(String id, PlaneRange planeRange) {
         super(id, ControllerWidgetManager.InteractType.PRESS, planeRange);
