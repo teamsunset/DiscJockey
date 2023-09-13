@@ -1,6 +1,6 @@
 package com.sunset.discjockey.util.SpecialType;
 
-import com.sunset.discjockey.util.Reference;
+import com.sunset.discjockey.util.ModReference;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -9,7 +9,7 @@ import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.Vector;
 
-@Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SimpleInterpolationValue {
     public static Vector<WeakReference<SimpleInterpolationValue>> VALUES = new Vector<>();
 

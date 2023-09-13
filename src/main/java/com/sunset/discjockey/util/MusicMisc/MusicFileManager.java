@@ -1,6 +1,6 @@
 package com.sunset.discjockey.util.MusicMisc;
 
-import com.sunset.discjockey.util.Reference;
+import com.sunset.discjockey.util.ModReference;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 
 @OnlyIn(Dist.CLIENT)
 public class MusicFileManager {
-    public static final String fileDir = FMLPaths.MODSDIR.get().toString() + "\\" + Reference.MOD_ID + "\\cache\\";
+    public static final String fileDir = FMLPaths.MODSDIR.get().toString() + "\\" + ModReference.MOD_ID + "\\cache\\";
 
     //para1 Return type, para2 Parameter type
 //    public static final Map<Class<?>, List<Class<?>>> supportedConversionType = new HashMap<>();
