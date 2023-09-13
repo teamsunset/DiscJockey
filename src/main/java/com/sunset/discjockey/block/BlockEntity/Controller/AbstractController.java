@@ -4,6 +4,8 @@ import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudioM
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
 import com.sunset.discjockey.network.NetworkHandler;
 import com.sunset.discjockey.network.message.ControllerSyncMessage;
+import com.sunset.discjockey.util.SpecialType.SimpleInterpolationValue;
+import com.sunset.discjockey.util.SpecialType.WeakCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -12,15 +14,17 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
-import static com.sunset.discjockey.DiscJockey.DEBUG_LOGGER;
+import java.lang.ref.WeakReference;
+import java.util.Vector;
+
+import static net.minecraft.world.level.block.Block.UPDATE_CLIENTS;
 
 public class AbstractController extends BlockEntity {
+    public static final WeakCollection<AbstractController> CONTROLLERS = new WeakCollection<>(new Vector<>());
     public ControllerAudioManager controllerAudioManager;
     public ControllerWidgetManager controllerWidgetManager;
 
@@ -28,7 +32,7 @@ public class AbstractController extends BlockEntity {
         super(pType, pPos, pBlockState);
         controllerAudioManager = new ControllerAudioManager(this);
         controllerWidgetManager = new ControllerWidgetManager(this);
-        MinecraftForge.EVENT_BUS.register(this);
+        CONTROLLERS.add(this);
     }
 
 
@@ -42,8 +46,8 @@ public class AbstractController extends BlockEntity {
 
     public void sync() {
         if (level != null && !level.isClientSide) {
-//            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), UPDATE_CLIENTS);
-            NetworkHandler.NETWORK_CHANNEL.send(PacketDistributor.DIMENSION.with(() -> level.dimension()), new ControllerSyncMessage(this.getBlockPos(), this.getUpdateTag()));
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), UPDATE_CLIENTS);
+//            NetworkHandler.NETWORK_CHANNEL.send(PacketDistributor.DIMENSION.with(() -> level.dimension()), new ControllerSyncMessage(this.getBlockPos(), this.getUpdateTag()));
         }
     }
 
@@ -90,22 +94,23 @@ public class AbstractController extends BlockEntity {
         super.handleUpdateTag(compoundTag);
     }
 
-    public boolean loadDone = false;
-
-    @SubscribeEvent
-    public void onLevelTick(TickEvent.LevelTickEvent event) {
-        if (event.level != null && this.level != null && (event.level.isClientSide() == this.level.isClientSide()) && event.phase.equals(TickEvent.Phase.END)) {
-            if (!loadDone) {
-                if (this.level.getBlockEntity(this.getBlockPos()) != null)
-                    loadDone = true;
-            } else {
-                if (this.level.getBlockEntity(this.getBlockPos()) == null) {
-                    MinecraftForge.EVENT_BUS.unregister(this);
-                } else if (!event.level.isClientSide()) {
-                    this.controllerAudioManager.onLevelTick(event);
-                    this.sync();
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase.equals(TickEvent.Phase.END)) {
+            CONTROLLERS.iterate(controller -> {
+                if (controller.getLevel() != null && controller.getLevel().getBlockEntity(controller.getBlockPos()) == controller) {
+                    controller.controllerAudioManager.onServerTick(event);
+                    controller.controllerWidgetManager.onServerTick(event);
+                    controller.sync();
                 }
-            }
+            });
         }
+    }
+
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+        CONTROLLERS.iterate(controller -> {
+            if (controller.getLevel() != null && controller.getLevel().getBlockEntity(controller.getBlockPos()) == controller) {
+                controller.controllerWidgetManager.onClientTick(event);
+            }
+        });
     }
 }

@@ -4,6 +4,7 @@ import com.sunset.discjockey.util.SpecialType.OneShotBoolean;
 import com.sunset.discjockey.util.SpecialType.Property;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraftforge.event.TickEvent;
 
 public abstract class ControllerWidget {
     public ControllerWidgetManager controllerWidgetManager;
@@ -53,5 +54,13 @@ public abstract class ControllerWidget {
 
     //clientside
     public abstract void writeCompoundTag(CompoundTag compoundTag);
+
+    public void onServerTick(TickEvent.ServerTickEvent event) {
+    }
+
+
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+    }
+
 
 }

@@ -50,7 +50,7 @@ public class SpeakerSound extends AbstractTickableSoundInstance {
         this.y = pos.getY() + 0.5f;
         this.z = pos.getZ() + 0.5f;
         this.pos = pos;
-        this.volume = 0.3f;
+        this.volume = 1f;
     }
 
     @Override
@@ -70,6 +70,10 @@ public class SpeakerSound extends AbstractTickableSoundInstance {
 
     public void pause() {
         this.isPlaying = false;
+    }
+
+    public void setVolume(float volume) {
+        this.volume = volume;
     }
 
     public void destroy() {

@@ -1,5 +1,6 @@
 package com.sunset.discjockey.block.BlockEntity.Controller.Audio;
 
+import com.sunset.discjockey.DiscJockey;
 import com.sunset.discjockey.client.audio.SpeakerSound;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import net.minecraft.Util;
@@ -45,7 +46,8 @@ public class ControllerAudio {
         this.elapsedTimeOnServer = compoundTag.getInt("elapsedTimeOnServer");
         if (this.speakerSound != null) {
             this.speakerSound.isPlaying = this.isPlayingOnServer;
-//            this.speakerSound.elapsedTime.set(this.elapsedTimeOnServer);
+            if (Math.abs(this.elapsedTimeOnServer - this.speakerSound.elapsedTime.get()) > 10)
+                this.speakerSound.elapsedTime.set(this.elapsedTimeOnServer);
         }
     }
 
@@ -67,12 +69,10 @@ public class ControllerAudio {
                 , Util.backgroundExecutor());
     }
 
-    public void onLevelTick(TickEvent.LevelTickEvent event) {
-        if (!event.level.isClientSide()) {
-            if (this.isPlayingOnServer) {
-                this.elapsedTimeOnServer++;
-            }
-            this.manager.controller.markDirty();
+    public void onServerTick(TickEvent.ServerTickEvent event) {
+        if (this.isPlayingOnServer) {
+            this.elapsedTimeOnServer++;
         }
+        this.manager.controller.markDirty();
     }
 }

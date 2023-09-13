@@ -64,7 +64,7 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
                 MODEL_MANAGER.setRelative(
                         controllerWidget.id,
                         "z",
-                        (float) (((ControllerFader) controllerWidget).value.get() - 0.5)
+                        (float) ((((ControllerFader) controllerWidget).value.get() - 1) * 1.5)
                 );
             }
         }

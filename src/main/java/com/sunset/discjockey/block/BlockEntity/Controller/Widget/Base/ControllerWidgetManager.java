@@ -4,6 +4,7 @@ import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
+import net.minecraftforge.event.TickEvent;
 
 import java.util.Vector;
 
@@ -94,6 +95,18 @@ public class ControllerWidgetManager {
                     controllerWidget.executeOnClient();
                 }
             }
+        }
+    }
+
+    public void onServerTick(TickEvent.ServerTickEvent event) {
+        for (ControllerWidget controllerWidget : controllerWidgets) {
+            controllerWidget.onServerTick(event);
+        }
+    }
+
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        for (ControllerWidget controllerWidget : controllerWidgets) {
+            controllerWidget.onClientTick(event);
         }
     }
 }
