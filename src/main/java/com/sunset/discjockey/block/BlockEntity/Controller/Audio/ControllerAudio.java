@@ -83,6 +83,7 @@ public class ControllerAudio {
 
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (this.speakerSound != null && this.speakerSound.fileAudioStream != null && this.speakerSound.fileAudioStream.isStreamClosed) {
+            this.speakerSound.destroy();
             this.setupOnClient();
         }
     }
