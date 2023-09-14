@@ -1,22 +1,16 @@
 package com.sunset.discjockey.block.BlockEntity.Controller.Audio;
 
 import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
-import com.sunset.discjockey.network.message.ControllerSyncMessage;
-import com.sunset.discjockey.network.message.TagMessage;
+import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.network.NetworkEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
-
-import static com.sunset.discjockey.network.NetworkHandler.NETWORK_CHANNEL;
 
 public class ControllerAudioManager {
     public static Vector<ControllerAudioManager> MANAGERS = new Vector<>();
@@ -58,6 +52,7 @@ public class ControllerAudioManager {
         Vector<String> audios = new Vector<>();
         if (audiosTag != null) {
             for (Tag tag : audiosTag) {
+                MusicFileManager.loadURLToCache(tag.getAsString());
                 audios.add(tag.getAsString());
             }
         }
@@ -65,7 +60,8 @@ public class ControllerAudioManager {
 
         CompoundTag loadAudiosTag = compoundTag.getCompound("loadedAudios");
         for (String key : loadAudiosTag.getAllKeys()) {
-            if (loadedAudios.get(Integer.parseInt(key)) == null) {
+            if (loadedAudios.get(Integer.parseInt(key)) == null || !loadedAudios.get(Integer.parseInt(key)).url.equals(loadAudiosTag.getCompound(key).getString("url"))) {
+                this.unloadAudio(Integer.parseInt(key));
                 loadedAudios.put(Integer.parseInt(key), new ControllerAudio(this, loadAudiosTag.getCompound(key).getString("url")));
             }
             loadedAudios.get(Integer.parseInt(key)).writeCompoundTag(loadAudiosTag.getCompound(key));
@@ -73,11 +69,21 @@ public class ControllerAudioManager {
     }
 
     public void loadAudio(int index, int channelIndex) {
+        this.unloadAudio(channelIndex);
         loadedAudios.put(channelIndex, new ControllerAudio(this, audios.get(index)));
     }
 
     public void unloadAudio(int channelIndex) {
-        loadedAudios.remove(channelIndex);
+        if (loadedAudios.get(channelIndex) != null) {
+            loadedAudios.get(channelIndex).destroy();
+            loadedAudios.remove(channelIndex);
+        }
+    }
+
+    public void resetAudio() {
+        audios.clear();
+        for (ControllerAudio controllerAudio : loadedAudios.values())
+            controllerAudio.destroy();
     }
 
     public void onServerTick(TickEvent.ServerTickEvent event) {

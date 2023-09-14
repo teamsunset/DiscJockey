@@ -4,8 +4,8 @@ import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudio;
 import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudioManager;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerButton;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 
 public class ControllerPlayButton extends ControllerButton {
     public int channelIndex;
@@ -18,16 +18,18 @@ public class ControllerPlayButton extends ControllerButton {
     }
 
     @Override
-    public void executeOnServer(double value) {
-        super.executeOnServer(value);
+    public void executeOnServer(Player player, double value) {
+        super.executeOnServer(player, value);
         ControllerAudio audio = controllerAudioManager.loadedAudios.get(channelIndex);
         if (audio != null) {
             audio.isPlayingOnServer = !audio.isPlayingOnServer;
+            player.displayClientMessage(Component.literal("The " + channelIndex + " st channel is " + (audio.isPlayingOnServer ? "playing" : "pause")), true);
+        } else {
+            player.displayClientMessage(Component.literal("The " + channelIndex + " st channel is empty"), true);
         }
     }
 
     @Override
     public void executeOnClient() {
-        Minecraft.getInstance().player.sendSystemMessage(Component.literal("play button"));
     }
 }

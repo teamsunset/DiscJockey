@@ -6,6 +6,7 @@ import com.sunset.discjockey.util.SpecialType.OneShotBoolean;
 import com.sunset.discjockey.util.SpecialType.Property;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 
 public abstract class ControllerButton extends ControllerWidget {
     public Property<Boolean> pressed = new OneShotBoolean();
@@ -15,7 +16,7 @@ public abstract class ControllerButton extends ControllerWidget {
     }
 
     @Override
-    public void executeOnServer(double value) {
+    public void executeOnServer(Player player, double value) {
         pressed.set(!pressed.get());
         this.markExecute();
         this.markDirty();

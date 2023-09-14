@@ -2,6 +2,7 @@ package com.sunset.discjockey.util.MusicMisc;
 
 import com.sunset.discjockey.util.ModReference;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
+import net.minecraft.Util;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
 
 @OnlyIn(Dist.CLIENT)
 public class MusicFileManager {
@@ -125,6 +127,9 @@ public class MusicFileManager {
 //        return result;
 //    }
 
+    public static void loadURLToCache(String url) {
+        CompletableFuture.runAsync(() -> checkURL(url), Util.backgroundExecutor());
+    }
 
     //special get
     public static boolean checkURL(String url) {

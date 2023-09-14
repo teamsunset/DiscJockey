@@ -5,6 +5,7 @@ import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.Controller
 import com.sunset.discjockey.util.SpecialType.SimpleInterpolationValue;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 
 public class ControllerFader extends ControllerWidget {
 
@@ -17,7 +18,7 @@ public class ControllerFader extends ControllerWidget {
     }
 
     @Override
-    public void executeOnServer(double value) {
+    public void executeOnServer(Player player, double value) {
         this.value.setTarget(value);
         this.markExecute();
         this.markDirty();
