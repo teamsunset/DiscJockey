@@ -25,8 +25,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-public class BlockDDJ400 extends HorizontalDirectionalBlock implements EntityBlock
-{
+public class BlockDDJ400 extends HorizontalDirectionalBlock implements EntityBlock {
 
 //    private static DirectionProperty FACING = DirectionProperty.create("facing",
 //            Direction.NORTH,
@@ -42,7 +41,9 @@ public class BlockDDJ400 extends HorizontalDirectionalBlock implements EntityBlo
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {return new BlockEntityDDJ400(pos, state);}
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new BlockEntityDDJ400(pos, state);
+    }
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
@@ -69,7 +70,7 @@ public class BlockDDJ400 extends HorizontalDirectionalBlock implements EntityBlo
     public VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         Direction direction = blockState.getValue(FACING);
 
-        PlaneRange planeRange = new PlaneRange(new Vec2Plane(0, 0.2), new Vec2Plane(1, 0.75)).rotate(direction, new Vec2Plane(0.5, 0.5));
+        PlaneRange planeRange = new PlaneRange(new Vec2Plane(0, 3 / 16D), new Vec2Plane(1, 12 / 16D)).rotate(direction, new Vec2Plane(0.5, 0.5));
 
         return Shapes.box(planeRange.p1.x, 0, planeRange.p1.z, planeRange.p2.x, 0.125, planeRange.p2.z);
 
@@ -85,7 +86,7 @@ public class BlockDDJ400 extends HorizontalDirectionalBlock implements EntityBlo
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         Direction direction = blockState.getValue(FACING);
 
-        PlaneRange planeRange = new PlaneRange(new Vec2Plane(0, 0.2), new Vec2Plane(1, 0.75)).rotate(direction, new Vec2Plane(0.5, 0.5));
+        PlaneRange planeRange = new PlaneRange(new Vec2Plane(0, 3 / 16D), new Vec2Plane(1, 12 / 16D)).rotate(direction, new Vec2Plane(0.5, 0.5));
 
         return Shapes.box(planeRange.p1.x, 0, planeRange.p1.z, planeRange.p2.x, 0.125, planeRange.p2.z);
 
@@ -98,7 +99,9 @@ public class BlockDDJ400 extends HorizontalDirectionalBlock implements EntityBlo
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState blockState) {return RenderShape.ENTITYBLOCK_ANIMATED;}
+    public RenderShape getRenderShape(BlockState blockState) {
+        return RenderShape.ENTITYBLOCK_ANIMATED;
+    }
 
     public static void clientSetup(FMLClientSetupEvent event) {
 //        event.enqueueWork(()-> ItemBlockRenderTypes.setRenderLayer(BlockCollection.BLOCK_DDJ400.get(), RenderType.translucent()));
