@@ -56,11 +56,13 @@ public class SpeakerSound extends AbstractTickableSoundInstance {
     @Override
     public void tick() {
         Level world = Minecraft.getInstance().level;
-        BlockEntity blockEntity = world.getBlockEntity(this.pos);
-        if (blockEntity instanceof AbstractController controller) {
-            this.fileAudioStream.isPlaying = this.isPlaying;
-        } else {
-            this.stop();
+        if (world != null) {
+            BlockEntity blockEntity = world.getBlockEntity(this.pos);
+            if (blockEntity instanceof AbstractController controller) {
+                this.fileAudioStream.isPlaying = this.isPlaying;
+            } else {
+                this.stop();
+            }
         }
     }
 
