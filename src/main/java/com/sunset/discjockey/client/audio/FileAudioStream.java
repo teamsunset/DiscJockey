@@ -26,6 +26,8 @@ public class FileAudioStream implements AudioStream {
 
     public boolean isPlaying = false;
 
+    public boolean isStreamClosed = false;
+
     public FileAudioStream(String url) {
         this.stream = MusicFileManager.getMusicAudioInputStream(url);
         this.array = MusicFileManager.getMusicBytes(url);
@@ -56,6 +58,7 @@ public class FileAudioStream implements AudioStream {
 
     @Override
     public void close() throws IOException {
+        this.isStreamClosed = true;
         stream.close();
     }
 }

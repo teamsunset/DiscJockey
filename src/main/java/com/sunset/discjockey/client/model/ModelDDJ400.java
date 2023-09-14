@@ -146,7 +146,7 @@ public class ModelDDJ400<T extends Entity> extends EntityModel<T> {
 
         PartDefinition left_mix_fader = middle_fader.addOrReplaceChild("left_mix_fader", CubeListBuilder.create().texOffs(54, 59).addBox(-1.5F, -1.375F, -1.25F, 3.0F, 2.75F, 2.5F, new CubeDeformation(-1.125F)), PartPose.offset(-0.5F, -2.225F, -1.725F));
 
-        PartDefinition middle_mix_fader = middle_fader.addOrReplaceChild("middle_mix_fader", CubeListBuilder.create().texOffs(34, 59).addBox(-1.25F, -1.375F, -1.5F, 2.5F, 2.75F, 3.0F, new CubeDeformation(-1.125F)), PartPose.offset(-0.025F, -2.225F, -4.125F));
+        PartDefinition cross_fader = middle_fader.addOrReplaceChild("cross_fader", CubeListBuilder.create().texOffs(34, 59).addBox(-1.25F, -1.375F, -1.5F, 2.5F, 2.75F, 3.0F, new CubeDeformation(-1.125F)), PartPose.offset(-0.025F, -2.225F, -4.125F));
 
         PartDefinition middle_knob = middle.addOrReplaceChild("middle_knob", CubeListBuilder.create().texOffs(111, 0).addBox(-8.475F, -4.55F, 8.3F, 4.0F, 4.3F, 4.0F, new CubeDeformation(-1.75F))
                 .texOffs(111, 9).addBox(-10.875F, -4.55F, 8.3F, 4.0F, 4.3F, 4.0F, new CubeDeformation(-1.75F))

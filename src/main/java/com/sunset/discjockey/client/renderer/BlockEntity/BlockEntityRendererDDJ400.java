@@ -7,7 +7,7 @@ import com.sunset.discjockey.block.BlockEntity.BlockEntityDDJ400;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerButton;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerFader;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidget;
-import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMiddleMixFader;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerCrossFader;
 import com.sunset.discjockey.client.model.ModelDDJ400;
 import com.sunset.discjockey.client.model.ModelManager;
 import com.sunset.discjockey.util.ModReference;
@@ -42,11 +42,11 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
     public void renderWidgets(BlockEntityDDJ400 blockEntity) {
 
         for (ControllerWidget controllerWidget : blockEntity.controllerWidgetManager.controllerWidgets) {
-            if (controllerWidget.id.equals("middle_mix_fader")) {
+            if (controllerWidget.id.equals("cross_fader")) {
                 MODEL_MANAGER.setRelative(
-                        "middle_mix_fader",
+                        "cross_fader",
                         "x",
-                        (float) (-1 * ((ControllerMiddleMixFader) controllerWidget).value.get())
+                        (float) (-1 * ((ControllerCrossFader) controllerWidget).value.get())
                 );
             } else if (controllerWidget instanceof ControllerButton controllerButton) {
                 MODEL_MANAGER.setRelative(

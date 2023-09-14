@@ -80,4 +80,10 @@ public class ControllerAudio {
         }
         this.manager.controller.markDirty();
     }
+
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (this.speakerSound != null && this.speakerSound.fileAudioStream != null && this.speakerSound.fileAudioStream.isStreamClosed) {
+            this.setupOnClient();
+        }
+    }
 }

@@ -91,4 +91,10 @@ public class ControllerAudioManager {
             controllerAudio.onServerTick(event);
         }
     }
+
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        for (ControllerAudio controllerAudio : loadedAudios.values()) {
+            controllerAudio.onClientTick(event);
+        }
+    }
 }

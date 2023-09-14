@@ -28,7 +28,7 @@ public class ControllerSideMixFader extends ControllerFader {
     public void executeOnServer(Player player, double value) {
         super.executeOnServer(player, value);
         this.value.setTarget((value + 1) * 0.5);
-        player.displayClientMessage(Component.literal(this.channelIndex == 0 ? "left" : "right" + " channel mix rate set: " + (int) (this.value.getTarget() * 100) + "%"), true);
+        player.displayClientMessage(Component.literal((this.channelIndex == 0 ? "left" : "right") + " mix: " + (int) (this.value.getTarget() * 100) + "%"), true);
     }
 
     @Override

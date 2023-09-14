@@ -109,6 +109,7 @@ public class AbstractController extends BlockEntity {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         CONTROLLERS.iterate(controller -> {
             if (controller.getLevel() != null && controller.getLevel().getBlockEntity(controller.getBlockPos()) == controller) {
+                controller.controllerAudioManager.onClientTick(event);
                 controller.controllerWidgetManager.onClientTick(event);
             }
         });

@@ -38,7 +38,7 @@ public class BlockEntityDDJ400 extends AbstractController {
         ControllerSideMixFader rightMixFader = new ControllerSideMixFader("right_mix_fader", TouchMapDDJ400.RIGHT_MIX_FADER, controllerAudioManager, 1);
         controllerWidgetManager.add(leftMixFader);
         controllerWidgetManager.add(rightMixFader);
-        controllerWidgetManager.add(new ControllerMiddleMixFader("mix_fader", TouchMapDDJ400.MIX_FADER, controllerAudioManager, leftMixFader, rightMixFader));
+        controllerWidgetManager.add(new ControllerCrossFader("cross_fader", TouchMapDDJ400.CROSS_FADER, controllerAudioManager, leftMixFader, rightMixFader));
         controllerWidgetManager.add(new ControllerPlayButton("left_play_button", TouchMapDDJ400.LEFT_PLAY_BUTTON, controllerAudioManager, 0));
         controllerWidgetManager.add(new ControllerPlayButton("right_play_button", TouchMapDDJ400.RIGHT_PLAY_BUTTON, controllerAudioManager, 1));
         controllerWidgetManager.add(new ControllerCueButton("left_cue_button", TouchMapDDJ400.LEFT_CUE_BUTTON, controllerAudioManager, 0));
