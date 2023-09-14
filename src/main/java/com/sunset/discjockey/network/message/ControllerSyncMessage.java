@@ -3,6 +3,7 @@ package com.sunset.discjockey.network.message;
 import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,16 +44,20 @@ public class ControllerSyncMessage {
 //            context.getSender().level().getBlockEntity(message.pos).getCapability(MusicURLSyncMessageProvider.MUSIC_URL_SYNC_MESSAGE_CAPABILITY).ifPresent(cap -> {
 //                cap.setURLs(message.urls);
 //            });
-            BlockEntity blockEntity = Minecraft.getInstance().level.getBlockEntity(message.pos);
+                    ClientLevel level = Minecraft.getInstance().level;
+                    if (level != null && level.isLoaded(message.pos)) {
+                        BlockEntity blockEntity = level.getBlockEntity(message.pos);
 //            if(blockEntity instanceof MusicURLSyncMessageProvider) {
 //                ((MusicURLSyncMessageProvider) blockEntity).setURLs(message.urls);
 //            }
-            if (blockEntity instanceof AbstractController controller) {
-                controller.load(message.compoundTag);
-            } else {
-                DEBUG_LOGGER.debug("what the hell?" + ControllerSyncMessage.class.getName());
-            }
-        });
+                        if (blockEntity instanceof AbstractController controller) {
+                            controller.load(message.compoundTag);
+                        } else {
+                            DEBUG_LOGGER.debug("what the hell?" + ControllerSyncMessage.class.getName());
+                        }
+                    }
+                }
+        );
         context.setPacketHandled(true);
     }
 }
