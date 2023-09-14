@@ -20,16 +20,20 @@ public class SHA256
 
             if (array instanceof byte[]) {
                 hash = messageDigest.digest((byte[]) array);
-            } else if (array instanceof InputStream) {
+            }
+            else if (array instanceof InputStream) {
                 hash = messageDigest.digest(array.toString().getBytes());
-            } else if (array instanceof String) {
+            }
+            else if (array instanceof String) {
                 hash = messageDigest.digest(((String) array).getBytes());
-            } else if (array instanceof File) {
+            }
+            else if (array instanceof File) {
                 hash = messageDigest.digest(Files.readAllBytes(Paths.get(((File) array).getPath())));
-            } else {
+            }
+            else {
                 throw new Exception("Unsupported type");
             }
-            
+
             StringBuilder stringBuilder = new StringBuilder();
             for (byte b : hash) {
                 stringBuilder.append(String.format("%02x", b));
