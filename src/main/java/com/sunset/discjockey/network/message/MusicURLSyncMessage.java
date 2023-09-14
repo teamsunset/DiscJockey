@@ -4,6 +4,7 @@ import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -45,18 +46,21 @@ public class MusicURLSyncMessage {
 //            context.getSender().level().getBlockEntity(message.pos).getCapability(MusicURLSyncMessageProvider.MUSIC_URL_SYNC_MESSAGE_CAPABILITY).ifPresent(cap -> {
 //                cap.setURLs(message.urls);
 //            });
-
-            BlockEntity blockEntity = context.getSender().level().getBlockEntity(message.pos);
+                    Level level = context.getSender().level();
+                    if (level != null && level.isLoaded(message.pos)) {
+                        BlockEntity blockEntity = level.getBlockEntity(message.pos);
 //            if(blockEntity instanceof MusicURLSyncMessageProvider) {
 //                ((MusicURLSyncMessageProvider) blockEntity).setURLs(message.urls);
 //            }
-            if (blockEntity instanceof AbstractController controller) {
-                controller.controllerAudioManager.audios = message.urls;
-                context.getSender().sendSystemMessage(Component.literal("url has been set!"));
-            } else {
-                DEBUG_LOGGER.debug("what the hell?" + MusicURLSyncMessage.class.getName());
-            }
-        });
+                        if (blockEntity instanceof AbstractController controller) {
+                            controller.controllerAudioManager.audios = message.urls;
+                            context.getSender().sendSystemMessage(Component.literal("url has been set!"));
+                        } else {
+                            DEBUG_LOGGER.debug("what the hell?" + MusicURLSyncMessage.class.getName());
+                        }
+                    }
+                }
+        );
         context.setPacketHandled(true);
     }
 }
