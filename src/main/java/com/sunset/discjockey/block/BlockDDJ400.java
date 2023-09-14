@@ -47,7 +47,7 @@ public class BlockDDJ400 extends HorizontalDirectionalBlock implements EntityBlo
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.getBlockEntity(pos) instanceof BlockEntityDDJ400 blockEntityDDJ400) {
+        if (level.isLoaded(pos) && level.getBlockEntity(pos) instanceof BlockEntityDDJ400 blockEntityDDJ400) {
             return blockEntityDDJ400.use(state, level, pos, player, hand, hit);
         } else {
             return InteractionResult.PASS;
