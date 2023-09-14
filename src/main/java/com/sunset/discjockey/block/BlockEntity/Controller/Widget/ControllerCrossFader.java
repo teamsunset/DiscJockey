@@ -8,14 +8,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 
-public class ControllerMiddleMixFader extends ControllerFader {
+public class ControllerCrossFader extends ControllerFader {
 
     public ControllerAudioManager controllerAudioManager;
 
     public ControllerSideMixFader leftMixFader;
     public ControllerSideMixFader rightMixFader;
 
-    public ControllerMiddleMixFader(String id, PlaneRange planeRange, ControllerAudioManager controllerAudioManager, ControllerSideMixFader leftMixFader, ControllerSideMixFader rightMixFader) {
+    public ControllerCrossFader(String id, PlaneRange planeRange, ControllerAudioManager controllerAudioManager, ControllerSideMixFader leftMixFader, ControllerSideMixFader rightMixFader) {
         super(id, planeRange);
         this.controllerAudioManager = controllerAudioManager;
         this.leftMixFader = leftMixFader;
@@ -25,7 +25,8 @@ public class ControllerMiddleMixFader extends ControllerFader {
     @Override
     public void executeOnServer(Player player, double value) {
         super.executeOnServer(player, value);
-        player.displayClientMessage(Component.literal("middle mix rate set: " + (int) (this.value.getTarget() * 100) + "%"), true);
+        int rateNum = (int) ((this.value.getTarget() + 1.0D) / 2 * 100);
+        player.displayClientMessage(Component.literal("cross mix: " + rateNum + "% / " + (100 - rateNum) + "%"), true);
     }
 
     @Override
@@ -41,13 +42,14 @@ public class ControllerMiddleMixFader extends ControllerFader {
     @Override
     public void onClientTick(TickEvent.ClientTickEvent event) {
         super.onClientTick(event);
+        double rate = ((this.value.get() + 1.0D) / 2);
         ControllerAudio leftAudio = this.controllerAudioManager.loadedAudios.get(0);
         ControllerAudio rightAudio = this.controllerAudioManager.loadedAudios.get(1);
         if (leftAudio != null && leftAudio.speakerSound != null) {
-            leftAudio.speakerSound.setVolume((float) (this.value.get() * this.leftMixFader.value.get()));
+            leftAudio.speakerSound.setVolume((float) (rate * this.leftMixFader.value.get() * 2));
         }
         if (rightAudio != null && rightAudio.speakerSound != null) {
-            rightAudio.speakerSound.setVolume((float) (this.value.get() * this.rightMixFader.value.get()));
+            rightAudio.speakerSound.setVolume((float) ((1 - rate) * this.rightMixFader.value.get() * 2));
         }
     }
 }
