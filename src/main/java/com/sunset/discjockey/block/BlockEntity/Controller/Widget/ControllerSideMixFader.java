@@ -4,12 +4,14 @@ import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudio;
 import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudioManager;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerFader;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 
-public class ControllerVolumeFader extends ControllerFader {
+public class ControllerSideMixFader extends ControllerFader {
     public ControllerAudioManager controllerAudioManager;
     public int channelIndex;
 
-    public ControllerVolumeFader(String id, PlaneRange planeRange, ControllerAudioManager controllerAudioManager, int channelIndex) {
+    public ControllerSideMixFader(String id, PlaneRange planeRange, ControllerAudioManager controllerAudioManager, int channelIndex) {
         super(id, planeRange);
         this.controllerAudioManager = controllerAudioManager;
         this.channelIndex = channelIndex;
@@ -23,9 +25,10 @@ public class ControllerVolumeFader extends ControllerFader {
     }
 
     @Override
-    public void executeOnServer(double value) {
-        super.executeOnServer(value);
+    public void executeOnServer(Player player, double value) {
+        super.executeOnServer(player, value);
         this.value.setTarget((value + 1) * 0.5);
+        player.displayClientMessage(Component.literal(this.channelIndex == 0 ? "left" : "right" + " channel mix rate set: " + (int) (this.value.getTarget() * 100) + "%"), true);
     }
 
     @Override

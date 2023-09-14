@@ -4,6 +4,7 @@ import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 
 import java.util.Vector;
@@ -49,19 +50,19 @@ public class ControllerWidgetManager {
     }
 
     //this function is only on serverside
-    public void interact(InteractType interactType, int interactValue, Vec2Plane relativeActionPos) {
+    public void interact(Player player, InteractType interactType, int interactValue, Vec2Plane relativeActionPos) {
         for (ControllerWidget controllerWidget : controllerWidgets) {
             if (controllerWidget.interactType == interactType && controllerWidget.planeRange.isInRange(relativeActionPos)) {
                 switch (interactType) {
                     case PRESS -> {
-                        controllerWidget.executeOnServer(1);
+                        controllerWidget.executeOnServer(player, 1);
                     }
                     case DRAG -> {
                         double value = controllerWidget.planeRange.getValueInRange(relativeActionPos) * 2 - 1;
-                        controllerWidget.executeOnServer(value);
+                        controllerWidget.executeOnServer(player, value);
                     }
                     case SCROLL -> {
-                        controllerWidget.executeOnServer(interactValue);
+                        controllerWidget.executeOnServer(player, interactValue);
                     }
                 }
             }

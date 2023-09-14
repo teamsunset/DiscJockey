@@ -50,6 +50,10 @@ public class SimpleInterpolationValue {
         return _oVal;
     }
 
+    public double getTarget() {
+        return _dVal;
+    }
+
     public void set(double val) {
         this._oVal = val;
         this._dVal = val;

@@ -7,7 +7,7 @@ import com.sunset.discjockey.block.BlockEntity.BlockEntityDDJ400;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerButton;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerFader;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidget;
-import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMixFader;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMiddleMixFader;
 import com.sunset.discjockey.client.model.ModelDDJ400;
 import com.sunset.discjockey.client.model.ModelManager;
 import com.sunset.discjockey.util.ModReference;
@@ -42,11 +42,11 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
     public void renderWidgets(BlockEntityDDJ400 blockEntity) {
 
         for (ControllerWidget controllerWidget : blockEntity.controllerWidgetManager.controllerWidgets) {
-            if (controllerWidget.id.equals("mix_fader")) {
+            if (controllerWidget.id.equals("middle_mix_fader")) {
                 MODEL_MANAGER.setRelative(
-                        "mix_fader",
+                        "middle_mix_fader",
                         "x",
-                        (float) (-1 * ((ControllerMixFader) controllerWidget).value.get())
+                        (float) (-1 * ((ControllerMiddleMixFader) controllerWidget).value.get())
                 );
             } else if (controllerWidget instanceof ControllerButton controllerButton) {
                 MODEL_MANAGER.setRelative(
@@ -60,7 +60,7 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
                         "z",
                         (float) (((ControllerFader) controllerWidget).value.get() * 1.5)
                 );
-            } else if (controllerWidget.id.contains("volume_fader")) {
+            } else if (controllerWidget.id.equals("left_mix_fader") || controllerWidget.id.equals("right_mix_fader")) {
                 MODEL_MANAGER.setRelative(
                         controllerWidget.id,
                         "z",

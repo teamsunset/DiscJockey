@@ -1,6 +1,5 @@
 package com.sunset.discjockey.block.BlockEntity.Controller.Audio;
 
-import com.sunset.discjockey.DiscJockey;
 import com.sunset.discjockey.client.audio.SpeakerSound;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import net.minecraft.Util;
@@ -48,6 +47,12 @@ public class ControllerAudio {
             this.speakerSound.isPlaying = this.isPlayingOnServer;
             if (Math.abs(this.elapsedTimeOnServer - this.speakerSound.elapsedTime.get()) > 10)
                 this.speakerSound.elapsedTime.set(this.elapsedTimeOnServer);
+        }
+    }
+
+    public void destroy() {
+        if (this.speakerSound != null) {
+            this.speakerSound.destroy();
         }
     }
 

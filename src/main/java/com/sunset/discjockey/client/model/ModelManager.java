@@ -1,9 +1,6 @@
 package com.sunset.discjockey.client.model;
 
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraftforge.fml.common.Mod;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +27,7 @@ public class ModelManager {
         ModelPart part = parts.get(id);
         ModelPart initialPart = initialParts.get(id);
         if (part == null || initialPart == null) {
-            new Exception("ModelManager: setRelative: part or initialPart is null").printStackTrace();
+            new Exception("ModelManager: setRelative: part or initialPart is null: " + id).printStackTrace();
             return;
         }
         switch (axis) {

@@ -3,10 +3,7 @@ package com.sunset.discjockey.block.BlockEntity;
 import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerFader;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
-import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerCueButton;
-import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerMixFader;
-import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerPlayButton;
-import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerVolumeFader;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.*;
 import com.sunset.discjockey.network.message.MusicURLSyncMessage;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
@@ -37,13 +34,19 @@ public class BlockEntityDDJ400 extends AbstractController {
 
     public BlockEntityDDJ400(BlockPos pPos, BlockState pBlockState) {
         super(BlockEntityTypeCollection.BLOCK_ENTITY_DDJ400.get(), pPos, pBlockState);
-        controllerWidgetManager.add(new ControllerMixFader("mix_fader", TouchMapDDJ400.MIX_FADER, controllerAudioManager));
+        ControllerSideMixFader leftMixFader = new ControllerSideMixFader("left_mix_fader", TouchMapDDJ400.LEFT_MIX_FADER, controllerAudioManager, 0);
+        ControllerSideMixFader rightMixFader = new ControllerSideMixFader("right_mix_fader", TouchMapDDJ400.RIGHT_MIX_FADER, controllerAudioManager, 1);
+        controllerWidgetManager.add(leftMixFader);
+        controllerWidgetManager.add(rightMixFader);
+        controllerWidgetManager.add(new ControllerMiddleMixFader("mix_fader", TouchMapDDJ400.MIX_FADER, controllerAudioManager, leftMixFader, rightMixFader));
         controllerWidgetManager.add(new ControllerPlayButton("left_play_button", TouchMapDDJ400.LEFT_PLAY_BUTTON, controllerAudioManager, 0));
+        controllerWidgetManager.add(new ControllerPlayButton("right_play_button", TouchMapDDJ400.RIGHT_PLAY_BUTTON, controllerAudioManager, 1));
         controllerWidgetManager.add(new ControllerCueButton("left_cue_button", TouchMapDDJ400.LEFT_CUE_BUTTON, controllerAudioManager, 0));
+        controllerWidgetManager.add(new ControllerCueButton("right_cue_button", TouchMapDDJ400.RIGHT_CUE_BUTTON, controllerAudioManager, 1));
         controllerWidgetManager.add(new ControllerFader("left_bpm_fader", TouchMapDDJ400.LEFT_BPM_FADER));
         controllerWidgetManager.add(new ControllerFader("right_bpm_fader", TouchMapDDJ400.RIGHT_BPM_FADER));
-        controllerWidgetManager.add(new ControllerVolumeFader("left_volume_fader", TouchMapDDJ400.LEFT_VOLUME_FADER, controllerAudioManager, 0));
-        controllerWidgetManager.add(new ControllerVolumeFader("right_volume_fader", TouchMapDDJ400.RIGHT_VOLUME_FADER, controllerAudioManager, 1));
+        controllerWidgetManager.add(new ControllerLoadButton("left_load_button", TouchMapDDJ400.LEFT_LOAD_BUTTON, controllerAudioManager, 0, 0));
+        controllerWidgetManager.add(new ControllerLoadButton("right_load_button", TouchMapDDJ400.RIGHT_LOAD_BUTTON, controllerAudioManager, 1, 1));
     }
 
     //action
@@ -70,8 +73,8 @@ public class BlockEntityDDJ400 extends AbstractController {
             Vec3 relativeHitLocation = hitLocation.subtract(this.getBlockPos().getCenter());
             Direction blockFacing = state.getValue(HorizontalDirectionalBlock.FACING);
             Vec2Plane relativeHitPoint = new Vec2Plane(new Vec2Plane(relativeHitLocation.x, relativeHitLocation.z)).rotate(-1 * Vec2Plane.DIRECTION_DEGREE_MAP.get(blockFacing), Vec2Plane.ORIGIN);
-            controllerWidgetManager.interact(ControllerWidgetManager.InteractType.DRAG, 1, relativeHitPoint);
-            controllerWidgetManager.interact(ControllerWidgetManager.InteractType.PRESS, 1, relativeHitPoint);
+            controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.DRAG, 1, relativeHitPoint);
+            controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.PRESS, 1, relativeHitPoint);
 
 //        player.getEyePosition();
 //        player.pick(player.distance)
