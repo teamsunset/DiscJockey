@@ -25,10 +25,8 @@
 package com.sunset.discjockey.lib.spi;
 
 
-import com.sunset.discjockey.util.Reference;
 import javazoom.spi.mpeg.sampled.convert.DecodedMpegAudioInputStream;
 import javazoom.spi.mpeg.sampled.file.MpegEncoding;
-import net.minecraftforge.fml.common.Mod;
 import org.tritonus.share.TDebug;
 import org.tritonus.share.sampled.Encodings;
 import org.tritonus.share.sampled.convert.TEncodingFormatConversionProvider;
@@ -42,8 +40,7 @@ import java.util.Arrays;
 /**
  * ConversionProvider for MPEG files.
  */
-public class MpegFormatConversionProvider extends TEncodingFormatConversionProvider
-{
+public class MpegFormatConversionProvider extends TEncodingFormatConversionProvider {
     private static final AudioFormat.Encoding MP3 = Encodings.getEncoding("MP3");
     private static final AudioFormat.Encoding PCM_SIGNED = Encodings.getEncoding("PCM_SIGNED");
 

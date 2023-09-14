@@ -19,6 +19,18 @@ public class BlockSpeaker extends HorizontalDirectionalBlock
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, net.minecraft.core.Direction.NORTH));
     }
 
+    //blockState
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateDefinitionBuilder) {
+        stateDefinitionBuilder.add(FACING);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
+        return this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite());
+    }
+
+    //render
     @Override
     public VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         return Shapes.box(0.3D, 0, 0.3D, 0.7D, 0.7D, 0.7D);
@@ -29,13 +41,4 @@ public class BlockSpeaker extends HorizontalDirectionalBlock
         return Shapes.box(0.3D, 0, 0.3D, 0.7D, 0.7D, 0.7D);
     }
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateDefinitionBuilder) {
-        stateDefinitionBuilder.add(FACING);
-    }
-
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        return this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite());
-    }
 }
