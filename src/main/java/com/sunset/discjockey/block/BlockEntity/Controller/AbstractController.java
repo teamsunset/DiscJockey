@@ -97,7 +97,7 @@ public class AbstractController extends BlockEntity {
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase.equals(TickEvent.Phase.END)) {
             CONTROLLERS.iterate(controller -> {
-                if (controller.getLevel() != null && controller.getLevel().getBlockEntity(controller.getBlockPos()) == controller) {
+                if (controller.getLevel() != null && controller.getLevel().isLoaded(controller.getBlockPos()) && controller.getLevel().getBlockEntity(controller.getBlockPos()) == controller) {
                     controller.controllerAudioManager.onServerTick(event);
                     controller.controllerWidgetManager.onServerTick(event);
                     controller.sync();
@@ -108,7 +108,7 @@ public class AbstractController extends BlockEntity {
 
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         CONTROLLERS.iterate(controller -> {
-            if (controller.getLevel() != null && controller.getLevel().getBlockEntity(controller.getBlockPos()) == controller) {
+            if (controller.getLevel() != null && controller.getLevel().isLoaded(controller.getBlockPos()) && controller.getLevel().getBlockEntity(controller.getBlockPos()) == controller) {
                 controller.controllerAudioManager.onClientTick(event);
                 controller.controllerWidgetManager.onClientTick(event);
             }
