@@ -25,6 +25,7 @@ public class WeakCollection<T> {
     public void add(T value) {
         synchronized (collection) {
             if (isIterating) {
+                new Exception("You can't add value to a WeakCollection while iterating it!").printStackTrace();
                 waitingQueue.add(new WeakReference<>(value));
             } else {
                 collection.add(new WeakReference<>(value));
