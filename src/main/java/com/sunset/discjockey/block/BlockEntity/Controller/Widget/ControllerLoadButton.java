@@ -22,8 +22,11 @@ public class ControllerLoadButton extends ControllerButton {
     @Override
     public void executeOnServer(Player player, double value) {
         super.executeOnServer(player, value);
-        controllerAudioManager.loadAudio(this.loadIndex, this.channelIndex);
-        player.displayClientMessage(Component.literal("The " + this.loadIndex + " st audio has been loaded to " + this.channelIndex + " channel"), true);
+        if (controllerAudioManager.loadAudio(this.loadIndex, this.channelIndex)) {
+            player.displayClientMessage(Component.literal("The " + this.loadIndex + " st audio has been loaded to " + this.channelIndex + " channel"), true);
+        } else {
+            player.displayClientMessage(Component.literal("§4The " + this.loadIndex + " st audio is empty"), false);
+        }
     }
 
     @Override

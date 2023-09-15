@@ -59,6 +59,11 @@ public class ControllerAudioManager {
         this.audios = audios;
 
         CompoundTag loadAudiosTag = compoundTag.getCompound("loadedAudios");
+        for (int channelIndex : loadedAudios.keySet()) {
+            if (!loadAudiosTag.contains(String.valueOf(channelIndex))) {
+                this.unloadAudio(channelIndex);
+            }
+        }
         for (String key : loadAudiosTag.getAllKeys()) {
             if (loadedAudios.get(Integer.parseInt(key)) == null || !loadedAudios.get(Integer.parseInt(key)).url.equals(loadAudiosTag.getCompound(key).getString("url"))) {
                 this.unloadAudio(Integer.parseInt(key));
@@ -68,9 +73,14 @@ public class ControllerAudioManager {
         }
     }
 
-    public void loadAudio(int index, int channelIndex) {
+    public boolean loadAudio(int index, int channelIndex) {
         this.unloadAudio(channelIndex);
-        loadedAudios.put(channelIndex, new ControllerAudio(this, audios.get(index)));
+        if (audios.size() > index) {
+            loadedAudios.put(channelIndex, new ControllerAudio(this, audios.get(index)));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void unloadAudio(int channelIndex) {
