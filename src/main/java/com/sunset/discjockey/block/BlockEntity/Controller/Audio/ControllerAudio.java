@@ -16,7 +16,7 @@ public class ControllerAudio {
     public ControllerAudioManager manager;
     public String url;
 
-    public SpeakerSound speakerSound = null;//only on level clientside
+    public SpeakerSound speakerSound = null;//only on clientside
 
     public boolean isPlayingOnServer = false;
 
@@ -26,7 +26,7 @@ public class ControllerAudio {
     public ControllerAudio(ControllerAudioManager controllerAudioManager, String url) {
         this.manager = controllerAudioManager;
         this.url = url;
-        if (this.manager.controller.getLevel().isClientSide()) {
+        if (this.manager.controller.hasLevel() && this.manager.controller.getLevel().isClientSide()) {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::setupOnClient);
         }
     }
@@ -66,7 +66,9 @@ public class ControllerAudio {
                         }
                         this.speakerSound = new SpeakerSound(this.manager.controller.getBlockPos(), this.url);
                         this.speakerSound.elapsedTime.set(this.elapsedTimeOnServer);
-                        Minecraft.getInstance().getSoundManager().play(this.speakerSound);
+                        Minecraft.getInstance().submitAsync(() -> {
+                            Minecraft.getInstance().getSoundManager().play(this.speakerSound);
+                        });
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
