@@ -1,12 +1,7 @@
 package com.sunset.discjockey.util.SpecialType;
 
-import net.minecraftforge.event.TickEvent;
-
-import java.util.Vector;
-
 //@Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SimpleInterpolationValue {
-    public static WeakCollection<SimpleInterpolationValue> VALUES = new WeakCollection<>(new Vector<>());
 
     public double _oVal;
 
@@ -30,15 +25,7 @@ public class SimpleInterpolationValue {
     public SimpleInterpolationValue(double _oVal, double _dVal) {
         this._oVal = _oVal;
         this._dVal = _dVal;
-        VALUES.add(this);
     }
-
-    //invalid
-//    @Override
-//    public void finalize() throws Throwable {
-//        VALUES.remove(this);
-//        super.finalize();
-//    }
 
     public void interpolate() {
         if (_oVal != _dVal) {
@@ -66,37 +53,29 @@ public class SimpleInterpolationValue {
 
     //interpolate at the end of each tick
 //    @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            VALUES.iterate(value -> {
-                if (Math.abs(value._dVal - value._oVal) > SimpleInterpolationValue.threshold) {
-                    value.interpolate();
-                    if (value.onServerInterpolate != null) {
-                        value.onServerInterpolate.run();
-                    }
-                } else if (value.isSetCalled.get()) {
-                    if (value.onServerInterpolate != null) {
-                        value.onServerInterpolate.run();
-                    }
-                }
-            });
+    public void onServerTick() {
+        if (Math.abs(this._dVal - this._oVal) > SimpleInterpolationValue.threshold) {
+            this.interpolate();
+            if (this.onServerInterpolate != null) {
+                this.onServerInterpolate.run();
+            }
+        } else if (this.isSetCalled.get()) {
+            if (this.onServerInterpolate != null) {
+                this.onServerInterpolate.run();
+            }
         }
     }
 
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            VALUES.iterate(value -> {
-                if (Math.abs(value._dVal - value._oVal) > SimpleInterpolationValue.threshold) {
-                    value.interpolate();
-                    if (value.onClientInterpolate != null) {
-                        value.onClientInterpolate.run();
-                    }
-                } else if (value.isSetCalled.get()) {
-                    if (value.onClientInterpolate != null) {
-                        value.onClientInterpolate.run();
-                    }
-                }
-            });
+    public void onClientTick() {
+        if (Math.abs(this._dVal - this._oVal) > SimpleInterpolationValue.threshold) {
+            this.interpolate();
+            if (this.onClientInterpolate != null) {
+                this.onClientInterpolate.run();
+            }
+        } else if (this.isSetCalled.get()) {
+            if (this.onClientInterpolate != null) {
+                this.onClientInterpolate.run();
+            }
         }
     }
 
