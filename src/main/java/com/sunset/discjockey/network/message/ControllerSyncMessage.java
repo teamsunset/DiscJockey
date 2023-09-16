@@ -1,7 +1,6 @@
 package com.sunset.discjockey.network.message;
 
-import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
-import net.minecraft.Util;
+import com.sunset.discjockey.block.BlockEntity.Controller.AbstractControllerEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -9,9 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkEvent;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.*;
 import java.util.function.Supplier;
 
 import static com.sunset.discjockey.DiscJockey.DEBUG_LOGGER;
@@ -50,7 +47,7 @@ public class ControllerSyncMessage {
 //            if(blockEntity instanceof MusicURLSyncMessageProvider) {
 //                ((MusicURLSyncMessageProvider) blockEntity).setURLs(message.urls);
 //            }
-                        if (blockEntity instanceof AbstractController controller) {
+                        if (blockEntity instanceof AbstractControllerEntity controller) {
                             controller.load(message.compoundTag);
                         } else {
                             DEBUG_LOGGER.debug("what the hell?" + ControllerSyncMessage.class.getName());
