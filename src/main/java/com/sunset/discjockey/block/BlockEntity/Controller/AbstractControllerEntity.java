@@ -112,4 +112,5 @@ public class AbstractControllerEntity extends BlockEntity implements BlockEntity
         this.controllerAudioManager.onClientTick();
         this.controllerWidgetManager.onClientTick();
     }
+    
 }
