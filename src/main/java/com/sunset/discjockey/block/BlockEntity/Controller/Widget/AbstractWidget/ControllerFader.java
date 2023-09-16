@@ -40,4 +40,16 @@ public class ControllerFader extends ControllerWidget {
     public void writeCompoundTag(CompoundTag compoundTag) {
         this.value.set(compoundTag.getDouble("value"));
     }
+
+    @Override
+    public void onServerTick() {
+        super.onServerTick();
+        this.value.onServerTick();
+    }
+
+    @Override
+    public void onClientTick() {
+        super.onClientTick();
+        this.value.onClientTick();
+    }
 }

@@ -7,7 +7,6 @@ import com.sunset.discjockey.network.NetworkHandler;
 import com.sunset.discjockey.util.ModReference;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
-import com.sunset.discjockey.util.SpecialType.SimpleInterpolationValue;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.TickEvent;
@@ -28,12 +27,10 @@ public class EventHandler {
 
         @SubscribeEvent
         public static void onServerTick(TickEvent.ServerTickEvent event) {
-            SimpleInterpolationValue.onServerTick(event);
         }
 
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {
-            SimpleInterpolationValue.onClientTick(event);
         }
     }
 
