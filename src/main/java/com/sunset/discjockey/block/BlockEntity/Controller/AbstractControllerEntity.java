@@ -1,38 +1,30 @@
 package com.sunset.discjockey.block.BlockEntity.Controller;
 
+import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudio;
 import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudioManager;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
-import com.sunset.discjockey.network.NetworkHandler;
-import com.sunset.discjockey.network.message.ControllerSyncMessage;
-import com.sunset.discjockey.util.SpecialType.SimpleInterpolationValue;
-import com.sunset.discjockey.util.SpecialType.WeakCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
-
-import java.lang.ref.WeakReference;
-import java.util.Vector;
 
 import static net.minecraft.world.level.block.Block.UPDATE_CLIENTS;
 
-public class AbstractController extends BlockEntity {
-    public static final WeakCollection<AbstractController> CONTROLLERS = new WeakCollection<>(new Vector<>());
+public class AbstractControllerEntity extends BlockEntity implements BlockEntityTicker<AbstractControllerEntity> {
     public ControllerAudioManager controllerAudioManager;
     public ControllerWidgetManager controllerWidgetManager;
 
-    public AbstractController(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
+    public AbstractControllerEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
         controllerAudioManager = new ControllerAudioManager(this);
         controllerWidgetManager = new ControllerWidgetManager(this);
-        CONTROLLERS.add(this);
     }
 
 
@@ -94,24 +86,30 @@ public class AbstractController extends BlockEntity {
         super.handleUpdateTag(compoundTag);
     }
 
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase.equals(TickEvent.Phase.END)) {
-            CONTROLLERS.iterate(controller -> {
-                if (controller.getLevel() != null && controller.getLevel().isLoaded(controller.getBlockPos()) && controller.getLevel().getBlockEntity(controller.getBlockPos()) == controller) {
-                    controller.controllerAudioManager.onServerTick(event);
-                    controller.controllerWidgetManager.onServerTick(event);
-                    controller.sync();
-                }
-            });
+    public void tick(Level pLevel, BlockPos pPos, BlockState pState, AbstractControllerEntity pBlockEntity) {
+        if (pLevel.isClientSide()) {
+            this.onClientTick();
+        } else {
+            this.onServerTick();
         }
     }
 
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        CONTROLLERS.iterate(controller -> {
-            if (controller.getLevel() != null && controller.getLevel().isLoaded(controller.getBlockPos()) && controller.getLevel().getBlockEntity(controller.getBlockPos()) == controller) {
-                controller.controllerAudioManager.onClientTick(event);
-                controller.controllerWidgetManager.onClientTick(event);
-            }
-        });
+    @Override
+    public void onChunkUnloaded() {
+        super.onChunkUnloaded();
+        for (ControllerAudio audio : controllerAudioManager.loadedAudios.values()) {
+            audio.terminate();
+        }
+    }
+
+    public void onServerTick() {
+        this.controllerAudioManager.onServerTick();
+        this.controllerWidgetManager.onServerTick();
+        this.sync();
+    }
+
+    public void onClientTick() {
+        this.controllerAudioManager.onClientTick();
+        this.controllerWidgetManager.onClientTick();
     }
 }
