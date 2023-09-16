@@ -56,11 +56,11 @@ public abstract class ControllerWidget {
     //clientside
     public abstract void writeCompoundTag(CompoundTag compoundTag);
 
-    public void onServerTick(TickEvent.ServerTickEvent event) {
+    public void onServerTick() {
     }
 
 
-    public void onClientTick(TickEvent.ClientTickEvent event) {
+    public void onClientTick() {
     }
 
 

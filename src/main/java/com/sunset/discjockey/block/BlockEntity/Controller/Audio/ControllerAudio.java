@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.DistExecutor;
 
 import java.util.concurrent.CompletableFuture;
@@ -50,9 +49,9 @@ public class ControllerAudio {
         }
     }
 
-    public void destroy() {
+    public void terminate() {
         if (this.speakerSound != null) {
-            this.speakerSound.destroy();
+            this.speakerSound.terminate();
         }
     }
 
@@ -76,16 +75,16 @@ public class ControllerAudio {
                 , Util.backgroundExecutor());
     }
 
-    public void onServerTick(TickEvent.ServerTickEvent event) {
+    public void onServerTick() {
         if (this.isPlayingOnServer) {
             this.elapsedTimeOnServer++;
         }
         this.manager.controller.markDirty();
     }
 
-    public void onClientTick(TickEvent.ClientTickEvent event) {
+    public void onClientTick() {
         if (this.speakerSound != null && this.speakerSound.fileAudioStream != null && this.speakerSound.fileAudioStream.isStreamClosed) {
-            this.speakerSound.destroy();
+            this.speakerSound.terminate();
             this.setupOnClient();
         }
     }
