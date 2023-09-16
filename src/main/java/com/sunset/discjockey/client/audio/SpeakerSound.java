@@ -1,7 +1,6 @@
 package com.sunset.discjockey.client.audio;
 
-import com.sunset.discjockey.block.BlockEntity.BlockEntityDDJ400;
-import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
+import com.sunset.discjockey.block.BlockEntity.Controller.AbstractControllerEntity;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.RegistryCollection.SoundEventCollection;
 import com.sunset.discjockey.util.SpecialType.Property;
@@ -58,7 +57,7 @@ public class SpeakerSound extends AbstractTickableSoundInstance {
         Level world = Minecraft.getInstance().level;
         if (world != null && world.isLoaded(this.pos)) {
             BlockEntity blockEntity = world.getBlockEntity(this.pos);
-            if (blockEntity instanceof AbstractController controller) {
+            if (blockEntity instanceof AbstractControllerEntity controller) {
                 this.fileAudioStream.isPlaying = this.isPlaying;
             } else {
                 this.stop();
@@ -78,7 +77,7 @@ public class SpeakerSound extends AbstractTickableSoundInstance {
         this.volume = volume;
     }
 
-    public void destroy() {
+    public void terminate() {
         this.stop();
     }
 

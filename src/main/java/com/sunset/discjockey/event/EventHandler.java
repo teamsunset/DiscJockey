@@ -1,8 +1,7 @@
 package com.sunset.discjockey.event;
 
-import com.google.common.eventbus.Subscribe;
 import com.sunset.discjockey.block.BlockDDJ400;
-import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
+import com.sunset.discjockey.block.BlockEntity.Controller.AbstractControllerEntity;
 import com.sunset.discjockey.client.model.ModelDDJ400;
 import com.sunset.discjockey.client.renderer.BlockEntity.BlockEntityRendererDDJ400;
 import com.sunset.discjockey.network.NetworkHandler;
@@ -31,13 +30,11 @@ public class EventHandler {
         @SubscribeEvent
         public static void onServerTick(TickEvent.ServerTickEvent event) {
             SimpleInterpolationValue.onServerTick(event);
-            AbstractController.onServerTick(event);
         }
 
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {
             SimpleInterpolationValue.onClientTick(event);
-            AbstractController.onClientTick(event);
         }
     }
 

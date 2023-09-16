@@ -1,6 +1,6 @@
 package com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base;
 
-import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
+import com.sunset.discjockey.block.BlockEntity.Controller.AbstractControllerEntity;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
@@ -11,7 +11,7 @@ import java.util.Vector;
 
 //for load at launching, this.controllerWidgets will be statically defined by BlockEntity.if you want to create dynamic widgets in the future, you should write the load function.
 public class ControllerWidgetManager {
-    public AbstractController controller;
+    public AbstractControllerEntity controller;
 
     public enum InteractType {
         PRESS,
@@ -30,7 +30,7 @@ public class ControllerWidgetManager {
 //        }
 //    }
 
-    public ControllerWidgetManager(AbstractController controller) {
+    public ControllerWidgetManager(AbstractControllerEntity controller) {
         this.controller = controller;
     }
 
@@ -99,15 +99,15 @@ public class ControllerWidgetManager {
         }
     }
 
-    public void onServerTick(TickEvent.ServerTickEvent event) {
+    public void onServerTick() {
         for (ControllerWidget controllerWidget : controllerWidgets) {
-            controllerWidget.onServerTick(event);
+            controllerWidget.onServerTick();
         }
     }
 
-    public void onClientTick(TickEvent.ClientTickEvent event) {
+    public void onClientTick() {
         for (ControllerWidget controllerWidget : controllerWidgets) {
-            controllerWidget.onClientTick(event);
+            controllerWidget.onClientTick();
         }
     }
 }

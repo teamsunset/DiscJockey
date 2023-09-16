@@ -1,6 +1,6 @@
 package com.sunset.discjockey.block.BlockEntity;
 
-import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
+import com.sunset.discjockey.block.BlockEntity.Controller.AbstractControllerEntity;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerFader;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.*;
@@ -30,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.sunset.discjockey.network.NetworkHandler.NETWORK_CHANNEL;
 
-public class BlockEntityDDJ400 extends AbstractController {
+public class BlockEntityDDJ400 extends AbstractControllerEntity {
 
     public BlockEntityDDJ400(BlockPos pPos, BlockState pBlockState) {
         super(BlockEntityTypeCollection.BLOCK_ENTITY_DDJ400.get(), pPos, pBlockState);
@@ -104,4 +104,5 @@ public class BlockEntityDDJ400 extends AbstractController {
         }
         return InteractionResult.SUCCESS;
     }
+
 }

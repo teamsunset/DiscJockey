@@ -35,13 +35,13 @@ public class ControllerCrossFader extends ControllerFader {
     }
 
     @Override
-    public void onServerTick(TickEvent.ServerTickEvent event) {
-        super.onServerTick(event);
+    public void onServerTick() {
+        super.onServerTick();
     }
 
     @Override
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        super.onClientTick(event);
+    public void onClientTick() {
+        super.onClientTick();
         double rate = ((this.value.get() + 1.0D) / 2);
         ControllerAudio leftAudio = this.controllerAudioManager.loadedAudios.get(0);
         ControllerAudio rightAudio = this.controllerAudioManager.loadedAudios.get(1);

@@ -1,12 +1,11 @@
 package com.sunset.discjockey.block.BlockEntity.Controller.Audio;
 
-import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
+import com.sunset.discjockey.block.BlockEntity.Controller.AbstractControllerEntity;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraftforge.event.TickEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +14,7 @@ import java.util.Vector;
 public class ControllerAudioManager {
     public static Vector<ControllerAudioManager> MANAGERS = new Vector<>();
 
-    public AbstractController controller;
+    public AbstractControllerEntity controller;
 
     //selected index should be used widget "knob"
     public Vector<String> audios = new Vector<>();
@@ -23,7 +22,7 @@ public class ControllerAudioManager {
     //channel,ControllerAudio
     public Map<Integer, ControllerAudio> loadedAudios = new HashMap<>();
 
-    public ControllerAudioManager(AbstractController controller) {
+    public ControllerAudioManager(AbstractControllerEntity controller) {
         this.controller = controller;
     }
 
@@ -85,7 +84,7 @@ public class ControllerAudioManager {
 
     public void unloadAudio(int channelIndex) {
         if (loadedAudios.get(channelIndex) != null) {
-            loadedAudios.get(channelIndex).destroy();
+            loadedAudios.get(channelIndex).terminate();
             loadedAudios.remove(channelIndex);
         }
     }
@@ -93,18 +92,18 @@ public class ControllerAudioManager {
     public void resetAudio() {
         audios.clear();
         for (ControllerAudio controllerAudio : loadedAudios.values())
-            controllerAudio.destroy();
+            controllerAudio.terminate();
     }
 
-    public void onServerTick(TickEvent.ServerTickEvent event) {
+    public void onServerTick() {
         for (ControllerAudio controllerAudio : loadedAudios.values()) {
-            controllerAudio.onServerTick(event);
+            controllerAudio.onServerTick();
         }
     }
 
-    public void onClientTick(TickEvent.ClientTickEvent event) {
+    public void onClientTick() {
         for (ControllerAudio controllerAudio : loadedAudios.values()) {
-            controllerAudio.onClientTick(event);
+            controllerAudio.onClientTick();
         }
     }
 }

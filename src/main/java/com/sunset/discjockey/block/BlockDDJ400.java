@@ -11,11 +11,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -24,8 +23,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import org.jetbrains.annotations.Nullable;
 
-public class BlockDDJ400 extends HorizontalDirectionalBlock implements EntityBlock {
+public class BlockDDJ400 extends AbstractControllerBlock {
 
 //    private static DirectionProperty FACING = DirectionProperty.create("facing",
 //            Direction.NORTH,
@@ -54,17 +54,6 @@ public class BlockDDJ400 extends HorizontalDirectionalBlock implements EntityBlo
         }
     }
 
-    //blockState
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> stateDefinitionBuilder) {
-        stateDefinitionBuilder.add(FACING);
-    }
-
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        return this.defaultBlockState().setValue(FACING, blockPlaceContext.getHorizontalDirection().getOpposite());
-    }
-
     //render
     @Override
     public VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
@@ -74,12 +63,6 @@ public class BlockDDJ400 extends HorizontalDirectionalBlock implements EntityBlo
 
         return Shapes.box(planeRange.p1.x, 0, planeRange.p1.z, planeRange.p2.x, 0.125, planeRange.p2.z);
 
-//        return switch (direction) {
-//            case NORTH -> Shapes.box(0, 0, 0.2, 1, 0.125, 0.75);
-//            case SOUTH -> Shapes.box(0, 0, 0.25, 1, 0.125, 0.8);
-//            case EAST -> Shapes.box(0.25, 0, 0, 0.8, 0.125, 1);
-//            default -> Shapes.box(0.2, 0, 0, 0.75, 0.125, 1);
-//        };
     }
 
     @Override
@@ -90,20 +73,10 @@ public class BlockDDJ400 extends HorizontalDirectionalBlock implements EntityBlo
 
         return Shapes.box(planeRange.p1.x, 0, planeRange.p1.z, planeRange.p2.x, 0.125, planeRange.p2.z);
 
-//        return switch (direction) {
-//            case NORTH -> Shapes.box(0, 0, 0.2D, 1, 0.125D, 0.75D);
-//            case SOUTH -> Shapes.box(0, 0, 0.25D, 1, 0.125D, 0.8D);
-//            case EAST -> Shapes.box(0.25D, 0, 0, 0.8D, 0.125D, 1);
-//            default -> Shapes.box(0.2D, 0, 0, 0.75D, 0.125D, 1);
-//        };
-    }
-
-    @Override
-    public RenderShape getRenderShape(BlockState blockState) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 
     public static void clientSetup(FMLClientSetupEvent event) {
 //        event.enqueueWork(()-> ItemBlockRenderTypes.setRenderLayer(BlockCollection.BLOCK_DDJ400.get(), RenderType.translucent()));
     }
+
 }

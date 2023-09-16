@@ -1,6 +1,6 @@
 package com.sunset.discjockey.network.message;
 
-import com.sunset.discjockey.block.BlockEntity.Controller.AbstractController;
+import com.sunset.discjockey.block.BlockEntity.Controller.AbstractControllerEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -52,7 +52,7 @@ public class MusicURLSyncMessage {
 //            if(blockEntity instanceof MusicURLSyncMessageProvider) {
 //                ((MusicURLSyncMessageProvider) blockEntity).setURLs(message.urls);
 //            }
-                        if (blockEntity instanceof AbstractController controller) {
+                        if (blockEntity instanceof AbstractControllerEntity controller) {
                             controller.controllerAudioManager.audios = message.urls;
                             context.getSender().sendSystemMessage(Component.literal("url has been set!"));
                         } else {
