@@ -6,6 +6,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +53,7 @@ public class ControllerAudioManager {
         Vector<String> audios = new Vector<>();
         if (audiosTag != null) {
             for (Tag tag : audiosTag) {
-                MusicFileManager.loadURLToCache(tag.getAsString());
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> MusicFileManager.loadURLToCache(tag.getAsString()));
                 audios.add(tag.getAsString());
             }
         }
