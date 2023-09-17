@@ -1,7 +1,12 @@
 package com.sunset.discjockey.util.MusicMisc;
 
 
+import javax.sound.sampled.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 public class ProcessAudio {
+
     // 复制
     public static byte[] copy(byte[] data) {
         int len = data.length;
@@ -10,35 +15,37 @@ public class ProcessAudio {
         return newData;
     }
 
-    // 混响效果
-
-
-    // EQ均衡器效果
-
-
-    // 变速效果
-    public static byte[] changeSpeed(byte[] data, float speed) {
-        int sampleSizeInBytes = 2; // 16 bits = 2 bytes
-        int len = data.length;
-        int newLen = (int) (len / speed);
-
-        // Ensure the new length is a multiple of the sample size
-        newLen = (newLen / sampleSizeInBytes) * sampleSizeInBytes;
-
-        byte[] newData = new byte[newLen];
-        for (int i = 0; i < newLen; i += sampleSizeInBytes) {
-            int index = (int) (i * speed);
-
-            // Ensure you don't go out of bounds or cut off a sample
-            if (index < len - sampleSizeInBytes + 1) {
-                newData[i] = data[index];
-                newData[i + 1] = data[index + 1];
-            } else {
-                newData[i] = 0;
-                newData[i + 1] = 0;
-            }
+    //倒放
+    public static byte[] reverse(byte[] data) {
+        byte[] newData = copy(data);
+        for (int i = 0; i < data.length; i += 2) {
+            newData[i] = data[data.length - i - 2];
+            newData[i + 1] = data[data.length - i - 1];
         }
         return newData;
     }
 
+
+    // 变速效果
+    public static void changeSpeedByResampled(AudioInputStream audioInputStream, float speed) {
+
+    }
+
+    public static void main(String[] args) throws LineUnavailableException, IOException, InterruptedException {
+        byte[] array = MusicFileManager.getMusicBytes("netease:1404596131");
+        //倒放
+        byte[] reverseArray = reverse(array);
+
+        //output format
+        System.out.println(MusicFileManager.getMusicAudioInputStream("netease:1404596131").getFormat());
+        AudioFormat format = new AudioFormat(44100, 16, 1, true, false);
+        System.out.println(format);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(reverseArray);
+        AudioInputStream audioInputStream = new AudioInputStream(byteArrayInputStream, format, reverseArray.length / format.getFrameSize());
+
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioInputStream);
+        clip.start();
+        Thread.sleep(clip.getMicrosecondLength() / 1000);
+    }
 }

@@ -39,14 +39,14 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
         instance = this;
     }
 
-    public void renderWidgets(BlockEntityDDJ400 blockEntity) {
+    public void renderWidgets(BlockEntityDDJ400 blockEntity, float pPartialTick) {
 
         for (ControllerWidget controllerWidget : blockEntity.controllerWidgetManager.controllerWidgets) {
             if (controllerWidget.id.equals("cross_fader")) {
                 MODEL_MANAGER.setRelative(
                         "cross_fader",
                         "x",
-                        (float) (-1 * ((ControllerCrossFader) controllerWidget).value.get())
+                        (float) (-1 * ((ControllerCrossFader) controllerWidget).renderValue.interpolate(pPartialTick))
                 );
             } else if (controllerWidget instanceof ControllerButton controllerButton) {
                 MODEL_MANAGER.setRelative(
@@ -58,13 +58,13 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
                 MODEL_MANAGER.setRelative(
                         controllerWidget.id,
                         "z",
-                        (float) (((ControllerFader) controllerWidget).value.get() * 1.5)
+                        (float) (((ControllerFader) controllerWidget).renderValue.interpolate(pPartialTick) * 1.5)
                 );
             } else if (controllerWidget.id.equals("left_mix_fader") || controllerWidget.id.equals("right_mix_fader")) {
                 MODEL_MANAGER.setRelative(
                         controllerWidget.id,
                         "z",
-                        (float) ((((ControllerFader) controllerWidget).value.get() - 1) * 1.5)
+                        (float) ((((ControllerFader) controllerWidget).renderValue.interpolate(pPartialTick) - 1) * 1.5)
                 );
             }
         }
@@ -73,7 +73,7 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
     @Override
     public void render(BlockEntityDDJ400 pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
         BlockPos pos = pBlockEntity.getBlockPos();
-        this.renderWidgets(pBlockEntity);
+        this.renderWidgets(pBlockEntity, pPartialTick);
         renderModel(pPoseStack, pBuffer, pPackedLight, pBlockEntity.getBlockState().getValue(HorizontalDirectionalBlock.FACING));
     }
 

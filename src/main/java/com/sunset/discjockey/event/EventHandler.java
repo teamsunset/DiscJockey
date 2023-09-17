@@ -1,5 +1,6 @@
 package com.sunset.discjockey.event;
 
+import com.sunset.discjockey.block.AbstractControllerBlock;
 import com.sunset.discjockey.block.BlockDDJ400;
 import com.sunset.discjockey.client.model.ModelDDJ400;
 import com.sunset.discjockey.client.renderer.BlockEntity.BlockEntityRendererDDJ400;
@@ -7,8 +8,17 @@ import com.sunset.discjockey.network.NetworkHandler;
 import com.sunset.discjockey.util.ModReference;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.RegistryCollection.BlockEntityTypeCollection;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,12 +44,56 @@ public class EventHandler {
         }
     }
 
+    @Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.DEDICATED_SERVER)
+    public class ForgeEventDedicatedServerSide {
+    }
+
+    @Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+    public class ForgeEventClientSide {
+
+        @SubscribeEvent
+        public static void onMouseScroll(InputEvent.MouseScrollingEvent event) {
+
+        }
+
+        @SubscribeEvent
+        public static void onKeyInput(InputEvent.Key event) {
+
+        }
+
+        @SubscribeEvent
+        public static void onRenderTick(RenderLevelStageEvent event) {
+            if (event.getStage().equals(RenderLevelStageEvent.Stage.AFTER_LEVEL)) {
+                Player player = Minecraft.getInstance().player;
+
+                if (player != null) {
+                    HitResult rayTraceResult = player.pick(player.getAttribute(ForgeMod.BLOCK_REACH.get()).getValue(), event.getPartialTick(), false);
+
+                    if (rayTraceResult.getType() == HitResult.Type.BLOCK) {
+                        BlockPos pos = ((BlockHitResult) rayTraceResult).getBlockPos();
+                        BlockState blockState = Minecraft.getInstance().level.getBlockState(pos);
+
+                        if (blockState.getBlock() instanceof AbstractControllerBlock controllerBlock) {
+//                            DiscJockey.DEBUG_LOGGER.debug("what");
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
     @Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public class ModEventBothSide {
         @SubscribeEvent
         public static void onSetupEvent(FMLCommonSetupEvent event) {
             event.enqueueWork(NetworkHandler::init);
         }
+    }
+
+    @Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.DEDICATED_SERVER)
+    public class ModEventDedicatedServerSide {
+
     }
 
     @Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -63,8 +117,4 @@ public class EventHandler {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.DEDICATED_SERVER)
-    public class ModEventDedicatedServerSide {
-
-    }
 }
