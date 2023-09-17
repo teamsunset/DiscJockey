@@ -1,11 +1,9 @@
 package com.sunset.discjockey.util.MusicMisc;
 
-import com.sunset.discjockey.util.ModReference;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import net.minecraft.Util;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.IOUtils;
 
 import javax.sound.sampled.AudioFormat;
@@ -21,7 +19,8 @@ import java.util.concurrent.CompletableFuture;
 
 @OnlyIn(Dist.CLIENT)
 public class MusicFileManager {
-    public static final String fileDir = FMLPaths.MODSDIR.get().toString() + "\\" + ModReference.MOD_ID + "\\cache\\";
+    //    public static final String fileDir = FMLPaths.MODSDIR.get().toString() + "\\" + ModReference.MOD_ID + "\\cache\\";
+    public static final String fileDir = "F:\\test\\logs";
 
     //para1 Return type, para2 Parameter type
 //    public static final Map<Class<?>, List<Class<?>>> supportedConversionType = new HashMap<>();
@@ -187,6 +186,16 @@ public class MusicFileManager {
         return audioInputStream;
     }
 
+    public static byte[] getMusicBytes(AudioInputStream audioInputStream) {
+        byte[] bytes = null;
+        try {
+            bytes = IOUtils.toByteArray(audioInputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bytes;
+    }
+
     public static byte[] getMusicBytes(String url) {
         byte[] bytes = null;
 
@@ -197,7 +206,7 @@ public class MusicFileManager {
             } else {
                 AudioInputStream audioInputStream = getMusicAudioInputStream(url);
                 if (audioInputStream != null) {
-                    bytes = IOUtils.toByteArray(audioInputStream);
+                    bytes = MusicFileManager.getMusicBytes(audioInputStream);
                     if (bytes != null)
                         soundBytes.put(hashCode, bytes);
                 }

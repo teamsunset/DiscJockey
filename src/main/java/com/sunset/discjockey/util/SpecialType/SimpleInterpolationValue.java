@@ -1,5 +1,7 @@
 package com.sunset.discjockey.util.SpecialType;
 
+import org.joml.Math;
+
 //@Mod.EventBusSubscriber(modid = ModReference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SimpleInterpolationValue {
 
@@ -27,10 +29,27 @@ public class SimpleInterpolationValue {
         this._dVal = _dVal;
     }
 
-    public void interpolate() {
+    public SimpleInterpolationValue interpolate() {
         if (_oVal != _dVal) {
             _oVal = MathMisc.linearInterpolate(_oVal, _dVal, r);
         }
+        return this;
+    }
+
+    public double interpolateFuture() {
+        if (_oVal != _dVal) {
+            return MathMisc.linearInterpolate(_oVal, _dVal, r);
+        } else {
+            return _oVal;
+        }
+    }
+
+    public double interpolate(double r) {
+        double val = _oVal;
+        if (_oVal != _dVal) {
+            val = MathMisc.linearInterpolate(_oVal, _dVal, Math.clamp(r, 0.0, 1.0));
+        }
+        return val;
     }
 
     public double get() {
@@ -53,8 +72,13 @@ public class SimpleInterpolationValue {
 
     //interpolate at the end of each tick
 //    @SubscribeEvent
+
+    public boolean check() {
+        return Math.abs(this._dVal - this._oVal) > SimpleInterpolationValue.threshold;
+    }
+
     public void onServerTick() {
-        if (Math.abs(this._dVal - this._oVal) > SimpleInterpolationValue.threshold) {
+        if (this.check()) {
             this.interpolate();
             if (this.onServerInterpolate != null) {
                 this.onServerInterpolate.run();
@@ -67,7 +91,7 @@ public class SimpleInterpolationValue {
     }
 
     public void onClientTick() {
-        if (Math.abs(this._dVal - this._oVal) > SimpleInterpolationValue.threshold) {
+        if (this.check()) {
             this.interpolate();
             if (this.onClientInterpolate != null) {
                 this.onClientInterpolate.run();

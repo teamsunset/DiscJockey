@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class ControllerDisc extends ControllerWidget {
 
-    public SimpleInterpolationValue speed = new SimpleInterpolationValue(0.5, 0.5);
+    public SimpleInterpolationValue speed = new SimpleInterpolationValue(4, 4);
 
     public ControllerAudioManager controllerAudioManager;
 
@@ -33,7 +33,7 @@ public class ControllerDisc extends ControllerWidget {
     public void executeOnClient() {
         ControllerAudio audio = this.controllerAudioManager.loadedAudios.get(channelIndex);
         if (audio != null && audio.speakerSound != null) {
-//            audio.speakerSound.fileAudioStream.outArray = ProcessAudio.changeSpeed(audio.speakerSound.fileAudioStream.array, (float) this.speed.get());
+            audio.speakerSound.speed.set((float) this.speed.get());
         }
     }
 
@@ -44,7 +44,6 @@ public class ControllerDisc extends ControllerWidget {
         return compoundTag;
     }
 
-    ;
 
     @Override
     public void writeCompoundTag(CompoundTag compoundTag) {

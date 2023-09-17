@@ -18,21 +18,24 @@ import java.nio.ByteBuffer;
 @OnlyIn(Dist.CLIENT)
 public class FileAudioStream implements AudioStream {
     public final AudioInputStream stream;
-    public final byte[] array;
+    public byte[] array;
 
-    public byte[] outArray;
+    public byte[] reversedArray;
+
     public int offset;
 
-    public final int tickSize;
+    public int tickSize;
 
     public boolean isPlaying = false;
+
+    public boolean isReversed = false;
 
     public boolean isStreamClosed = false;
 
     public FileAudioStream(String url) {
         this.stream = MusicFileManager.getMusicAudioInputStream(url);
         this.array = MusicFileManager.getMusicBytes(url);
-        this.outArray = ProcessAudio.copy(this.array);
+        this.reversedArray = ProcessAudio.reverse(this.array);
         this.tickSize = this.array.length / MusicFileManager.getSongTime(url);
         this.offset = 0;
     }
@@ -40,7 +43,7 @@ public class FileAudioStream implements AudioStream {
     @NotNull
     @Override
     public AudioFormat getFormat() {
-        return stream.getFormat();
+        return this.stream.getFormat();
     }
 
     @NotNull
@@ -48,9 +51,14 @@ public class FileAudioStream implements AudioStream {
     public ByteBuffer read(int size) {
         size = this.tickSize;
         ByteBuffer byteBuffer = BufferUtils.createByteBuffer(size);
-        if (this.isPlaying && outArray.length >= offset + size) {
-            byteBuffer.put(outArray, offset, size);
-            offset += size;
+        if (this.isPlaying) {
+            if (this.isReversed && reversedArray.length >= reversedArray.length - offset + size) {
+                byteBuffer.put(reversedArray, reversedArray.length - offset, size);
+                offset -= size;
+            } else if (!this.isReversed && array.length >= offset + size) {
+                byteBuffer.put(array, offset, size);
+                offset += size;
+            }
         } else {
             byteBuffer.put(new byte[size]);
         }
