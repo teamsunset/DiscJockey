@@ -1,6 +1,7 @@
 package com.sunset.discjockey.block.BlockEntity;
 
 import com.sunset.discjockey.block.BlockEntity.Controller.AbstractControllerEntity;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerDisc;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerFader;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.*;
@@ -47,6 +48,8 @@ public class BlockEntityDDJ400 extends AbstractControllerEntity {
         controllerWidgetManager.add(new ControllerFader("right_bpm_fader", TouchMapDDJ400.RIGHT_BPM_FADER));
         controllerWidgetManager.add(new ControllerLoadButton("left_load_button", TouchMapDDJ400.LEFT_LOAD_BUTTON, controllerAudioManager, 0, 0));
         controllerWidgetManager.add(new ControllerLoadButton("right_load_button", TouchMapDDJ400.RIGHT_LOAD_BUTTON, controllerAudioManager, 1, 1));
+        controllerWidgetManager.add(new ControllerDisc("left_disc", TouchMapDDJ400.LEFT_DISC, controllerAudioManager, 0));
+        controllerWidgetManager.add(new ControllerDisc("right_disc", TouchMapDDJ400.RIGHT_DISC, controllerAudioManager, 1));
     }
 
     //action
@@ -75,6 +78,7 @@ public class BlockEntityDDJ400 extends AbstractControllerEntity {
             Vec2Plane relativeHitPoint = new Vec2Plane(new Vec2Plane(relativeHitLocation.x, relativeHitLocation.z)).rotate(-1 * Vec2Plane.DIRECTION_DEGREE_MAP.get(blockFacing), Vec2Plane.ORIGIN);
             controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.DRAG, 1, relativeHitPoint);
             controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.PRESS, 1, relativeHitPoint);
+            controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.SCROLL, 1, relativeHitPoint);
 
 //        player.getEyePosition();
 //        player.pick(player.distance)

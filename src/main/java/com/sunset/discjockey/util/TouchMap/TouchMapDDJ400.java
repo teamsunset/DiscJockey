@@ -21,4 +21,7 @@ public class TouchMapDDJ400 extends AbstractTouchMap {
 
     public static PlaneRange LEFT_LOAD_BUTTON = new PlaneRange(new Vec2Plane(0.5 / 16D, 3 / 16D), new Vec2Plane(1.5 / 16D, 4 / 16D));
     public static PlaneRange RIGHT_LOAD_BUTTON = new PlaneRange(new Vec2Plane(-1.5 / 16D, 3 / 16D), new Vec2Plane(-0.5 / 16D, 4 / 16D));
+
+    public static PlaneRange LEFT_DISC = new PlaneRange(new Vec2Plane(3.5 / 16D, -1 / 16D), new Vec2Plane(6.5 / 16D, 1.5 / 16D));
+    public static PlaneRange RIGHT_DISC = new PlaneRange(new Vec2Plane(-6.5 / 16D, -1 / 16D), new Vec2Plane(-3.5 / 16D, 1.5 / 16D));
 }
