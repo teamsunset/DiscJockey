@@ -1,54 +1,13 @@
 package com.sunset.discjockey.util.MusicMisc;
 
 
-import java.io.*;
-import javax.sound.sampled.*;
-
-import javazoom.jl.converter.Converter;
-import javazoom.jl.decoder.JavaLayerException;
-
-public class ProcessAudio
-{
-
-    public static void convertMP3ToPCM(String mp3File, String wavFile, String pcmFile) {
-        try {
-            // 使用JLayer将MP3转换为WAV
-            Converter converter = new Converter();
-            converter.convert(mp3File, wavFile);
-
-            // 读取WAV文件
-            AudioInputStream ais = AudioSystem.getAudioInputStream(new File(wavFile));
-
-            // 获取音频格式
-            AudioFormat baseFormat = ais.getFormat();
-
-            // 创建一个新的音频格式为PCM
-            AudioFormat pcmFormat = new AudioFormat(
-                    AudioFormat.Encoding.PCM_SIGNED,
-                    baseFormat.getSampleRate(),
-                    16,
-                    baseFormat.getChannels(),
-                    baseFormat.getChannels() * 2,
-                    baseFormat.getSampleRate(),
-                    false
-            );
-
-            // 获取PCM数据
-            AudioInputStream pcmAis = AudioSystem.getAudioInputStream(pcmFormat, ais);
-
-            // 将PCM数据写入文件
-            AudioSystem.write(pcmAis, AudioFileFormat.Type.WAVE, new File(pcmFile));
-
-            // 关闭流
-            ais.close();
-            pcmAis.close();
-        } catch (UnsupportedAudioFileException | IOException | JavaLayerException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        convertMP3ToPCM("F:\\test\\1.mp3", "F:\\test\\1.wav", "F:\\test\\1.pcm");
+public class ProcessAudio {
+    // 复制
+    public static byte[] copy(byte[] data) {
+        int len = data.length;
+        byte[] newData = new byte[len];
+        System.arraycopy(data, 0, newData, 0, len);
+        return newData;
     }
 
     // 混响效果
@@ -58,5 +17,28 @@ public class ProcessAudio
 
 
     // 变速效果
+    public static byte[] changeSpeed(byte[] data, float speed) {
+        int sampleSizeInBytes = 2; // 16 bits = 2 bytes
+        int len = data.length;
+        int newLen = (int) (len / speed);
+
+        // Ensure the new length is a multiple of the sample size
+        newLen = (newLen / sampleSizeInBytes) * sampleSizeInBytes;
+
+        byte[] newData = new byte[newLen];
+        for (int i = 0; i < newLen; i += sampleSizeInBytes) {
+            int index = (int) (i * speed);
+
+            // Ensure you don't go out of bounds or cut off a sample
+            if (index < len - sampleSizeInBytes + 1) {
+                newData[i] = data[index];
+                newData[i + 1] = data[index + 1];
+            } else {
+                newData[i] = 0;
+                newData[i + 1] = 0;
+            }
+        }
+        return newData;
+    }
 
 }
