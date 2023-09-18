@@ -5,7 +5,6 @@ import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.TickEvent;
 
 import java.util.Vector;
 
@@ -72,16 +71,16 @@ public class ControllerWidgetManager {
     public CompoundTag getCompoundTag() {
         CompoundTag compoundTag = new CompoundTag();
         for (ControllerWidget controllerWidget : controllerWidgets) {
-            if (controllerWidget.syncMark.get()) {
-                CompoundTag widgetTag = new CompoundTag();
-                widgetTag.put(
-                        "data",
-                        controllerWidget.getCompoundTag() == null ? new CompoundTag() : controllerWidget.getCompoundTag()
-                );
-                widgetTag.put("execute", IntTag.valueOf(controllerWidget.executeMark.get() ? 1 : 0));
-                compoundTag.put(controllerWidget.id, widgetTag);
+//            if (controllerWidget.syncMark.get()) {
+            CompoundTag widgetTag = new CompoundTag();
+            widgetTag.put(
+                    "data",
+                    controllerWidget.getCompoundTag() == null ? new CompoundTag() : controllerWidget.getCompoundTag()
+            );
+            widgetTag.put("execute", IntTag.valueOf(controllerWidget.executeMark.get() ? 1 : 0));
+            compoundTag.put(controllerWidget.id, widgetTag);
 //                controllerWidget.markClean();
-            }
+//            }
 
         }
         return compoundTag;

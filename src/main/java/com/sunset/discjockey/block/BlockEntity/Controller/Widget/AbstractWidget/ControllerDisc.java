@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class ControllerDisc extends ControllerWidget {
 
-    public SimpleInterpolationValue speed = new SimpleInterpolationValue(4, 4);
+    public SimpleInterpolationValue speed = new SimpleInterpolationValue(0.3, 0.3);
 
     public ControllerAudioManager controllerAudioManager;
 
@@ -32,8 +32,8 @@ public class ControllerDisc extends ControllerWidget {
     @Override
     public void executeOnClient() {
         ControllerAudio audio = this.controllerAudioManager.loadedAudios.get(channelIndex);
-        if (audio != null && audio.speakerSound != null) {
-            audio.speakerSound.speed.set((float) this.speed.get());
+        if (audio != null && audio.speakerSound != null && audio.speakerSound.fileAudioStream != null) {
+
         }
     }
 
