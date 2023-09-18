@@ -1,8 +1,5 @@
 package com.sunset.discjockey.util.SpecialType;
 
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
 public class OneShotBoolean extends Property<Boolean> {
     public OneShotBoolean() {
         super(false,
@@ -11,9 +8,7 @@ public class OneShotBoolean extends Property<Boolean> {
                     wov.set(false);
                     return v;
                 },
-                (wov, dv) -> {
-                    wov.set(true);
-                });
+                Wrapper::set);
     }
 
     public OneShotBoolean(boolean origin) {
@@ -23,8 +18,6 @@ public class OneShotBoolean extends Property<Boolean> {
                     wov.set(false);
                     return v;
                 },
-                (wov, dv) -> {
-                    wov.set(true);
-                });
+                Wrapper::set);
     }
 }

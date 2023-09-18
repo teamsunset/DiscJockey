@@ -23,16 +23,14 @@ public class MusicURLSyncMessage {
     }
 
     public static void encode(MusicURLSyncMessage message, FriendlyByteBuf buf) {
-        buf.writeInt(message.pos.getX());
-        buf.writeInt(message.pos.getY());
-        buf.writeInt(message.pos.getZ());
+        buf.writeBlockPos(message.pos);
         for (String url : message.urls) {
             buf.writeUtf(url);
         }
     }
 
     public static MusicURLSyncMessage decode(FriendlyByteBuf buf) {
-        BlockPos pos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
+        BlockPos pos = buf.readBlockPos();
         Vector<String> urls = new Vector<>();
         while (buf.isReadable()) {
             urls.add(buf.readUtf());

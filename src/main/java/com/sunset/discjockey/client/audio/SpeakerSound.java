@@ -29,19 +29,25 @@ public class SpeakerSound extends AbstractTickableSoundInstance {
 
     public Property<Integer> elapsedTime = new Property<>(
             wov -> {
-                return this.fileAudioStream.offset / this.fileAudioStream.tickSize;
+                return (int) (this.fileAudioStream.offset / this.fileAudioStream.tickSize / this.fileAudioStream.speed);
             },
             (wov, nv) -> {
-                this.fileAudioStream.offset = nv * this.fileAudioStream.tickSize;
+                this.fileAudioStream.offset = (int) (nv * this.fileAudioStream.tickSize * this.fileAudioStream.speed);
             }
     );
 
-    public Property<Float> speed = new Property<>(
+    public Property<Double> speed = new Property<>(
             wov -> {
-                return (float) 0;
+                return this.fileAudioStream.speed * (this.fileAudioStream.isReversed ? -1 : 1);
             },
             (wov, nv) -> {
-
+                if (nv < 0) {
+                    this.fileAudioStream.isReversed = true;
+                    this.fileAudioStream.speed = -1 * nv;
+                } else {
+                    this.fileAudioStream.isReversed = false;
+                    this.fileAudioStream.speed = nv;
+                }
             }
     );
 

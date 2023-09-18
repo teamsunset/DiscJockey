@@ -18,7 +18,19 @@ public class SimpleInterpolationValue {
     //interpolation rate
     public static double r = 0.6;
 
+    public static double renderR = 0.8;
+
     public static double threshold = 0.01;
+
+
+    //is used to monoInterpolate
+    double prePartialTick = 0;
+
+    double totalPartialTick = 0;
+
+
+    OneShotBoolean hasSetTarget = new OneShotBoolean();
+
 
     public SimpleInterpolationValue() {
         this(0.0, 0.0);
@@ -30,26 +42,54 @@ public class SimpleInterpolationValue {
     }
 
     public SimpleInterpolationValue interpolate() {
-        if (_oVal != _dVal) {
+        if (_oVal != _dVal && Math.abs(_dVal - _oVal) > SimpleInterpolationValue.threshold) {
             _oVal = MathMisc.linearInterpolate(_oVal, _dVal, r);
+        } else {
+            _oVal = _dVal;
         }
         return this;
     }
 
     public double interpolateFuture() {
-        if (_oVal != _dVal) {
+        if (_oVal != _dVal && Math.abs(_dVal - _oVal) > SimpleInterpolationValue.threshold) {
             return MathMisc.linearInterpolate(_oVal, _dVal, r);
         } else {
-            return _oVal;
+            return _dVal;
         }
     }
 
-    public double interpolate(double r) {
-        double val = _oVal;
-        if (_oVal != _dVal) {
-            val = MathMisc.linearInterpolate(_oVal, _dVal, Math.clamp(r, 0.0, 1.0));
+//    public double interpolate(double r) {
+//        if (_oVal != _dVal && Math.abs(_dVal - _oVal) > SimpleInterpolationValue.threshold) {
+//            return MathMisc.linearInterpolate(_oVal, _dVal, Math.clamp(r, 0.0, 1.0));
+//        } else {
+//            return _dVal;
+//        }
+//    }
+//
+//    public double monoInterpolate(double r) {
+//        if (this.hasSetTarget.get()) {
+//            this.prePartialTick = 0;
+//        }
+//
+//        this.prePartialTick = Math.max(r, this.prePartialTick);
+//        return this.interpolate(this.prePartialTick);
+//    }
+
+    public double nonLinerInterpolate(double n) {
+        if (_oVal != _dVal && Math.abs(_dVal - _oVal) > SimpleInterpolationValue.threshold) {
+            return MathMisc.nonLinearInterpolate(_oVal, _dVal, renderR, n);
+        } else {
+            return _dVal;
         }
-        return val;
+    }
+
+    public double monoNonLinerInterpolate(double n) {
+        if (this.hasSetTarget.get()) {
+            this.totalPartialTick = 0;
+        }
+
+        this.totalPartialTick += n;
+        return this.nonLinerInterpolate(this.totalPartialTick);
     }
 
     public double get() {
@@ -68,6 +108,7 @@ public class SimpleInterpolationValue {
 
     public void setTarget(double _dVal) {
         this._dVal = _dVal;
+        this.hasSetTarget.set(true);
     }
 
     //interpolate at the end of each tick
