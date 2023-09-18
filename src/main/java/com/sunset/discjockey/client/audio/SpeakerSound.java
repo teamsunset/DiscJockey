@@ -41,19 +41,7 @@ public class SpeakerSound extends AbstractTickableSoundInstance {
                 return (float) 0;
             },
             (wov, nv) -> {
-                if (nv > 0) {
-                    this.fileAudioStream.isReversed = false;
-                } else if (nv < 0) {
-                    this.fileAudioStream.isReversed = true;
-                    nv *= -1;
-                } else {
-                    this.fileAudioStream.isReversed = false;
-                    nv = 0.00000001f;
-                }
-                this.setPitch(nv);
-                if (this.fileAudioStream != null) {
-                    this.fileAudioStream.tickSize = (int) (this.fileAudioStream.tickSize * nv);
-                }
+
             }
     );
 
@@ -96,10 +84,6 @@ public class SpeakerSound extends AbstractTickableSoundInstance {
 
     public void setVolume(float volume) {
         this.volume = volume;
-    }
-
-    public void setPitch(float pitch) {
-        this.pitch = pitch;
     }
 
     public void terminate() {
