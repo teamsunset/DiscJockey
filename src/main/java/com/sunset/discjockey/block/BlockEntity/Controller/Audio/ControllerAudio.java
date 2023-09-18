@@ -21,6 +21,8 @@ public class ControllerAudio {
 
     public int elapsedTimeOnServer = 0;
 
+    public double speed = 1;
+
 
     public ControllerAudio(ControllerAudioManager controllerAudioManager, String url) {
         this.manager = controllerAudioManager;
@@ -35,6 +37,7 @@ public class ControllerAudio {
         compoundTag.putString("url", this.url);
         compoundTag.putBoolean("isPlayingOnServer", this.isPlayingOnServer);
         compoundTag.putInt("elapsedTimeOnServer", this.elapsedTimeOnServer);
+        compoundTag.putDouble("speed", this.speed);
         return compoundTag;
     }
 
@@ -42,10 +45,13 @@ public class ControllerAudio {
         this.url = compoundTag.getString("url");
         this.isPlayingOnServer = compoundTag.getBoolean("isPlayingOnServer");
         this.elapsedTimeOnServer = compoundTag.getInt("elapsedTimeOnServer");
+        this.speed = compoundTag.getDouble("speed");
+
         if (this.speakerSound != null) {
             this.speakerSound.isPlaying = this.isPlayingOnServer;
             if (Math.abs(this.elapsedTimeOnServer - this.speakerSound.elapsedTime.get()) > 10)
                 this.speakerSound.elapsedTime.set(this.elapsedTimeOnServer);
+            this.speakerSound.speed.set(this.speed);
         }
     }
 
@@ -77,13 +83,16 @@ public class ControllerAudio {
 
     public void onServerTick() {
         if (this.isPlayingOnServer) {
-            this.elapsedTimeOnServer++;
+            if (speed > 0)
+                this.elapsedTimeOnServer++;
+            else if (speed < 0 && this.elapsedTimeOnServer > 0)
+                this.elapsedTimeOnServer--;
         }
         this.manager.controller.markDirty();
     }
 
     public void onClientTick() {
-        if (this.speakerSound != null && this.speakerSound.fileAudioStream != null && this.speakerSound.fileAudioStream.isStreamClosed) {
+        if (this.speakerSound != null && this.speakerSound.fileAudioStream != null && this.speakerSound.fileAudioStream.isStreamClosed.get()) {
             this.speakerSound.terminate();
             this.setupOnClient();
         }

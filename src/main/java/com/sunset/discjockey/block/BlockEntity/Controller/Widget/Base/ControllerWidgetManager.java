@@ -49,7 +49,7 @@ public class ControllerWidgetManager {
     }
 
     //this function is only on serverside
-    public void interact(Player player, InteractType interactType, int interactValue, Vec2Plane relativeActionPos) {
+    public void interact(Player player, InteractType interactType, double interactValue, Vec2Plane relativeActionPos) {
         for (ControllerWidget controllerWidget : controllerWidgets) {
             if (controllerWidget.interactType == interactType && controllerWidget.planeRange.isInRange(relativeActionPos)) {
                 switch (interactType) {

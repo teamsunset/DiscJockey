@@ -3,16 +3,21 @@ package com.sunset.discjockey.block.BlockEntity.Controller;
 import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudio;
 import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudioManager;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
+import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minecraft.world.level.block.Block.UPDATE_CLIENTS;
@@ -25,6 +30,14 @@ public class AbstractControllerEntity extends BlockEntity implements BlockEntity
         super(pType, pPos, pBlockState);
         controllerAudioManager = new ControllerAudioManager(this);
         controllerWidgetManager = new ControllerWidgetManager(this);
+    }
+
+    public Vec2Plane getRelativeHitPoint(BlockHitResult hit) {
+        Vec3 hitLocation = hit.getLocation();
+        Vec3 relativeHitLocation = hitLocation.subtract(this.getBlockPos().getCenter());
+        Direction blockFacing = this.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
+        Vec2Plane relativeHitPoint = new Vec2Plane(new Vec2Plane(relativeHitLocation.x, relativeHitLocation.z)).rotate(-1 * Vec2Plane.DIRECTION_DEGREE_MAP.get(blockFacing), Vec2Plane.ORIGIN);
+        return relativeHitPoint;
     }
 
 
@@ -112,5 +125,5 @@ public class AbstractControllerEntity extends BlockEntity implements BlockEntity
         this.controllerAudioManager.onClientTick();
         this.controllerWidgetManager.onClientTick();
     }
-    
+
 }

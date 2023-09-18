@@ -37,6 +37,20 @@ public class ModelManager {
         }
     }
 
+    public void rotate(String id, String axis, float value) {
+        ModelPart part = parts.get(id);
+        ModelPart initialPart = initialParts.get(id);
+        if (part == null || initialPart == null) {
+            new Exception("ModelManager: setRelative: part or initialPart is null: " + id).printStackTrace();
+            return;
+        }
+        switch (axis) {
+            case "x" -> part.xRot = initialPart.xRot + value;
+            case "y" -> part.yRot = initialPart.yRot + value;
+            case "z" -> part.zRot = initialPart.zRot + value;
+        }
+    }
+
     public ModelPart getRoot() {
         return this.root;
     }

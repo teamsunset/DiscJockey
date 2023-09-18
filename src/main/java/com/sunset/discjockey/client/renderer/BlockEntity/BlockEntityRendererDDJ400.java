@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.sunset.discjockey.block.BlockEntity.BlockEntityDDJ400;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerButton;
+import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerDisc;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.ControllerFader;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidget;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.ControllerCrossFader;
@@ -46,7 +47,7 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
                 MODEL_MANAGER.setRelative(
                         "cross_fader",
                         "x",
-                        (float) (-1 * ((ControllerCrossFader) controllerWidget).renderValue.interpolate(pPartialTick))
+                        (float) (-1 * ((ControllerCrossFader) controllerWidget).renderValue.monoNonLinerInterpolate(pPartialTick))
                 );
             } else if (controllerWidget instanceof ControllerButton controllerButton) {
                 MODEL_MANAGER.setRelative(
@@ -58,13 +59,19 @@ public class BlockEntityRendererDDJ400 implements BlockEntityRenderer<BlockEntit
                 MODEL_MANAGER.setRelative(
                         controllerWidget.id,
                         "z",
-                        (float) (((ControllerFader) controllerWidget).renderValue.interpolate(pPartialTick) * 1.5)
+                        (float) (((ControllerFader) controllerWidget).renderValue.monoNonLinerInterpolate(pPartialTick) * 1.5)
                 );
             } else if (controllerWidget.id.equals("left_mix_fader") || controllerWidget.id.equals("right_mix_fader")) {
                 MODEL_MANAGER.setRelative(
                         controllerWidget.id,
                         "z",
-                        (float) ((((ControllerFader) controllerWidget).renderValue.interpolate(pPartialTick) - 1) * 1.5)
+                        (float) ((((ControllerFader) controllerWidget).renderValue.monoNonLinerInterpolate(pPartialTick) - 1) * 1.5)
+                );
+            } else if (controllerWidget.id.contains("disc")) {
+                MODEL_MANAGER.rotate(
+                        controllerWidget.id,
+                        "y",
+                        (float) ((2 * Math.PI / 1200) * ((System.currentTimeMillis() * ((ControllerDisc) controllerWidget).speed) % 1200))
                 );
             }
         }

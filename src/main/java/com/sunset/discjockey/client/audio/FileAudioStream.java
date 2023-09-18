@@ -2,6 +2,7 @@ package com.sunset.discjockey.client.audio;
 
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.MusicMisc.ProcessAudio;
+import com.sunset.discjockey.util.SpecialType.OneShotBoolean;
 import net.minecraft.client.sounds.AudioStream;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -20,7 +21,11 @@ public class FileAudioStream implements AudioStream {
     public final AudioInputStream stream;
     public byte[] array;
 
+    public short[] arrayRaw;
+
     public byte[] reversedArray;
+
+    public short[] reversedArrayRaw;
 
     public int offset;
 
@@ -30,12 +35,16 @@ public class FileAudioStream implements AudioStream {
 
     public boolean isReversed = false;
 
-    public boolean isStreamClosed = false;
+    public OneShotBoolean isStreamClosed = new OneShotBoolean();
+
+    public double speed = 1;
 
     public FileAudioStream(String url) {
         this.stream = MusicFileManager.getMusicAudioInputStream(url);
         this.array = MusicFileManager.getMusicBytes(url);
+        this.arrayRaw = ProcessAudio.pcm16ToShort(this.array);
         this.reversedArray = ProcessAudio.reverse(this.array);
+        this.reversedArrayRaw = ProcessAudio.pcm16ToShort(this.reversedArray);
         this.tickSize = this.array.length / MusicFileManager.getSongTime(url);
         this.offset = 0;
     }
@@ -51,14 +60,22 @@ public class FileAudioStream implements AudioStream {
     public ByteBuffer read(int size) {
         size = this.tickSize;
         ByteBuffer byteBuffer = BufferUtils.createByteBuffer(size);
-        if (this.isPlaying) {
-            if (this.isReversed && reversedArray.length >= reversedArray.length - offset + size) {
-                byteBuffer.put(reversedArray, reversedArray.length - offset, size);
-                offset -= size;
-            } else if (!this.isReversed && array.length >= offset + size) {
-                byteBuffer.put(array, offset, size);
-                offset += size;
-            }
+
+
+        if (this.isPlaying && this.isReversed && offset >= size * speed) {
+            short[] bufferArrayRaw = new short[(int) (size * speed / 2)];
+            System.arraycopy(reversedArrayRaw, (array.length - offset) / 2, bufferArrayRaw, 0, (int) (size * speed / 2));
+
+            bufferArrayRaw = ProcessAudio.changeSpeedByResampled(bufferArrayRaw, speed);
+            byteBuffer.put(ProcessAudio.shortToPcm16(bufferArrayRaw), 0, Math.min(size, bufferArrayRaw.length * 2));
+            offset -= (int) (size * speed);
+        } else if (this.isPlaying && !this.isReversed && array.length >= offset + size * speed) {
+            short[] bufferArrayRaw = new short[(int) (size * speed / 2)];
+            System.arraycopy(arrayRaw, offset / 2, bufferArrayRaw, 0, (int) (size * speed / 2));
+
+            bufferArrayRaw = ProcessAudio.changeSpeedByResampled(bufferArrayRaw, speed);
+            byteBuffer.put(ProcessAudio.shortToPcm16(bufferArrayRaw), 0, Math.min(size, bufferArrayRaw.length * 2));
+            offset += (int) (size * speed);
         } else {
             byteBuffer.put(new byte[size]);
         }
@@ -68,7 +85,7 @@ public class FileAudioStream implements AudioStream {
 
     @Override
     public void close() throws IOException {
-        this.isStreamClosed = true;
+        this.isStreamClosed.set(true);
         stream.close();
     }
 }

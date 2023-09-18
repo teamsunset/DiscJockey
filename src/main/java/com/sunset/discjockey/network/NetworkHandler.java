@@ -1,9 +1,6 @@
 package com.sunset.discjockey.network;
 
-import com.sunset.discjockey.network.message.ControllerSyncMessage;
-import com.sunset.discjockey.network.message.ItemTagMessage;
-import com.sunset.discjockey.network.message.MusicURLSyncMessage;
-import com.sunset.discjockey.network.message.TagMessage;
+import com.sunset.discjockey.network.message.*;
 import com.sunset.discjockey.util.ModReference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
@@ -53,6 +50,14 @@ public class NetworkHandler {
                 ItemTagMessage::encode,
                 ItemTagMessage::decode,
                 ItemTagMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
+        NETWORK_CHANNEL.registerMessage(
+                id++,
+                ScratchMessage.class,
+                ScratchMessage::encode,
+                ScratchMessage::decode,
+                ScratchMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER)
         );
     }

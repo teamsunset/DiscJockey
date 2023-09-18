@@ -13,7 +13,6 @@ import com.sunset.discjockey.util.TouchMap.TouchMapDDJ400;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.Vec2Plane;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -21,10 +20,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.Vector;
 import java.util.concurrent.CompletableFuture;
@@ -72,14 +69,10 @@ public class BlockEntityDDJ400 extends AbstractControllerEntity {
 //        }
 
         if (!level.isClientSide() && !player.getItemInHand(hand).getItem().equals(ItemCollection.ITEM_USB_FLASH_DISK.get())) {
-            Vec3 hitLocation = hit.getLocation();
-            Vec3 relativeHitLocation = hitLocation.subtract(this.getBlockPos().getCenter());
-            Direction blockFacing = state.getValue(HorizontalDirectionalBlock.FACING);
-            Vec2Plane relativeHitPoint = new Vec2Plane(new Vec2Plane(relativeHitLocation.x, relativeHitLocation.z)).rotate(-1 * Vec2Plane.DIRECTION_DEGREE_MAP.get(blockFacing), Vec2Plane.ORIGIN);
+            Vec2Plane relativeHitPoint = this.getRelativeHitPoint(hit);
             controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.DRAG, 1, relativeHitPoint);
             controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.PRESS, 1, relativeHitPoint);
             controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.SCROLL, 1, relativeHitPoint);
-
 //        player.getEyePosition();
 //        player.pick(player.distance)
 //            if (TouchMapDDJ400.MIDDLE_BLADE_FADER.isInRange(relativeHitPoint)) {
@@ -108,6 +101,5 @@ public class BlockEntityDDJ400 extends AbstractControllerEntity {
         }
         return InteractionResult.SUCCESS;
     }
-
 
 }
