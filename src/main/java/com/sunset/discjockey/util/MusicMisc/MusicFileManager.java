@@ -1,9 +1,11 @@
 package com.sunset.discjockey.util.MusicMisc;
 
+import com.sunset.discjockey.util.ModReference;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import net.minecraft.Util;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.IOUtils;
 
 import javax.sound.sampled.AudioFormat;
@@ -19,8 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 @OnlyIn(Dist.CLIENT)
 public class MusicFileManager {
-    //    public static final String fileDir = FMLPaths.MODSDIR.get().toString() + "\\" + ModReference.MOD_ID + "\\cache\\";
-    public static final String fileDir = "F:\\test\\logs";
+    public static final String fileDir = FMLPaths.MODSDIR.get().toString() + "\\" + ModReference.MOD_ID + "\\cache\\";
 
     //para1 Return type, para2 Parameter type
 //    public static final Map<Class<?>, List<Class<?>>> supportedConversionType = new HashMap<>();
@@ -132,7 +133,12 @@ public class MusicFileManager {
 
     //special get
     public static boolean checkURL(String url) {
-        return getMusicFile(url) != null;
+        try {
+            return getMusicFile(url) != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     //millisecond
@@ -276,6 +282,10 @@ public class MusicFileManager {
                 url = new URL(url).openConnection().getHeaderField("Location");
             }
 
+            if (url == null || url.contains("music.163.com/404")) {
+                throw new Exception("Music not found");
+            }
+
             connection = new URL(url).openConnection();
             connection.setDoInput(true);
             connection.setDoOutput(false);
@@ -344,6 +354,10 @@ public class MusicFileManager {
                 file.delete();
             }
         }
+
+        soundBytes.clear();
+        soundFiles.clear();
+        soundStream.clear();
     }
 
 }
