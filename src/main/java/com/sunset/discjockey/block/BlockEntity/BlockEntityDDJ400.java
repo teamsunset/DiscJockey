@@ -51,34 +51,10 @@ public class BlockEntityDDJ400 extends AbstractControllerEntity {
 
     //action
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-//            String futureSongURL = player.getItemInHand(hand).getDisplayName().getString().replace("[", "").replace("]", "");
-//            if (!level.isClientSide()) {
-//                this.setSongURL(futureSongURL);
-//                player.sendSystemMessage(Component.literal("Set song url to " + this.getSongURL()));
-//            } else {
-//                CompletableFuture.runAsync(() -> {
-//                            if (!MusicFileManager.checkURL(futureSongURL)) {
-//                                player.sendSystemMessage(Component.literal("§4Song not found!"));
-//                            }
-//                        }
-//                        , Util.backgroundExecutor());
-//            }
-//        } else if (!level.isClientSide()) {
-//            this.setPlaying(!this.getPlaying());
-//            player.displayClientMessage(Component.literal("Set playing to " + this.getPlaying()), true);
-//        }
-
         if (!level.isClientSide() && !player.getItemInHand(hand).getItem().equals(ItemCollection.ITEM_USB_FLASH_DISK.get())) {
             Vec2Plane relativeHitPoint = this.getRelativeHitPoint(hit);
             controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.DRAG, 1, relativeHitPoint);
             controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.PRESS, 1, relativeHitPoint);
-            controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.SCROLL, 1, relativeHitPoint);
-//        player.getEyePosition();
-//        player.pick(player.distance)
-//            if (TouchMapDDJ400.MIDDLE_BLADE_FADER.isInRange(relativeHitPoint)) {
-//                this.setMiddleBladeFader(((relativeHitPoint.x - TouchMapDDJ400.MIDDLE_BLADE_FADER.p1.x) / (TouchMapDDJ400.MIDDLE_BLADE_FADER.p2.x - TouchMapDDJ400.MIDDLE_BLADE_FADER.p1.x) * 2 - 1));
-//                SG_LOGGER.debug(String.valueOf(hitLocation));
-//            }
         } else if (level.isClientSide() && player.getItemInHand(hand).getItem().equals(ItemCollection.ITEM_USB_FLASH_DISK.get())) {
             CompletableFuture.runAsync(() -> {
                 ListTag listTag = player.getItemInHand(hand).getTag().getList("urls", Tag.TAG_STRING);
