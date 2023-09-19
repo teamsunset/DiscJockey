@@ -2,6 +2,7 @@ package com.sunset.discjockey.block.BlockEntity.Controller.Audio;
 
 import com.sunset.discjockey.client.audio.SpeakerSound;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
+import com.sunset.discjockey.util.SpecialType.OneShotBoolean;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +23,8 @@ public class ControllerAudio {
     public double elapsedTimeOnServer = 0;
 
     public int songTime = -1;
+
+    public OneShotBoolean notSetSongTime = new OneShotBoolean(true);
 
     public double speed = 1;
 
