@@ -60,6 +60,14 @@ public class NetworkHandler {
                 ScratchMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER)
         );
+        NETWORK_CHANNEL.registerMessage(
+                id++,
+                SongTimeMessage.class,
+                SongTimeMessage::encode,
+                SongTimeMessage::decode,
+                SongTimeMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
     }
 
 //    public static void sendToNearby(Level world, BlockPos pos, Object toSend) {
