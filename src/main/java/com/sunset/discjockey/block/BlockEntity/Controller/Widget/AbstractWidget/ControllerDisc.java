@@ -70,7 +70,12 @@ public class ControllerDisc extends ControllerWidget {
                 this.speed = this.windowSize * 0.01 - 1;
             }
             audio.speed = this.speed;
+        } else {
+            this.speed = 0;
+            this.windowSize = 0;
+            return;
         }
+        
         if (windowSize != 0) {
             if (windowSize > 0) windowSize--;
             else windowSize++;
