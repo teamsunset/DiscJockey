@@ -1,5 +1,6 @@
 package com.sunset.discjockey.block.BlockEntity.Controller.Audio;
 
+import com.sunset.discjockey.DiscJockey;
 import com.sunset.discjockey.client.audio.SpeakerSound;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import com.sunset.discjockey.util.SpecialType.OneShotBoolean;
@@ -56,8 +57,10 @@ public class ControllerAudio {
 
         if (this.speakerSound != null) {
             this.speakerSound.isPlaying = this.isPlayingOnServer;
-            if (Math.abs(this.elapsedTimeOnServer - this.speakerSound.elapsedTime.get()) > 10)
+            if (this.speed == 1 && Math.abs(this.elapsedTimeOnServer - this.speakerSound.elapsedTime.get()) > 10) {
+                DiscJockey.DEBUG_LOGGER.debug(String.valueOf(this.elapsedTimeOnServer - this.speakerSound.elapsedTime.get()));
                 this.speakerSound.elapsedTime.set(this.elapsedTimeOnServer);
+            }
             this.speakerSound.speed.set(this.speed);
         }
     }
