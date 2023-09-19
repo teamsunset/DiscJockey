@@ -60,6 +60,7 @@ public class ControllerDisc extends ControllerWidget {
         if (audio != null) {
             if (!audio.isPlayingOnServer) {
                 this.speed = 0;
+                this.windowSize = 0;
                 return;
             }
 
