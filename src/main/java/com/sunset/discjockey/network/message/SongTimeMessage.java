@@ -42,6 +42,7 @@ public class SongTimeMessage {
             ServerPlayer player = context.getSender();
             if (player != null && player.level().isLoaded(message.pos) && (player.level().getBlockEntity(message.pos) instanceof AbstractControllerEntity abstractControllerEntity)) {
                 abstractControllerEntity.controllerAudioManager.loadedAudios.get(message.channelIndex).songTime = message.songTime;
+                abstractControllerEntity.controllerAudioManager.loadedAudios.get(message.channelIndex).notSetSongTime.set(false);
             }
         });
         context.setPacketHandled(true);

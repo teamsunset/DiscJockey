@@ -4,16 +4,16 @@ import com.sunset.discjockey.block.BlockEntity.Controller.AbstractControllerEnti
 import com.sunset.discjockey.network.NetworkHandler;
 import com.sunset.discjockey.network.message.SongTimeMessage;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
+import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.CompletableFuture;
 
 public class ControllerAudioManager {
     public static Vector<ControllerAudioManager> MANAGERS = new Vector<>();
@@ -55,7 +55,9 @@ public class ControllerAudioManager {
         Vector<String> audios = new Vector<>();
         if (audiosTag != null) {
             for (Tag tag : audiosTag) {
-                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> MusicFileManager.loadURLToCache(tag.getAsString()));
+                if (this.controller != null && this.controller.hasLevel() && this.controller.getLevel().isClientSide()) {
+                    MusicFileManager.loadURLToCache(tag.getAsString());
+                }
                 audios.add(tag.getAsString());
             }
         }
@@ -73,6 +75,16 @@ public class ControllerAudioManager {
                 loadedAudios.put(Integer.parseInt(key), new ControllerAudio(this, loadAudiosTag.getCompound(key).getString("url")));
             }
             loadedAudios.get(Integer.parseInt(key)).writeCompoundTag(loadAudiosTag.getCompound(key));
+            if (this.controller != null && this.controller.hasLevel() && this.controller.getLevel().isClientSide()) {
+                if (loadedAudios.get(Integer.parseInt(key)).songTime == -1 && loadedAudios.get(Integer.parseInt(key)).notSetSongTime.get()) {
+                    CompletableFuture.runAsync(() -> {
+                                int songTime = MusicFileManager.getSongTime(loadedAudios.get(Integer.parseInt(key)).url);
+                                loadedAudios.get(Integer.parseInt(key)).songTime = songTime;
+                                NetworkHandler.NETWORK_CHANNEL.sendToServer(new SongTimeMessage(this.controller.getBlockPos(), Integer.parseInt(key), songTime));
+                            }, Util.backgroundExecutor()
+                    );
+                }
+            }
         }
     }
 
@@ -80,7 +92,6 @@ public class ControllerAudioManager {
         this.unloadAudio(channelIndex);
         if (audios.size() > index) {
             loadedAudios.put(channelIndex, new ControllerAudio(this, audios.get(index)));
-            NetworkHandler.NETWORK_CHANNEL.sendToServer(new SongTimeMessage(this.controller.getBlockPos(), channelIndex, MusicFileManager.getSongTime(audios.get(index))));
             return true;
         } else {
             return false;
