@@ -53,8 +53,8 @@ public class BlockEntityDDJ400 extends AbstractControllerEntity {
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!level.isClientSide() && !player.getItemInHand(hand).getItem().equals(ItemCollection.ITEM_USB_FLASH_DISK.get())) {
             Vec2Plane relativeHitPoint = this.getRelativeHitPoint(hit);
-            controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.DRAG, 1, relativeHitPoint);
-            controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.PRESS, 1, relativeHitPoint);
+            controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.DRAG, 1, false, relativeHitPoint);
+            controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.PRESS, 1, false, relativeHitPoint);
         } else if (level.isClientSide() && player.getItemInHand(hand).getItem().equals(ItemCollection.ITEM_USB_FLASH_DISK.get())) {
             CompletableFuture.runAsync(() -> {
                 ListTag listTag = player.getItemInHand(hand).getOrCreateTag().getList("urls", Tag.TAG_STRING);

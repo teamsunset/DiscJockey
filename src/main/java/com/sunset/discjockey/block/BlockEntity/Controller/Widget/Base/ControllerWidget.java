@@ -5,7 +5,6 @@ import com.sunset.discjockey.util.SpecialType.Property;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.TickEvent;
 
 public abstract class ControllerWidget {
     public ControllerWidgetManager controllerWidgetManager;
@@ -46,7 +45,7 @@ public abstract class ControllerWidget {
     }
 
     //should clean mark on serverside after send packet
-    public abstract void executeOnServer(Player player, double value);
+    public abstract void executeOnServer(Player player, double value, boolean condition);
 
     public abstract void executeOnClient();
 

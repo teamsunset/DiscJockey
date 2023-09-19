@@ -18,7 +18,7 @@ public class ControllerFader extends ControllerWidget {
     }
 
     @Override
-    public void executeOnServer(Player player, double value) {
+    public void executeOnServer(Player player, double value, boolean condition) {
         this.value.setTarget(value);
         this.markExecute();
         this.markDirty();

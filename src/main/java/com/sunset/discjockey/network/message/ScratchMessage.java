@@ -14,18 +14,22 @@ public class ScratchMessage {
     public BlockPos pos;
     public double scrollDelta;
 
+    public boolean isTouching;
+
 
     public Vec2Plane relativeHitPoint;
 
-    public ScratchMessage(BlockPos pos, double scrollDelta, Vec2Plane relativeHitPoint) {
+    public ScratchMessage(BlockPos pos, double scrollDelta, boolean isTouching, Vec2Plane relativeHitPoint) {
         this.pos = pos;
         this.scrollDelta = scrollDelta;
+        this.isTouching = isTouching;
         this.relativeHitPoint = relativeHitPoint;
     }
 
     public static void encode(ScratchMessage message, FriendlyByteBuf buf) {
         buf.writeBlockPos(message.pos);
         buf.writeDouble(message.scrollDelta);
+        buf.writeBoolean(message.isTouching);
         buf.writeDouble(message.relativeHitPoint.x);
         buf.writeDouble(message.relativeHitPoint.z);
 
@@ -34,8 +38,9 @@ public class ScratchMessage {
     public static ScratchMessage decode(FriendlyByteBuf buf) {
         BlockPos pos = buf.readBlockPos();
         double scrollDelta = buf.readDouble();
+        boolean isTouching = buf.readBoolean();
         Vec2Plane relativeHitPoint = new Vec2Plane(buf.readDouble(), buf.readDouble());
-        return new ScratchMessage(pos, scrollDelta, relativeHitPoint);
+        return new ScratchMessage(pos, scrollDelta, isTouching, relativeHitPoint);
     }
 
     public static void handle(ScratchMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
@@ -43,7 +48,7 @@ public class ScratchMessage {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
             if (player != null && player.level().isLoaded(message.pos) && (player.level().getBlockEntity(message.pos) instanceof AbstractControllerEntity abstractControllerEntity)) {
-                abstractControllerEntity.controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.SCROLL, message.scrollDelta, message.relativeHitPoint);
+                abstractControllerEntity.controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.SCROLL, message.scrollDelta, message.isTouching, message.relativeHitPoint);
             }
         });
         context.setPacketHandled(true);
