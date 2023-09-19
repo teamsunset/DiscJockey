@@ -57,7 +57,7 @@ public class BlockEntityDDJ400 extends AbstractControllerEntity {
             controllerWidgetManager.interact(player, ControllerWidgetManager.InteractType.PRESS, 1, relativeHitPoint);
         } else if (level.isClientSide() && player.getItemInHand(hand).getItem().equals(ItemCollection.ITEM_USB_FLASH_DISK.get())) {
             CompletableFuture.runAsync(() -> {
-                ListTag listTag = player.getItemInHand(hand).getTag().getList("urls", Tag.TAG_STRING);
+                ListTag listTag = player.getItemInHand(hand).getOrCreateTag().getList("urls", Tag.TAG_STRING);
                 boolean isValid = true;
                 for (Tag tag : listTag) {
                     if (!MusicFileManager.checkURL(tag.getAsString())) {
