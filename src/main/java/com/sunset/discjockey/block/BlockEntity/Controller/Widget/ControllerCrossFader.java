@@ -6,7 +6,6 @@ import com.sunset.discjockey.block.BlockEntity.Controller.Widget.AbstractWidget.
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.event.TickEvent;
 
 public class ControllerCrossFader extends ControllerFader {
 
@@ -23,8 +22,8 @@ public class ControllerCrossFader extends ControllerFader {
     }
 
     @Override
-    public void executeOnServer(Player player, double value) {
-        super.executeOnServer(player, value);
+    public void executeOnServer(Player player, double value, boolean condition) {
+        super.executeOnServer(player, value, condition);
         int rateNum = (int) ((this.value.getTarget() + 1.0D) / 2 * 100);
         player.displayClientMessage(Component.literal("cross mix: " + rateNum + "% / " + (100 - rateNum) + "%"), true);
     }

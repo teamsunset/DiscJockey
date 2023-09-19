@@ -4,8 +4,10 @@ import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudio;
 import com.sunset.discjockey.block.BlockEntity.Controller.Audio.ControllerAudioManager;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidget;
 import com.sunset.discjockey.block.BlockEntity.Controller.Widget.Base.ControllerWidgetManager;
+import com.sunset.discjockey.util.SpecialType.OneShotBoolean;
 import com.sunset.discjockey.util.TouchMap.Vec2Type.PlaneRange;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
 public class ControllerDisc extends ControllerWidget {
@@ -16,20 +18,26 @@ public class ControllerDisc extends ControllerWidget {
 
     public ControllerAudioManager controllerAudioManager;
 
+    public OneShotBoolean isTouching = new OneShotBoolean();
+
     public int channelIndex;
 
     public ControllerDisc(String id, PlaneRange planeRange, ControllerAudioManager controllerAudioManager, int channelIndex) {
         super(id, ControllerWidgetManager.InteractType.SCROLL, planeRange);
         this.controllerAudioManager = controllerAudioManager;
         this.channelIndex = channelIndex;
-//        this.speed.onServerInterpolate = this::markDirty;
     }
 
     @Override
-    public void executeOnServer(Player player, double value) {
-//        this.speed.setTarget(this.speed.get() + value);
+    public void executeOnServer(Player player, double value, boolean condition) {
         this.windowSize -= (int) value;
-//        this.speed.setTarget(0.5 * (-1 * value) + 1);
+        this.isTouching.set(condition);
+        if (condition) {
+            player.displayClientMessage(Component.literal("§e//!-Touching Disc-!//"), true);
+        } else {
+            player.displayClientMessage(Component.literal("speed: " + String.format("%.2f", this.speed)), true);
+        }
+        
         this.markExecute();
         this.markDirty();
     }
@@ -64,18 +72,23 @@ public class ControllerDisc extends ControllerWidget {
                 return;
             }
 
-            if (this.windowSize >= 0) {
-                this.speed = this.windowSize * 0.01 + 1;
+            if (this.isTouching.get()) {
+                this.speed = this.windowSize * 0.1;
             } else {
-                this.speed = this.windowSize * 0.01 - 1;
+                this.speed = this.windowSize * 0.01 + 1;
             }
+//            if (this.windowSize >= 0) {
+//                this.speed = this.windowSize * 0.01 + 1;
+//            } else {
+//                this.speed = this.windowSize * 0.01 - 1;
+//            }
             audio.speed = this.speed;
         } else {
             this.speed = 0;
             this.windowSize = 0;
             return;
         }
-        
+
         if (windowSize != 0) {
             if (windowSize > 0) windowSize--;
             else windowSize++;

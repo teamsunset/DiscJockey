@@ -17,8 +17,8 @@ public class ControllerCueButton extends ControllerButton {
     }
 
     @Override
-    public void executeOnServer(Player player, double value) {
-        super.executeOnServer(player, value);
+    public void executeOnServer(Player player, double value, boolean condition) {
+        super.executeOnServer(player, value, condition);
         player.displayClientMessage(Component.literal("cue button"), true);
     }
 

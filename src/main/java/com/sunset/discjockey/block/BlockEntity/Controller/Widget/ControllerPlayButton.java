@@ -18,8 +18,8 @@ public class ControllerPlayButton extends ControllerButton {
     }
 
     @Override
-    public void executeOnServer(Player player, double value) {
-        super.executeOnServer(player, value);
+    public void executeOnServer(Player player, double value, boolean condition) {
+        super.executeOnServer(player, value, condition);
         ControllerAudio audio = controllerAudioManager.loadedAudios.get(channelIndex);
         if (audio != null) {
             audio.isPlayingOnServer = !audio.isPlayingOnServer;

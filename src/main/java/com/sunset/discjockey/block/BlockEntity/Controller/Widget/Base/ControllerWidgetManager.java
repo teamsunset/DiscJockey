@@ -49,19 +49,19 @@ public class ControllerWidgetManager {
     }
 
     //this function is only on serverside
-    public void interact(Player player, InteractType interactType, double interactValue, Vec2Plane relativeActionPos) {
+    public void interact(Player player, InteractType interactType, double interactValue, boolean condition, Vec2Plane relativeActionPos) {
         for (ControllerWidget controllerWidget : controllerWidgets) {
             if (controllerWidget.interactType == interactType && controllerWidget.planeRange.isInRange(relativeActionPos)) {
                 switch (interactType) {
                     case PRESS -> {
-                        controllerWidget.executeOnServer(player, 1);
+                        controllerWidget.executeOnServer(player, 1, condition);
                     }
                     case DRAG -> {
                         double value = controllerWidget.planeRange.getValueInRange(relativeActionPos) * 2 - 1;
-                        controllerWidget.executeOnServer(player, value);
+                        controllerWidget.executeOnServer(player, value, condition);
                     }
                     case SCROLL -> {
-                        controllerWidget.executeOnServer(player, interactValue);
+                        controllerWidget.executeOnServer(player, interactValue, condition);
                     }
                 }
             }

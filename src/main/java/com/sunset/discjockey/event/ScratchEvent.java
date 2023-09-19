@@ -29,15 +29,13 @@ public class ScratchEvent {
 
     public static Vec2Plane relativeHitPoint = Vec2Plane.ORIGIN;
 
-    public static boolean isLookingAtController = false;
-
 
     public static void onMouseScroll(InputEvent.MouseScrollingEvent event) {
         scrollDeltaQueue.add(event.getScrollDelta());
     }
 
     public static void onKeyInput(InputEvent.Key event) {
-        if (event.getKey() == GLFW.GLFW_KEY_LEFT_ALT && event.getAction() == GLFW.GLFW_PRESS) {
+        if (event.getKey() == GLFW.GLFW_KEY_LEFT_ALT && (event.getAction() == GLFW.GLFW_PRESS || event.getAction() == GLFW.GLFW_REPEAT)) {
             ScratchEvent.isALTDown = true;
         } else if (event.getKey() == GLFW.GLFW_KEY_LEFT_ALT && event.getAction() == GLFW.GLFW_RELEASE) {
             ScratchEvent.isALTDown = false;
@@ -49,7 +47,6 @@ public class ScratchEvent {
     public static void onRenderTick(RenderLevelStageEvent event) {
         ScratchEvent.pos = BlockPos.ZERO;
         ScratchEvent.relativeHitPoint = Vec2Plane.ORIGIN;
-        ScratchEvent.isLookingAtController = false;
 
         if (event.getStage().equals(RenderLevelStageEvent.Stage.AFTER_LEVEL)) {
             Player player = Minecraft.getInstance().player;
@@ -73,10 +70,9 @@ public class ScratchEvent {
                             if (level.getBlockEntity(pos) instanceof AbstractControllerEntity abstractControllerEntity) {
                                 ScratchEvent.relativeHitPoint = abstractControllerEntity.getRelativeHitPoint((BlockHitResult) rayTraceResult);
                                 ScratchEvent.pos = pos;
-                                ScratchEvent.isLookingAtController = true;
-                                if (!scrollDeltaQueue.isEmpty()) {
-                                    NetworkHandler.NETWORK_CHANNEL.sendToServer(new ScratchMessage(pos, scrollDeltaQueue.poll(), relativeHitPoint));
-                                }
+
+                                NetworkHandler.NETWORK_CHANNEL.sendToServer(new ScratchMessage(pos, scrollDeltaQueue.isEmpty() ? 0 : scrollDeltaQueue.poll(), isALTDown, relativeHitPoint));
+
                                 return;
                             }
                         }
@@ -86,6 +82,7 @@ public class ScratchEvent {
             }
 
             scrollDeltaQueue.clear();
+            ScratchEvent.isALTDown = false;
         }
     }
 }

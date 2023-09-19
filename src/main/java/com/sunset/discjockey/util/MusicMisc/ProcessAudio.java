@@ -70,12 +70,12 @@ public class ProcessAudio {
         short[] resampled = new short[newLength];
 
         if (speed < 1) {
-            for (int i = 0; i < data.length; i++) {
+            for (int i = 0; i < origin.length; i++) {
                 int preResampleIndex = (int) ((i - 1) / speed);
                 int resampledIndex = (int) (i / speed);
 
                 if (resampledIndex < resampled.length - 1) {
-                    resampled[resampledIndex] = data[i];
+                    resampled[resampledIndex] = origin[i];
 
                     if (i > 0) {
                         short preSample = resampled[preResampleIndex];
@@ -88,14 +88,37 @@ public class ProcessAudio {
                     }
                 }
             }
+
+            // 首先，收集需要插值的数据点
+//            List<Double> x = new ArrayList<>();
+//            List<Double> y = new ArrayList<>();
+//
+//            for (int i = 0; i < data.length; i++) {
+//                int resampledIndex = (int) (i / speed);
+//                if (resampledIndex < resampled.length) {
+//                    x.add((double) i);
+//                    y.add((double) data[i]);
+//                }
+//            }
+//
+//            // 使用三次样条插值
+//            MathMisc.CubicSpline spline = new MathMisc.CubicSpline(x.stream().mapToDouble(Double::doubleValue).toArray(), y.stream().mapToDouble(Double::doubleValue).toArray());
+//
+//            // 用插值的结果填充resampled数组
+//            for (int i = 0; i < data.length; i++) {
+//                int resampledIndex = (int) (i / speed);
+//                if (resampledIndex < resampled.length) {
+//                    resampled[resampledIndex] = (short) spline.interpolate(i);
+//                }
+//            }
         } else {
             for (int i = 0; i < newLength; i++) {
                 int sampleIndex = (int) (i * speed);
 
-                if (sampleIndex < data.length - 1) {
-                    resampled[i] = data[sampleIndex];
+                if (sampleIndex < origin.length - 1) {
+                    resampled[i] = origin[sampleIndex];
                 } else {
-                    resampled[i] = data[data.length - 1];
+                    resampled[i] = origin[origin.length - 1];
                 }
             }
         }
