@@ -62,14 +62,14 @@ public class FileAudioStream implements AudioStream {
         ByteBuffer byteBuffer = BufferUtils.createByteBuffer(size);
 
 
-        if (this.isPlaying && this.isReversed && offset >= size * speed) {
+        if (this.offset >= 0 && this.isPlaying && this.isReversed && offset >= size * speed) {
             short[] bufferArrayRaw = new short[(int) (size * speed / 2)];
             System.arraycopy(reversedArrayRaw, (array.length - offset) / 2, bufferArrayRaw, 0, (int) (size * speed / 2));
 
             bufferArrayRaw = ProcessAudio.changeSpeedByResampled(bufferArrayRaw, speed);
             byteBuffer.put(ProcessAudio.shortToPcm16(bufferArrayRaw), 0, Math.min(size, bufferArrayRaw.length * 2));
             offset -= (int) (size * speed);
-        } else if (this.isPlaying && !this.isReversed && array.length >= offset + size * speed) {
+        } else if (this.offset >= 0 && this.isPlaying && !this.isReversed && array.length >= offset + size * speed) {
             short[] bufferArrayRaw = new short[(int) (size * speed / 2)];
             System.arraycopy(arrayRaw, offset / 2, bufferArrayRaw, 0, (int) (size * speed / 2));
 
