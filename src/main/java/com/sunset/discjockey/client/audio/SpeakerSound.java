@@ -27,12 +27,14 @@ public class SpeakerSound extends AbstractTickableSoundInstance {
 
     public boolean isPlaying = false;
 
-    public Property<Integer> elapsedTime = new Property<>(
+    public Property<Double> elapsedTime = new Property<>(
             wov -> {
-                return (int) (this.fileAudioStream.offset / this.fileAudioStream.tickSize / this.fileAudioStream.speed);
+                return (this.fileAudioStream.offset / this.fileAudioStream.tickSize / this.fileAudioStream.speed);
             },
             (wov, nv) -> {
-                this.fileAudioStream.offset = (int) (nv * this.fileAudioStream.tickSize * this.fileAudioStream.speed);
+                if (nv < this.soundTime) {
+                    this.fileAudioStream.offset = (int) (nv * this.fileAudioStream.tickSize * this.fileAudioStream.speed);
+                }
             }
     );
 

@@ -19,7 +19,9 @@ public class ControllerAudio {
 
     public boolean isPlayingOnServer = false;
 
-    public int elapsedTimeOnServer = 0;
+    public double elapsedTimeOnServer = 0;
+
+    public int songTime = -1;
 
     public double speed = 1;
 
@@ -36,7 +38,8 @@ public class ControllerAudio {
         CompoundTag compoundTag = new CompoundTag();
         compoundTag.putString("url", this.url);
         compoundTag.putBoolean("isPlayingOnServer", this.isPlayingOnServer);
-        compoundTag.putInt("elapsedTimeOnServer", this.elapsedTimeOnServer);
+        compoundTag.putDouble("elapsedTimeOnServer", this.elapsedTimeOnServer);
+        compoundTag.putInt("songTime", this.songTime);
         compoundTag.putDouble("speed", this.speed);
         return compoundTag;
     }
@@ -45,6 +48,7 @@ public class ControllerAudio {
         this.url = compoundTag.getString("url");
         this.isPlayingOnServer = compoundTag.getBoolean("isPlayingOnServer");
         this.elapsedTimeOnServer = compoundTag.getInt("elapsedTimeOnServer");
+        this.songTime = compoundTag.getInt("songTime");
         this.speed = compoundTag.getDouble("speed");
 
         if (this.speakerSound != null) {
@@ -83,10 +87,14 @@ public class ControllerAudio {
 
     public void onServerTick() {
         if (this.isPlayingOnServer) {
-            if (speed > 0)
-                this.elapsedTimeOnServer++;
-            else if (speed < 0 && this.elapsedTimeOnServer > 0)
-                this.elapsedTimeOnServer--;
+            if (speed > 0 || (speed < 0 && this.elapsedTimeOnServer > speed))
+                this.elapsedTimeOnServer += speed;
+        }
+
+        if (this.songTime != -1 && this.elapsedTimeOnServer > this.songTime) {
+            this.elapsedTimeOnServer = 0;
+            this.speed = 1;
+            this.isPlayingOnServer = false;
         }
         this.manager.controller.markDirty();
     }

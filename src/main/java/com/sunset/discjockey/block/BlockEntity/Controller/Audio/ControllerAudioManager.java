@@ -1,6 +1,8 @@
 package com.sunset.discjockey.block.BlockEntity.Controller.Audio;
 
 import com.sunset.discjockey.block.BlockEntity.Controller.AbstractControllerEntity;
+import com.sunset.discjockey.network.NetworkHandler;
+import com.sunset.discjockey.network.message.SongTimeMessage;
 import com.sunset.discjockey.util.MusicMisc.MusicFileManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -78,6 +80,7 @@ public class ControllerAudioManager {
         this.unloadAudio(channelIndex);
         if (audios.size() > index) {
             loadedAudios.put(channelIndex, new ControllerAudio(this, audios.get(index)));
+            NetworkHandler.NETWORK_CHANNEL.sendToServer(new SongTimeMessage(this.controller.getBlockPos(), channelIndex, MusicFileManager.getSongTime(audios.get(index))));
             return true;
         } else {
             return false;
