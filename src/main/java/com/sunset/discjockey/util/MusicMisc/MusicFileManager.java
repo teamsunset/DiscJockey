@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 @OnlyIn(Dist.CLIENT)
 public class MusicFileManager {
-    public static final String fileDir = FMLPaths.MODSDIR.get().toString() + "\\" + ModReference.MOD_ID + "\\cache\\";
+    public static final String fileDir = FMLPaths.MODSDIR.get().toString() + File.separator + ModReference.MOD_ID + File.separator + "cache" + File.separator;
 
     //para1 Return type, para2 Parameter type
 //    public static final Map<Class<?>, List<Class<?>>> supportedConversionType = new HashMap<>();
